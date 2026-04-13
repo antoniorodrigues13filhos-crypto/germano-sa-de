@@ -34,6 +34,22 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* Animações de Entrada Sofisticada */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-first { transition-delay: 0.1s; }
+        .delay-second { transition-delay: 0.3s; }
+        .delay-third { transition-delay: 0.5s; }
+
         .parallax-card {
             opacity: 0;
             transform: translateY(120px);
@@ -110,7 +126,6 @@
                         <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <p class="text-[9px] text-petroleum/30 mt-2 text-center uppercase tracking-widest font-bold">Respostas automáticas simuladas</p>
             </div>
         </div>
 
@@ -159,29 +174,34 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
                 <div>
-                    <span class="text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
-                    <h2 class="text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase">BioTech <br/> Germano</h2>
+                    <span class="reveal-text delay-first text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">
+                        Excelência Molecular
+                    </span>
+                    <h2 class="reveal-text delay-second text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">
+                        BioTech <br/> Germano
+                    </h2>
                 </div>
-                <p class="text-petroleum/60 max-w-sm text-right hidden md:block italic">
+                <p class="reveal-text delay-third text-petroleum/60 max-w-sm text-right hidden md:block italic">
                     Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
                 </p>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div class="parallax-card card-delay-1 group cursor-pointer">
+                <div class="parallax-card group cursor-pointer">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20calmix%20cromovita1.png" alt="Calmix" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
                     <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
                     <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
                 </div>
-                <div class="parallax-card card-delay-2 group cursor-pointer md:mt-24">
+                <div class="parallax-card group cursor-pointer md:mt-24">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto-fort-vit.png" alt="Fort Vit" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
                     <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
                     <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
                 </div>
-                <div class="parallax-card card-delay-3 group cursor-pointer">
+                <div class="parallax-card group cursor-pointer">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" alt="Núcleo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
@@ -199,6 +219,7 @@
     </footer>
 
     <script>
+        // --- CHAT SIMULADO ---
         function toggleChat() {
             const chat = document.getElementById('whatsapp-chat');
             chat.classList.toggle('active');
@@ -209,20 +230,17 @@
             const input = document.getElementById('user-input');
             const history = document.getElementById('chat-history');
             const text = input.value.trim().toLowerCase();
-
             if (text === "") return;
 
-            // Adiciona mensagem do usuário
             const userDiv = document.createElement('div');
             userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
             userDiv.innerText = input.value;
             history.appendChild(userDiv);
             
-            const currentMsg = input.value; // Guarda o texto original
+            const currentMsg = input.value;
             input.value = "";
             history.scrollTop = history.scrollHeight;
 
-            // Simula Digitante
             const typingDiv = document.createElement('div');
             typingDiv.className = "text-[10px] text-petroleum/40 font-bold animate-pulse italic ml-2";
             typingDiv.id = "typing-indicator";
@@ -230,10 +248,8 @@
             history.appendChild(typingDiv);
             history.scrollTop = history.scrollHeight;
 
-            // Lógica de Respostas da Demonstração
             setTimeout(() => {
                 document.getElementById('typing-indicator').remove();
-                
                 const responseDiv = document.createElement('div');
                 responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]";
                 
@@ -242,16 +258,14 @@
 
                 if (text.includes("bom dia") || text.includes("boa tarde") || text.includes("olá") || text.includes("ola")) {
                     reply = "Olá! Tudo bem? Como posso ajudar você e seu rebanho hoje?";
-                } else if (text.includes("dúvida") || text.includes("duvida") || text.includes("ajuda")) {
-                    reply = "Com certeza! Pode me falar qual sua dúvida? Estou aqui para ajudar.";
                 } else if (text.includes("preço") || text.includes("valor") || text.includes("quanto custa")) {
-                    reply = "Nossos protocolos variam conforme a necessidade do seu rebanho. Mas vou te passar para um consultor comercial agora mesmo para te enviar a tabela!";
+                    reply = "Nossos protocolos são personalizados. Vou te passar agora para nosso consultor comercial para te enviar a tabela completa!";
                     shouldRedirect = true;
-                } else if (text.includes("entrega") || text.includes("prazo") || text.includes("onde entrega")) {
-                    reply = "Entregamos em todo o Brasil com logística própria e parceiros! Vou te conectar para calcularmos o frete para sua região.";
+                } else if (text.includes("entrega") || text.includes("prazo")) {
+                    reply = "Entregamos em todo o Brasil! Vou te conectar para calcularmos o frete e o prazo para sua fazenda.";
                     shouldRedirect = true;
                 } else {
-                    reply = "Entendido! Para te dar uma resposta técnica mais detalhada, vou te direcionar para nosso atendimento especializado no WhatsApp.";
+                    reply = "Entendido! Para te dar um suporte técnico bem preciso, vou te conectar agora com nosso especialista no WhatsApp.";
                     shouldRedirect = true;
                 }
 
@@ -261,14 +275,13 @@
 
                 if (shouldRedirect) {
                     setTimeout(() => {
-                        const zapUrl = `https://wa.me/5562999999999?text=${encodeURIComponent("Olá Camila, eu estava no site e tenho uma dúvida: " + currentMsg)}`;
-                        window.open(zapUrl, "_blank");
+                        window.open(`https://wa.me/5562999999999?text=${encodeURIComponent("Dúvida do site: " + currentMsg)}`, "_blank");
                     }, 2000);
                 }
             }, 1500);
         }
 
-        // LÓGICA DE VÍDEO E SCROLL MANTIDA
+        // --- RENDERIZAÇÃO E SCROLL ---
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
         initLucide();
 
@@ -326,6 +339,17 @@
                 };
                 img.src = getUrl(i);
             }
+
+            // Ativador da animação BioTech
+            const observerOptions = { threshold: 0.2 };
+            const textObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.reveal-text').forEach(el => el.classList.add('active'));
+                    }
+                });
+            }, observerOptions);
+            textObserver.observe(document.getElementById('biotech-section'));
 
             window.addEventListener("resize", resizeCanvas);
             window.addEventListener("scroll", () => {
