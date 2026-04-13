@@ -73,9 +73,14 @@
                         Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
                     </h1>
 
-                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 translate-y-10">
+                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute">
                         Um único animal afetado pode reduzir drasticamente sua produção.
                     </p>
+
+                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 absolute uppercase">
+                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/> 
+                        <span class="text-xl font-light tracking-widest block mt-4">Simples assim.</span>
+                    </h2>
 
                 </div>
             </div>
@@ -84,7 +89,7 @@
 
     <section id="produtos" class="py-32 bg-milky relative z-10">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-black text-petroleum mb-12">BioTech Germano</h2>
+            <h2 class="text-4xl font-black text-petroleum mb-12 uppercase tracking-tighter">BioTech Germano</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white">
                     <h3 class="text-2xl font-bold mb-4">Germano Prime</h3>
@@ -105,6 +110,7 @@
             
             const text01 = document.getElementById("text-01");
             const text02 = document.getElementById("text-02");
+            const text03 = document.getElementById("text-03");
 
             const frameCount = 78;
             const images = [];
@@ -158,7 +164,7 @@
             window.addEventListener("scroll", () => {
                 const scrollY = window.scrollY;
                 const maxScroll = heroEl.offsetHeight - window.innerHeight;
-                const fraction = Math.min(1, scrollY / maxScroll);
+                const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
                 
                 // Sequência de frames
                 const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
@@ -166,9 +172,10 @@
                     requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
 
-                // DINÂMICA DE TEXTOS
-                // Texto 01: Fica visível de 0% a 20% do scroll, depois some
-                if (fraction < 0.25) {
+                // LÓGICA DINÂMICA DE TEXTOS
+                
+                // Texto 1: (0% a 25%)
+                if (fraction <= 0.25) {
                     text01.style.opacity = 1 - (fraction * 4);
                     text01.style.transform = `translateY(${-(fraction * 100)}px)`;
                     text01.style.display = "block";
@@ -176,19 +183,26 @@
                     text01.style.display = "none";
                 }
 
-                // Texto 02: Surge entre 35% e 65% do scroll
-                if (fraction > 0.35 && fraction < 0.75) {
-                    const localFrac = (fraction - 0.35) / 0.15; // Fade in rápido
-                    const fadeOutFrac = (fraction - 0.60) / 0.15; // Fade out
-                    
-                    let opacity = localFrac;
-                    if (fraction > 0.60) opacity = 1 - fadeOutFrac;
+                // Texto 2: (35% a 65%)
+                if (fraction > 0.35 && fraction <= 0.70) {
+                    const localFrac = (fraction - 0.35) / 0.15; 
+                    const fadeOutFrac = (fraction - 0.55) / 0.15;
+                    let opacity = fraction > 0.55 ? 1 - fadeOutFrac : localFrac;
                     
                     text02.style.opacity = Math.max(0, Math.min(1, opacity));
-                    text02.style.transform = `translateY(${20 - (Math.min(1, localFrac) * 20)}px)`;
                     text02.style.display = "block";
                 } else {
                     text02.style.display = "none";
+                }
+
+                // Texto 3: (75% a 100%) - O Grande Final
+                if (fraction > 0.75) {
+                    const localFrac = (fraction - 0.75) / 0.15; 
+                    text03.style.opacity = Math.max(0, Math.min(1, localFrac));
+                    text03.style.transform = `scale(${0.95 + (Math.min(1, localFrac) * 0.05)})`;
+                    text03.style.display = "block";
+                } else {
+                    text03.style.display = "none";
                 }
             });
         });
