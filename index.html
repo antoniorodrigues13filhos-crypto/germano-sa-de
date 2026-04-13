@@ -26,14 +26,14 @@
         body {
             font-family: var(--font-sans);
             background-color: var(--color-milky);
-            color: var(--color-petroleum);
+            color: var(--color-teal-900);
             overflow: hidden; 
         }
 
         .glass-nav {
             background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         }
 
@@ -50,20 +50,20 @@
 
     <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
         <div class="mb-6 animate-pulse">
-            <img src="logo_germano-removebg-preview.png" alt="Germano Saúde Animal" class="w-32 h-32 object-contain">
+            <img src="logo_germano-removebg-preview.png" alt="Germano Saúde Animal" class="w-40 h-40 object-contain">
         </div>
         <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
             <div id="progress-bar" style="height:100%;background:white;width:0%;transition:width 0.2s;"></div>
         </div>
-        <p id="loading-text" class="text-white/60 mt-4 text-xs font-medium tracking-[0.2em] uppercase">Tecnologia Germano</p>
+        <p id="loading-text" class="text-white/60 mt-4 text-xs font-medium tracking-[0.2em] uppercase text-center">Inovação em Nutrição</p>
     </div>
 
     <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-6 py-0 flex justify-between items-center">
             <div class="flex items-center">
                 <img src="logo_germano-removebg-preview.png" 
                      alt="Logo Germano" 
-                     class="w-28 h-28 object-contain scale-125 transform-gpu origin-left">
+                     class="w-36 h-36 object-contain scale-150 transform-gpu origin-left">
             </div>
             
             <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
@@ -82,11 +82,11 @@
             <div style="position:absolute;inset:0;background:linear-gradient(to top, #0F3A47, transparent 70%);z-index:1;opacity:0.6;"></div>
             
             <div id="hero-text-container" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
-                <div class="text-center px-6 max-w-5xl mt-20">
-                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6">
+                <div class="text-center px-6 max-w-5xl mt-24">
+                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl">
                         PRECISÃO <br/> <span class="text-emerald-light">MOLECULAR</span>
                     </h1>
-                    <p class="text-white/70 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto">
+                    <p class="text-white/70 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto drop-shadow-md">
                         Nutrição avançada de Anápolis-GO para o mundo.
                     </p>
                 </div>
@@ -95,15 +95,21 @@
     </section>
 
     <section id="produtos" class="py-32 bg-milky relative z-10">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-16 tracking-tight">Linha de Performance</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="glass-card p-10 rounded-[40px] hover:translate-y-[-10px] transition-transform">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-4 tracking-tight">BioTech Germano</h2>
+                <p class="text-petroleum/60 text-xl font-medium">Nutrição de alta performance projetada em Anápolis.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-10 rounded-[40px] hover:translate-y-[-10px] transition-all duration-300">
                     <div class="w-12 h-12 bg-emerald/10 rounded-2xl flex items-center justify-center mb-6 text-emerald">
                         <i data-lucide="microscope"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4">Germano Prime</h3>
+                    <h3 class="text-2xl font-bold mb-4 text-petroleum">Germano Prime</h3>
                     <p class="text-petroleum/60 text-sm leading-relaxed mb-8">Otimização máxima para bovinos com tecnologia de minerais quelatados.</p>
+                    <button class="text-emerald font-bold flex items-center gap-2 hover:gap-4 transition-all uppercase text-xs tracking-widest">
+                        Explorar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
                 </div>
                 </div>
         </div>
@@ -182,7 +188,8 @@
                     requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
                 const title = document.getElementById("hero-text-container");
-                title.style.opacity = 1 - (fraction * 3);
+                title.style.opacity = 1 - (fraction * 4);
+                title.style.transform = `translateY(${-(fraction * 120)}px)`;
             });
         });
     </script>
