@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Germano Saúde Animal | Excelência Nutricional</title>
+    
+    <!-- Tailwind CSS (v4) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style type="text/tailwindcss">
+        @theme {
+            --color-petroleum: #0F3A47;
+            --color-petroleum-dark: #0A2730;
+            --color-petroleum-light: #1A5465;
+            
+            --color-emerald: #047857;
+            --color-emerald-dark: #065F46;
+            --color-emerald-light: #10B981;
+            
+            --color-milky: #F5F7F5;
+            --color-milky-dark: #EAECE9;
+            --color-milky-light: #FFFFFF;
+
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-milky);
+            color: var(--color-petroleum);
+            overflow: hidden; /* Locked until frames load */
+        }
+
+        /* Bento Grid Custom Styles */
+        .bento-card {
+            @apply bg-white rounded-3xl p-8 border border-milky-dark shadow-sm transition-all duration-300 hover:shadow-md;
+        }
+        
+        .bento-card-dark {
+            @apply bg-petroleum rounded-3xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl text-white relative overflow-hidden;
+        }
+
+        .product-card {
+            @apply bg-white rounded-2xl overflow-hidden border border-milky-dark shadow-sm group transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MANDATORY LOADING SCREEN -->
+    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,var(--color-petroleum),var(--color-emerald));z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
+        <div class="mb-4 animate-bounce">
+            <i data-lucide="shield-plus" class="w-16 h-16 text-white"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-white mb-2 tracking-tight uppercase">GERMANO SAÚDE ANIMAL</h2>
+        <div style="width:16rem;height:0.5rem;background:rgba(255,255,255,0.2);border-radius:9999px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:white;transition:all 100ms ease-out;width:0%;"></div>
+        </div>
+        <p id="loading-text" class="text-white/90 mt-3 text-sm font-medium tracking-wide">Formulando excelência nutricional 0%...</p>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-milky/90 backdrop-blur-md border-b border-milky-dark py-4 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-petroleum p-2 rounded-lg">
+                    <i data-lucide="leaf" class="w-6 h-6 text-emerald-light"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-petroleum">GERMANO<span class="font-light text-petroleum-light">SaúdeAnimal</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#solucoes" class="text-petroleum hover:text-emerald transition-colors">Soluções</a>
+                <a href="#autoridade" class="text-petroleum hover:text-emerald transition-colors">A Empresa</a>
+                <a href="#produtos" class="text-petroleum hover:text-emerald transition-colors">Linha de Produtos</a>
+                <a href="#contato" class="bg-emerald hover:bg-emerald-dark text-white px-6 py-2.5 rounded-full transition-colors font-semibold shadow-sm flex items-center gap-2">
+                    Fale Conosco
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <button class="md:hidden text-petroleum">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MANDATORY HERO SECTION -->
+    <section id="scroll-hero" style="height:400vh;position:relative;background-color:var(--color-milky);">
+        <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
+            <!-- Canvas for frame sequence -->
+            <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+            
+            <!-- Overlay gradient: Milky White at bottom to ensure Petroleum Blue text is readable -->
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, var(--color-milky) 0%, var(--color-milky) 15%, rgba(245,247,245,0.85) 35%, transparent 70%);z-index:1;pointer-events:none;"></div>
+            
+            <!-- Text Content OVER canvas -->
+            <div style="position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;padding-bottom:10vh;">
+                <div class="max-w-7xl mx-auto px-6 w-full" id="hero-text-container">
+                    <div class="max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald/10 border border-emerald/20 text-emerald-dark text-sm font-semibold mb-6">
+                            <i data-lucide="microscope" class="w-4 h-4"></i>
+                            Tecnologia em Nutrição
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-extrabold text-petroleum leading-tight mb-6 tracking-tight">
+                            Potencializando Resultados no <span class="text-transparent bg-clip-text bg-gradient-to-r from-petroleum to-emerald">Setor Produtivo.</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-petroleum-light mb-8 max-w-2xl leading-relaxed">
+                            Desenvolvemos soluções nutricionais de alta performance para garantir a saúde e a produtividade máxima do seu rebanho, unindo ciência e resultados em campo.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-4">
+                            <a href="#produtos" class="bg-emerald hover:bg-emerald-dark text-white px-8 py-4 rounded-full transition-all text-lg font-semibold shadow-lg hover:shadow-emerald/30 flex items-center gap-2 group">
+                                Conheça Nossas Soluções
+                                <i data-lucide="chevron-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <div class="flex items-center gap-3 px-6 py-4">
+                                <div class="flex -space-x-3">
+                                    <div class="w-10 h-10 rounded-full border-2 border-milky bg-petroleum flex justify-center items-center"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
+                                    <div class="w-10 h-10 rounded-full border-2 border-milky bg-emerald flex justify-center items-center"><i data-lucide="award" class="w-4 h-4 text-white"></i></div>
+                                </div>
+                                <span class="text-sm font-medium text-petroleum-light">Qualidade<br>Garantida</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENTO GRID: AUTHORITY & SOCIAL PROOF -->
+    <section id="autoridade" class="py-24 bg-milky relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-petroleum mb-4">Números que Comprovam Nossa Força</h2>
+                <p class="text-petroleum-light text-lg max-w-2xl mx-auto">A Germano Saúde Animal é parceira estratégica de milhares de produtores em todo o país, entregando excelência em cada grama de nutrição.</p>
+            </div>
+
+            <!-- Grid Structure -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)]">
+                
+                <!-- Block 1: Cities (Spans 2 cols) -->
+                <div class="bento-card md:col-span-2 flex flex-col justify-between group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-3 bg-emerald/10 rounded-xl text-emerald">
+                            <i data-lucide="map-pin" class="w-8 h-8"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-gray-400 group-hover:text-emerald transition-colors"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-5xl font-extrabold text-petroleum mb-2">+ de 450</h3>
+                        <p class="text-lg text-petroleum-light font-medium">Cidades Atendidas diariamente por nossa logística especializada.</p>
+                    </div>
+                </div>
+
+                <!-- Block 2: Tons (Dark Block, Spans 1) -->
+                <div class="bento-card-dark flex flex-col justify-between group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                    <div class="p-3 bg-white/10 w-fit rounded-xl text-emerald-light mb-6 backdrop-blur-sm">
+                        <i data-lucide="factory" class="w-8 h-8"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-4xl font-extrabold text-white mb-2">1.2M</h3>
+                        <p class="text-milky-dark font-medium">Toneladas Produzidas anualmente.</p>
+                    </div>
+                </div>
+
+                <!-- Block 3: Clients (Spans 1 col, 2 rows) -->
+                <div class="bento-card md:row-span-2 flex flex-col justify-center items-center text-center bg-gradient-to-b from-white to-milky">
+                    <div class="w-20 h-20 bg-emerald-light/10 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="users" class="w-10 h-10 text-emerald"></i>
+                    </div>
+                    <h3 class="text-5xl font-extrabold text-petroleum mb-4">+15k</h3>
+                    <p class="text-xl text-petroleum font-semibold mb-2">Clientes Satisfeitos</p>
+                    <p class="text-petroleum-light text-sm">Espalhados por todo o território nacional, confiando na nossa qualidade.</p>
+                    
+                    <div class="mt-8 flex justify-center -space-x-4">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=100&h=100&q=80" alt="Farmer" class="w-12 h-12 rounded-full border-4 border-white object-cover">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&h=100&q=80" alt="Veterinarian" class="w-12 h-12 rounded-full border-4 border-white object-cover">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80" alt="Producer" class="w-12 h-12 rounded-full border-4 border-white object-cover">
+                        <div class="w-12 h-12 rounded-full border-4 border-white bg-petroleum flex items-center justify-center text-xs text-white font-bold">+</div>
+                    </div>
+                </div>
+
+                <!-- Block 4: Partners (Spans 2 cols) -->
+                <div class="bento-card md:col-span-2 flex flex-col justify-center">
+                    <p class="text-sm font-semibold text-emerald tracking-widest uppercase mb-6">Rede de Confiança</p>
+                    <div class="grid grid-cols-3 gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div class="flex items-center gap-2 justify-center">
+                            <i data-lucide="hexagon" class="w-8 h-8 text-petroleum"></i>
+                            <span class="font-bold text-petroleum text-xl tracking-tight">AgroTech</span>
+                        </div>
+                        <div class="flex items-center gap-2 justify-center border-l border-r border-gray-200">
+                            <i data-lucide="sprout" class="w-8 h-8 text-petroleum"></i>
+                            <span class="font-bold text-petroleum text-xl tracking-tight">BioVet</span>
+                        </div>
+                        <div class="flex items-center gap-2 justify-center">
+                            <i data-lucide="boxes" class="w-8 h-8 text-petroleum"></i>
+                            <span class="font-bold text-petroleum text-xl tracking-tight">LogistBr</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block 5: Quality Seals (Spans 1) -->
+                <div class="bento-card bg-emerald text-white flex flex-col justify-between group overflow-hidden relative">
+                    <div class="absolute -right-8 -top-8 text-white/10 group-hover:scale-125 transition-transform duration-700">
+                        <i data-lucide="shield-check" class="w-48 h-48"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex gap-2 mb-4">
+                            <i data-lucide="star" class="w-5 h-5 fill-current text-yellow-300"></i>
+                            <i data-lucide="star" class="w-5 h-5 fill-current text-yellow-300"></i>
+                            <i data-lucide="star" class="w-5 h-5 fill-current text-yellow-300"></i>
+                            <i data-lucide="star" class="w-5 h-5 fill-current text-yellow-300"></i>
+                            <i data-lucide="star" class="w-5 h-5 fill-current text-yellow-300"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Selos de Qualidade</h3>
+                        <p class="text-emerald-light font-medium text-white/80">Certificação ISO 9001 e BPFA garantidas.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS GRID -->
+    <section id="produtos" class="py-24 bg-white relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <span class="text-emerald font-semibold tracking-wider uppercase text-sm mb-2 block">A Linha do Tempo de Produção</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-petroleum">Nossas Linhas de Nutrição</h2>
+                </div>
+                <a href="#" class="text-emerald font-medium hover:text-petroleum transition-colors flex items-center gap-2 border-b-2 border-emerald pb-1">
+                    Ver catálogo completo
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Grid 3x2 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1594498653382-78fec2db857a?auto=format&fit=crop&w=800&q=80" alt="Bovinos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Bovinocultura</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">Germano Prime Bovinos</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">Suplemento mineral proteico energético para máxima conversão alimentar em regime de pasto.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1553284965-83fd3e0e76fb?auto=format&fit=crop&w=800&q=80" alt="Equinos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Equinocultura</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">EquiNutri Alta Performance</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">Ração balanceada para cavalos atletas, garantindo energia rápida e recuperação muscular.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1604847426162-817de7c8f936?auto=format&fit=crop&w=800&q=80" alt="Suínos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Suinocultura</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">Suínos Max Crescimento</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">Núcleo vitamínico focado em ganho de peso diário e excelência na qualidade da carcaça.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1548550023-2a62f6828555?auto=format&fit=crop&w=800&q=80" alt="Aves" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Avicultura</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">Avicultura Postura Plus</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">Premix formulado para aumentar a taxa de postura e fortalecer a casca dos ovos comerciais.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1585242407267-33a8db2bbaf2?auto=format&fit=crop&w=800&q=80" alt="Sal Mineral" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Suplementação base</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">Sal Mineral Germano</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">A base da nutrição do seu rebanho. Macro e microminerais biodisponíveis de alta absorção.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80" alt="Confinamento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-petroleum shadow-sm">Engorda</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-petroleum mb-2">Núcleo Confinamento 100%</h3>
+                        <p class="text-petroleum-light text-sm mb-6 line-clamp-2">Aditivos melhoradores de desempenho focados na terminação rápida e eficiente do gado.</p>
+                        <button class="w-full py-3 rounded-xl border-2 border-emerald text-emerald font-bold hover:bg-emerald hover:text-white transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                            Orçar Agora
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contato" class="bg-petroleum text-milky pt-20 pb-10 relative z-10 border-t border-petroleum-light/30">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                
+                <!-- Brand & About -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="bg-milky/10 p-2 rounded-lg">
+                            <i data-lucide="leaf" class="w-6 h-6 text-emerald"></i>
+                        </div>
+                        <span class="font-bold text-2xl tracking-tight text-white">GERMANO</span>
+                    </div>
+                    <p class="text-milky/70 text-sm leading-relaxed mb-6">
+                        Inovação e qualidade em nutrição animal. Trabalhamos lado a lado com o produtor para garantir resultados que impulsionam o agronegócio brasileiro.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-emerald hover:text-white transition-colors text-white/70">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-emerald hover:text-white transition-colors text-white/70">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-emerald hover:text-white transition-colors text-white/70">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-bold text-white mb-6 text-lg">Links Rápidos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#solucoes" class="text-milky/70 hover:text-emerald transition-colors text-sm flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Soluções</a></li>
+                        <li><a href="#autoridade" class="text-milky/70 hover:text-emerald transition-colors text-sm flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Quem Somos</a></li>
+                        <li><a href="#produtos" class="text-milky/70 hover:text-emerald transition-colors text-sm flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Produtos</a></li>
+                        <li><a href="#" class="text-milky/70 hover:text-emerald transition-colors text-sm flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Seja um Representante</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="lg:col-span-2 bg-petroleum-dark p-8 rounded-2xl border border-white/5">
+                    <h4 class="font-bold text-white mb-6 text-lg flex items-center gap-2">
+                        <i data-lucide="headphones" class="w-5 h-5 text-emerald"></i>
+                        Fale Conosco
+                    </h4>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="map-pin" class="w-6 h-6 text-emerald shrink-0 mt-1"></i>
+                            <div>
+                                <span class="block text-white/50 text-xs font-bold uppercase mb-1">Endereço</span>
+                                <p class="text-milky text-sm leading-relaxed">Av. Independência, S/N, Qd.09, Lt. 37/38<br>Res. Buritis, Anápolis - GO, 75101-000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="phone" class="w-6 h-6 text-emerald shrink-0 mt-1"></i>
+                            <div>
+                                <span class="block text-white/50 text-xs font-bold uppercase mb-1">Telefone</span>
+                                <p class="text-milky text-lg font-medium">(62) 3318-6037</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="clock" class="w-6 h-6 text-emerald shrink-0 mt-1"></i>
+                            <div>
+                                <span class="block text-white/50 text-xs font-bold uppercase mb-1">Horário de Funcionamento</span>
+                                <p class="text-milky text-sm"><span class="text-emerald-light font-medium">Aberto</span> ⋅ Fecha às 18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-milky/50 text-xs">© 2024 Germano Saúde Animal. Todos os direitos reservados.</p>
+                <div class="flex gap-4 text-xs text-milky/50">
+                    <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Init Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        function initLucide(){
+            if(window.lucide){
+                lucide.createIcons();
+            } else {
+                setTimeout(initLucide, 200);
+            }
+        }
+        initLucide();
+    </script>
+
+    <!-- MANDATORY SCROLL ANIMATION LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('hero-canvas');
+            const context = canvas.getContext('2d');
+            const heroEl = document.getElementById('scroll-hero');
+            const heroTextContainer = document.getElementById('hero-text-container');
+            const loader = document.getElementById('loader');
+            const progressBar = document.getElementById('progress-bar');
+            const loadingText = document.getElementById('loading-text');
+
+            const frameCount = 78;
+            const images = [];
+            let loadedImages = 0;
+            const baseUrl = "./assets/hero-sequence/frame_";
+
+            // Antigravity smoothing variables
+            let currentFrame = 0;
+            let targetFrame = 0;
+            const ease = 0.08; // Suavização do motor Antigravity
+
+            // 1. Preload frames
+            for (let i = 0; i < frameCount; i++) {
+                const img = new Image();
+                img.onload = () => {
+                    loadedImages++;
+                    const percent = Math.floor((loadedImages / frameCount) * 100);
+                    if (progressBar) progressBar.style.width = `${percent}%`;
+                    if (loadingText) loadingText.innerText = `Formulando excelência nutricional ${percent}%...`;
+
+                    // Draw first frame immediately when it loads
+                    if (loadedImages === 1 && i === 0) {
+                        resizeCanvas();
+                        drawCover(images[0]);
+                    }
+
+                    if (loadedImages === frameCount) {
+                        // All frames loaded -> hide loader & enable scroll
+                        setTimeout(() => {
+                            if (loader) {
+                                loader.style.opacity = '0';
+                                loader.style.visibility = 'hidden';
+                            }
+                            document.body.style.overflow = 'auto'; // Re-enable scrolling
+                            
+                            // Initialize render loop
+                            resizeCanvas();
+                            requestAnimationFrame(renderLoop);
+                        }, 500); 
+                    }
+                };
+                
+                // Error handling to prevent infinite loading
+                img.onerror = () => {
+                    loadedImages++;
+                    if (loadedImages === frameCount) {
+                        setTimeout(() => {
+                            if (loader) {
+                                loader.style.opacity = '0';
+                                loader.style.visibility = 'hidden';
+                            }
+                            document.body.style.overflow = 'auto'; 
+                            resizeCanvas();
+                            requestAnimationFrame(renderLoop);
+                        }, 500);
+                    }
+                };
+                
+                img.src = `${baseUrl}${i}.webp`;
+                images.push(img);
+            }
+
+            // 2. Canvas Resize Handler
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                if (images[Math.round(currentFrame)] && images[Math.round(currentFrame)].complete) {
+                    drawCover(images[Math.round(currentFrame)]);
+                }
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+
+            // 3. Draw function with COVER sizing
+            function drawCover(img) {
+                if (!img || !img.complete) return;
+                
+                const canvasRatio = canvas.width / canvas.height;
+                const imgRatio = img.width / img.height;
+                
+                let renderWidth, renderHeight, offsetX, offsetY;
+
+                if (canvasRatio > imgRatio) {
+                    // Canvas is wider than image
+                    renderWidth = canvas.width;
+                    renderHeight = img.height * (canvas.width / img.width);
+                    offsetX = 0;
+                    offsetY = (canvas.height - renderHeight) / 2;
+                } else {
+                    // Canvas is taller than image
+                    renderHeight = canvas.height;
+                    renderWidth = img.width * (canvas.height / img.height);
+                    offsetX = (canvas.width - renderWidth) / 2;
+                    offsetY = 0;
+                }
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, offsetX, offsetY, renderWidth, renderHeight);
+            }
+
+            // 4. Scroll Event (Update target frame)
+            window.addEventListener('scroll', () => {
+                const maxScroll = Math.max(1, heroEl.offsetHeight - window.innerHeight);
+                const scrollY = window.scrollY;
+                const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
+                
+                // Set target frame based on scroll fraction
+                targetFrame = fraction * (frameCount - 1);
+                
+                // HERO TEXT ANIMATION
+                if (heroTextContainer) {
+                    const textOpacity = Math.max(0, 1 - (fraction * 2.5)); 
+                    const textTranslateY = -(fraction * 150);
+                    const textScale = Math.max(0.9, 1 - (fraction * 0.2)); 
+                    heroTextContainer.style.opacity = textOpacity;
+                    heroTextContainer.style.transform = `translateY(${textTranslateY}px) scale(${textScale})`;
+                }
+            });
+
+            // 5. Antigravity Render Loop (Lerp)
+            function renderLoop() {
+                // Lerp formula: current = current + (target - current) * ease
+                currentFrame += (targetFrame - currentFrame) * ease;
+                
+                const frameIndex = Math.round(currentFrame);
+                
+                // Try to draw the interpolated frame
+                if (images[frameIndex] && images[frameIndex].complete) {
+                    drawCover(images[frameIndex]);
+                }
+                
+                requestAnimationFrame(renderLoop);
+            }
+        });
+    </script>
+
+<!-- Buildix Badge -->
+<a href="https://buildix.app" target="_blank" rel="noopener noreferrer"
+   style="position:fixed;bottom:16px;right:16px;z-index:9999;display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(24,24,27,0.9);backdrop-filter:blur(4px);border-radius:9999px;font-size:12px;color:#a1a1aa;text-decoration:none;border:1px solid rgba(63,63,70,0.5);font-family:system-ui,-apple-system,sans-serif;transition:color 0.2s;"
+   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">
+  <svg width="14" height="14" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bx-deep" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+      <stop offset="0%" stop-color="#4a1a88"/>
+      <stop offset="40%" stop-color="#200d50"/>
+      <stop offset="100%" stop-color="#02010a"/>
+    </radialGradient>
+    <radialGradient id="bx-neb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff33dd" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#330044" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bx-neb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#55ffff" stop-opacity="0.7"/>
+      <stop offset="70%" stop-color="#003366" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="bx-clip"><circle cx="256" cy="256" r="200"/></clipPath>
+  </defs>
+  <g>
+    <circle cx="256" cy="256" r="202" fill="none" stroke="#aa88ff" stroke-width="3" opacity="0.5"/>
+    <g clip-path="url(#bx-clip)">
+      <rect width="512" height="512" fill="url(#bx-deep)"/>
+      <circle cx="180" cy="180" r="300" fill="url(#bx-neb1)" opacity="0.7"/>
+      <circle cx="350" cy="350" r="280" fill="url(#bx-neb2)" opacity="0.6"/>
+      <g fill="#fff">
+        <circle cx="200" cy="150" r="2" opacity="0.9"/>
+        <circle cx="100" cy="300" r="1.5" opacity="0.7"/>
+        <circle cx="350" cy="100" r="1.8" opacity="0.8"/>
+        <circle cx="400" cy="300" r="1.2" opacity="0.6"/>
+        <circle cx="256" cy="256" r="2" opacity="0.8"/>
+      </g>
+    </g>
+    <circle cx="256" cy="256" r="200" fill="none" stroke="#6d58a6" stroke-width="1.5" opacity="0.3"/>
+  </g>
+</svg>
+  Made in Buildix
+</a>
+<!-- End Buildix Badge -->
+
+</body>
+</html>
