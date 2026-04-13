@@ -9,188 +9,281 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style type="text/tailwindcss">
         @theme {
             --color-petroleum: #0F3A47;
+            --color-petroleum-dark: #0A2730;
+            --color-petroleum-light: #1A5465;
+            
             --color-emerald: #047857;
+            --color-emerald-dark: #065F46;
+            --color-emerald-light: #10B981;
+            
             --color-milky: #F5F7F5;
+            --color-milky-dark: #EAECE9;
+            --color-milky-light: #FFFFFF;
+
+            --font-sans: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-sans);
             background-color: var(--color-milky);
-            overflow-x: hidden;
+            color: var(--color-petroleum);
+            overflow: hidden; /* Locked until frames load */
         }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* Bento Grid Custom Styles */
+        .bento-card {
+            @apply bg-white rounded-3xl p-8 border border-milky-dark shadow-sm transition-all duration-300 hover:shadow-md;
+        }
+        
+        .bento-card-dark {
+            @apply bg-petroleum rounded-3xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl text-white relative overflow-hidden;
         }
 
-        #hero-canvas {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        .loader {
-            position: fixed;
-            inset: 0;
-            background: var(--color-petroleum);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: opacity 0.8s ease;
+        .product-card {
+            @apply bg-white rounded-2xl overflow-hidden border border-milky-dark shadow-sm group transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader" class="loader">
-        <div class="text-white mb-4 font-semibold tracking-widest uppercase">Germano Saúde Animal</div>
-        <div class="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
-            <div id="progress" class="h-full bg-emerald-500 w-0 transition-all duration-300"></div>
+    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,var(--color-petroleum),var(--color-emerald));z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
+        <div class="mb-4 animate-bounce">
+            <i data-lucide="shield-plus" class="w-16 h-16 text-white"></i>
         </div>
-        <div id="percent" class="text-white/50 text-xs mt-2 font-mono">0%</div>
+        <h2 class="text-3xl font-bold text-white mb-2 tracking-tight uppercase">GERMANO SAÚDE ANIMAL</h2>
+        <div style="width:16rem;height:0.5rem;background:rgba(255,255,255,0.2);border-radius:9999px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:white;transition:all 100ms ease-out;width:0%;"></div>
+        </div>
+        <p id="loading-text" class="text-white/90 mt-3 text-sm font-medium tracking-wide">Formulando excelência nutricional 0%...</p>
     </div>
 
-    <canvas id="hero-canvas"></canvas>
+    <nav class="fixed top-0 left-0 w-full z-50 bg-milky/90 backdrop-blur-md border-b border-milky-dark py-4 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-petroleum p-2 rounded-lg">
+                    <i data-lucide="leaf" class="w-6 h-6 text-emerald-light"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-petroleum">GERMANO<span class="font-light text-petroleum-light">SaúdeAnimal</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#solucoes" class="text-petroleum hover:text-emerald transition-colors">Soluções</a>
+                <a href="#autoridade" class="text-petroleum hover:text-emerald transition-colors">A Empresa</a>
+                <a href="#produtos" class="text-petroleum hover:text-emerald transition-colors">Linha de Produtos</a>
+                <a href="#contato" class="bg-emerald hover:bg-emerald-dark text-white px-6 py-2.5 rounded-full transition-colors font-semibold shadow-sm flex items-center gap-2">
+                    Fale Conosco
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
 
-    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-black/20 to-transparent">
-        <div class="text-white font-extrabold text-xl tracking-tighter">GERMANO</div>
-        <a href="https://wa.me/seu-numero" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-full font-medium transition-all transform hover:scale-105">
-            Falar com Especialista
-        </a>
+            <button class="md:hidden text-petroleum">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
     </nav>
 
-    <section class="relative h-[400vh] w-full">
-        <div class="sticky top-0 h-screen flex flex-col items-center justify-center text-center px-4">
-            <h1 class="text-5xl md:text-8xl font-extrabold text-petroleum mb-6 leading-none">
-                Nutrição de <br><span class="text-emerald-600">Alta Performance</span>
-            </h1>
-            <p class="text-petroleum/70 max-w-lg font-medium">
-                Sincronizando ciência e tecnologia para elevar a produtividade do seu rebanho.
-            </p>
-            <div class="mt-12 animate-bounce">
-                <div class="w-6 h-10 border-2 border-petroleum/30 rounded-full flex justify-center p-1">
-                    <div class="w-1 h-2 bg-emerald-600 rounded-full"></div>
+    <section id="scroll-hero" style="height:400vh;position:relative;background-color:var(--color-milky);">
+        <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
+            <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+            
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, var(--color-milky) 0%, var(--color-milky) 15%, rgba(245,247,245,0.85) 35%, transparent 70%);z-index:1;pointer-events:none;"></div>
+            
+            <div style="position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;padding-bottom:10vh;">
+                <div class="max-w-7xl mx-auto px-6 w-full" id="hero-text-container">
+                    <div class="max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald/10 border border-emerald/20 text-emerald-dark text-sm font-semibold mb-6">
+                            <i data-lucide="microscope" class="w-4 h-4"></i>
+                            Tecnologia em Nutrição
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-extrabold text-petroleum leading-tight mb-6 tracking-tight">
+                            Potencializando Resultados no <span class="text-transparent bg-clip-text bg-gradient-to-r from-petroleum to-emerald">Setor Produtivo.</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-petroleum-light mb-8 max-w-2xl leading-relaxed">
+                            Desenvolvemos soluções nutricionais de alta performance para garantir a saúde e a produtividade máxima do seu rebanho, unindo ciência e resultados em campo.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-4">
+                            <a href="#produtos" class="bg-emerald hover:bg-emerald-dark text-white px-8 py-4 rounded-full transition-all text-lg font-semibold shadow-lg hover:shadow-emerald/30 flex items-center gap-2 group">
+                                Conheça Nossas Soluções
+                                <i data-lucide="chevron-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 px-6 pt-[100vh]">
-            <div class="glass p-8 rounded-3xl md:col-span-2">
-                <h3 class="text-3xl font-bold text-petroleum mb-2">+450 Cidades</h3>
-                <p class="text-petroleum/60">Atendimento logístico estratégico em todo o território nacional.</p>
-            </div>
-            <div class="bg-petroleum p-8 rounded-3xl text-white">
-                <h3 class="text-3xl font-bold text-emerald-400">1.2M</h3>
-                <p class="opacity-70">Toneladas de nutrição produzidas com rigor científico.</p>
-            </div>
-            <div class="glass p-8 rounded-3xl">
-                <h3 class="text-2xl font-bold text-petroleum">Anápolis-GO</h3>
-                <p class="text-petroleum/60">Sede tecnológica e centro de distribuição.</p>
-            </div>
-            <div class="glass p-8 rounded-3xl md:col-span-2 flex justify-between items-center">
-                <div>
-                    <h3 class="text-2xl font-bold text-petroleum">Inovação Germano</h3>
-                    <p class="text-petroleum/60">Fórmulas exclusivas para conversão alimentar extrema.</p>
-                </div>
-                <div class="bg-emerald-100 p-4 rounded-full text-emerald-700 font-bold">BioTech</div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-petroleum-dark text-white p-12 text-center">
-        <p class="opacity-50 text-sm">© 2026 Germano Saúde Animal - Anápolis, GO</p>
-    </footer>
+    <section id="autoridade" class="py-24 bg-milky relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-petroleum mb-4">Números que Comprovam Nossa Força</h2>
+                <p class="text-petroleum-light text-lg max-w-2xl mx-auto">Excelência em cada grama de nutrição produzida em Anápolis-GO.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)]">
+                <div class="bento-card md:col-span-2 flex flex-col justify-between group">
+                    <div class="p-3 bg-emerald/10 rounded-xl text-emerald w-fit">
+                        <i data-lucide="map-pin" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-5xl font-extrabold text-petroleum mb-2">+ de 450</h3>
+                        <p class="text-lg text-petroleum-light font-medium">Cidades Atendidas diariamente.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card-dark flex flex-col justify-between group">
+                    <div class="p-3 bg-white/10 w-fit rounded-xl text-emerald-light mb-6 backdrop-blur-sm">
+                        <i data-lucide="factory" class="w-8 h-8"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-4xl font-extrabold text-white mb-2">1.2M</h3>
+                        <p class="text-milky-dark font-medium">Toneladas Produzidas.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card bg-emerald text-white flex flex-col justify-between overflow-hidden relative">
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold mb-2">Qualidade</h3>
+                        <p class="text-white/80">Certificações ISO 9001 e BPFA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        function initLucide(){
+            if(window.lucide){ lucide.createIcons(); } else { setTimeout(initLucide, 200); }
+        }
+        initLucide();
+    </script>
 
     <script>
-        const canvas = document.getElementById("hero-canvas");
-        const context = canvas.getContext("2d");
-        const loader = document.getElementById("loader");
-        const progressLine = document.getElementById("progress");
-        const percentText = document.getElementById("percent");
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('hero-canvas');
+            const context = canvas.getContext('2d');
+            const heroEl = document.getElementById('scroll-hero');
+            const heroTextContainer = document.getElementById('hero-text-container');
+            const loader = document.getElementById('loader');
+            const progressBar = document.getElementById('progress-bar');
+            const loadingText = document.getElementById('loading-text');
 
-        canvas.width = 1920;
-        canvas.height = 1080;
+            const frameCount = 78;
+            const images = [];
+            let loadedImages = 0;
 
-        const frameCount = 78;
-        const images = [];
-        let loadedCount = 0;
-
-        // Função para formatar o nome do ficheiro exatamente como está no teu Git
-        const getFileName = index => {
-            const pad = index.toString().padStart(2, '0');
-            return `./frame_${pad}_delay-0.041s.webp`;
-        };
-
-        // Preload das imagens
-        for (let i = 0; i < frameCount; i++) {
-            const img = new Image();
-            img.src = getFileName(i);
-            img.onload = () => {
-                loadedCount++;
-                const progress = Math.round((loadedCount / frameCount) * 100);
-                progressLine.style.width = progress + "%";
-                percentText.innerText = progress + "%";
-                
-                if (loadedCount === frameCount) {
-                    setTimeout(() => {
-                        loader.style.opacity = "0";
-                        setTimeout(() => loader.remove(), 800);
-                    }, 500);
-                    render();
-                }
+            // FUNÇÃO ATUALIZADA: Padrão exato do seu GitHub (frame_00_delay-0.041s.webp) na raiz
+            const getUrl = (index) => {
+                const pad = index.toString().padStart(2, '0');
+                return `./frame_${pad}_delay-0.041s.webp`;
             };
-            images.push(img);
-        }
 
-        const imageSequence = { frame: 0 };
+            // Antigravity smoothing variables
+            let currentFrame = 0;
+            let targetFrame = 0;
+            const ease = 0.08; 
 
-        function render() {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            if (images[imageSequence.frame]) {
-                context.drawImage(images[imageSequence.frame], 0, 0);
+            // 1. Preload frames
+            for (let i = 0; i < frameCount; i++) {
+                const img = new Image();
+                img.onload = () => {
+                    loadedImages++;
+                    const percent = Math.floor((loadedImages / frameCount) * 100);
+                    if (progressBar) progressBar.style.width = `${percent}%`;
+                    if (loadingText) loadingText.innerText = `Formulando excelência nutricional ${percent}%...`;
+
+                    if (loadedImages === 1 && i === 0) {
+                        resizeCanvas();
+                        drawCover(images[0]);
+                    }
+
+                    if (loadedImages === frameCount) {
+                        setTimeout(() => {
+                            if (loader) {
+                                loader.style.opacity = '0';
+                                loader.style.visibility = 'hidden';
+                            }
+                            document.body.style.overflow = 'auto'; 
+                            resizeCanvas();
+                            requestAnimationFrame(renderLoop);
+                        }, 500); 
+                    }
+                };
+                
+                img.onerror = () => {
+                    loadedImages++;
+                    console.error("Erro ao carregar:", img.src);
+                    if (loadedImages === frameCount) {
+                        loader.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                };
+                
+                img.src = getUrl(i);
+                images.push(img);
             }
-        }
 
-        // Lógica de Scroll "Antigravity Style" (Suavização com LERP)
-        let currentScroll = 0;
-        let targetScroll = 0;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                if (images[Math.round(currentFrame)]?.complete) {
+                    drawCover(images[Math.round(currentFrame)]);
+                }
+            }
 
-        window.addEventListener("scroll", () => {
-            targetScroll = window.scrollY;
+            window.addEventListener('resize', resizeCanvas);
+
+            function drawCover(img) {
+                if (!img || !img.complete) return;
+                const canvasRatio = canvas.width / canvas.height;
+                const imgRatio = img.width / img.height;
+                let renderWidth, renderHeight, offsetX, offsetY;
+
+                if (canvasRatio > imgRatio) {
+                    renderWidth = canvas.width;
+                    renderHeight = img.height * (canvas.width / img.width);
+                    offsetX = 0;
+                    offsetY = (canvas.height - renderHeight) / 2;
+                } else {
+                    renderHeight = canvas.height;
+                    renderWidth = img.width * (canvas.height / img.height);
+                    offsetX = (canvas.width - renderWidth) / 2;
+                    offsetY = 0;
+                }
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, offsetX, offsetY, renderWidth, renderHeight);
+            }
+
+            window.addEventListener('scroll', () => {
+                const maxScroll = Math.max(1, heroEl.offsetHeight - window.innerHeight);
+                const scrollY = window.scrollY;
+                const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
+                targetFrame = fraction * (frameCount - 1);
+                
+                if (heroTextContainer) {
+                    const textOpacity = Math.max(0, 1 - (fraction * 2.5)); 
+                    heroTextContainer.style.opacity = textOpacity;
+                    heroTextContainer.style.transform = `translateY(${-(fraction * 150)}px) scale(${Math.max(0.9, 1 - (fraction * 0.2))})`;
+                }
+            });
+
+            function renderLoop() {
+                currentFrame += (targetFrame - currentFrame) * ease;
+                const frameIndex = Math.round(currentFrame);
+                if (images[frameIndex]?.complete) {
+                    drawCover(images[frameIndex]);
+                }
+                requestAnimationFrame(renderLoop);
+            }
         });
-
-        function animate() {
-            // Suavização do scroll
-            currentScroll += (targetScroll - currentScroll) * 0.1;
-            
-            const maxScroll = document.body.scrollHeight - window.innerHeight;
-            const scrollFraction = currentScroll / maxScroll;
-            
-            const frameIndex = Math.min(
-                frameCount - 1,
-                Math.max(0, Math.floor(scrollFraction * frameCount * 1.5)) // Multiplicador para a animação terminar antes do fim do scroll
-            );
-
-            imageSequence.frame = frameIndex;
-            render();
-            requestAnimationFrame(animate);
-        }
-
-        animate();
     </script>
+
 </body>
 </html>
