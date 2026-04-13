@@ -57,6 +57,11 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+
+        /* Scrollbar suave para o chat */
+        #chat-history::-webkit-scrollbar { width: 4px; }
+        #chat-history::-webkit-scrollbar-track { background: transparent; }
+        #chat-history::-webkit-scrollbar-thumb { background: #0F3A4720; border-radius: 10px; }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -73,8 +78,8 @@
     </div>
 
     <div class="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
-        <div id="whatsapp-chat" class="mb-6 w-[340px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden">
-            <div class="bg-petroleum p-6 flex items-center gap-4">
+        <div id="whatsapp-chat" class="mb-6 w-[340px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden flex flex-col">
+            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0">
                 <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-white flex items-center justify-center">
                     <img src="assets/camila.jpg.jpg" alt="Camila" class="w-full h-full object-cover block">
                     <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
@@ -89,20 +94,27 @@
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="p-6 bg-milky/30">
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed">
+            
+            <div id="chat-history" class="p-6 bg-milky/30 h-[280px] overflow-y-auto flex flex-col gap-4">
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]">
                     Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br>
                     Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
                 </div>
-                <p class="text-[10px] text-petroleum/30 mt-4 uppercase font-bold tracking-[0.2em] text-center">Resposta em menos de 5 min</p>
             </div>
-            <div class="p-6 pt-0">
-                <a href="https://wa.me/5562999999999" target="_blank" class="flex items-center justify-center gap-3 bg-emerald hover:bg-[#03664a] text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-emerald/20 transform active:scale-95">
-                    <img src="3d-round-with-whatsapp-logo.png" class="w-6 h-6" alt="">
-                    Iniciar Conversa
-                </a>
+
+            <div class="p-4 bg-white border-t border-petroleum/5">
+                <div class="flex gap-2 items-center bg-milky rounded-2xl px-4 py-2 border border-petroleum/5 focus-within:border-emerald transition-colors">
+                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." 
+                           class="flex-1 bg-transparent border-none text-sm text-petroleum outline-none py-2"
+                           onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl hover:bg-emerald-dark transition-all transform active:scale-90">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <p class="text-[9px] text-petroleum/30 mt-2 text-center uppercase tracking-widest font-bold">Camila responde em segundos</p>
             </div>
         </div>
+
         <button onclick="toggleChat()" class="group flex items-center justify-center relative cursor-pointer">
             <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping group-hover:animate-none"></span>
             <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
@@ -188,12 +200,60 @@
     </footer>
 
     <script>
+        // --- LÓGICA DO CHAT SIMULADO ---
         function toggleChat() {
             const chat = document.getElementById('whatsapp-chat');
             chat.classList.toggle('active');
             if(chat.classList.contains('active')) initLucide();
         }
 
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const history = document.getElementById('chat-history');
+            const msg = input.value.trim();
+
+            if (msg === "") return;
+
+            // Adiciona mensagem do usuário
+            const userDiv = document.createElement('div');
+            userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
+            userDiv.innerText = msg;
+            history.appendChild(userDiv);
+            
+            input.value = "";
+            history.scrollTop = history.scrollHeight;
+
+            // Simula "Digitando..."
+            const typingDiv = document.createElement('div');
+            typingDiv.className = "text-[10px] text-petroleum/40 font-bold animate-pulse italic ml-2";
+            typingDiv.id = "typing-indicator";
+            typingDiv.innerText = "Camila está digitando...";
+            history.appendChild(typingDiv);
+            history.scrollTop = history.scrollHeight;
+
+            // Resposta Automática após 2 segundos
+            setTimeout(() => {
+                document.getElementById('typing-indicator').remove();
+                
+                const responseDiv = document.createElement('div');
+                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]";
+                
+                // Sugestão de resposta inteligente
+                responseDiv.innerHTML = "<strong>Camila:</strong> Ótima pergunta! Para te dar um suporte técnico bem preciso sobre isso, vou te conectar agora com nosso especialista no WhatsApp.";
+                
+                history.appendChild(responseDiv);
+                history.scrollTop = history.scrollHeight;
+
+                // Abre o WhatsApp após a resposta
+                setTimeout(() => {
+                    const zapUrl = `https://wa.me/5562999999999?text=${encodeURIComponent("Olá Camila, eu estava no site e tenho uma dúvida: " + msg)}`;
+                    window.open(zapUrl, "_blank");
+                }, 1500);
+
+            }, 2000);
+        }
+
+        // --- LÓGICA DO VÍDEO E SCROLL (ESTRUTURA MANTIDA) ---
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
         initLucide();
 
