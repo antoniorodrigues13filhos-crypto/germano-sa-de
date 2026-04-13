@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
@@ -7,8 +8,6 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style type="text/tailwindcss">
@@ -30,182 +29,106 @@
         .glass-nav {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="antialiased selection:bg-emerald selection:text-white">
 
-    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
-        <div class="mb-6 animate-pulse">
-            <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
-        </div>
-        <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
-            <div id="progress-bar" style="height:100%;background:white;width:0%;transition:width 0.2s;"></div>
+<nav class="fixed top-0 w-full z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <img src="logo_germano-removebg-preview.png" class="w-36">
+        <div class="hidden md:flex gap-10 items-center text-sm font-semibold">
+            <a href="#scroll-hero">Inovação</a>
+            <a href="#produtos">Produtos</a>
         </div>
     </div>
+</nav>
 
-    <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 py-0 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
-            </div>
-            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
-                <a href="#scroll-hero" class="hover:text-emerald transition-colors">Inovação</a>
-                <a href="#produtos" class="hover:text-emerald transition-colors">Produtos</a>
-                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-petroleum-dark transition-all cursor-pointer">Falar com Especialista</button>
-            </div>
+<section id="scroll-hero" style="height:200vh;background:#000;"></section>
+
+<!-- PRODUTOS -->
+<section id="produtos" class="py-32 bg-milky">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-black mb-12">BioTech Germano</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </div>
+</section>
+
+<script>
+const produtos = [
+    {
+        nome: "Germano Prime",
+        descricao: "Alta performance e precisão molecular.",
+        imagem: "produto1.png"
+    },
+    {
+        nome: "Germano Plus",
+        descricao: "Fortalecimento imunológico.",
+        imagem: "produto2.png"
+    },
+    {
+        nome: "Germano Max",
+        descricao: "Máxima proteção do rebanho.",
+        imagem: "produto3.png"
+    }
+];
+
+const container = document.querySelector("#produtos .grid");
+
+produtos.forEach(produto => {
+    const card = document.createElement("div");
+
+    card.className = `
+    reveal group p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white
+    transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl cursor-pointer`;
+
+    card.innerHTML = `
+        <div class="mb-6 overflow-hidden rounded-2xl">
+            <img src="${produto.imagem}" 
+            class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
         </div>
-    </nav>
 
-    <section id="scroll-hero" style="height:400vh;position:relative;background-color:#000;">
-        <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
-            <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top, #0F3A47, transparent 70%);z-index:1;opacity:0.6;"></div>
-            
-            <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
-                <div class="text-center px-6 max-w-5xl">
-                    
-                    <h1 id="text-01" class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
-                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
-                    </h1>
+        <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald">
+            ${produto.nome}
+        </h3>
 
-                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute">
-                        Um único animal afetado pode reduzir drasticamente sua produção.
-                    </p>
+        <p class="text-sm opacity-70">
+            ${produto.descricao}
+        </p>
+    `;
 
-                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 absolute uppercase">
-                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/> 
-                        <span class="text-xl font-light tracking-widest block mt-4">Simples assim.</span>
-                    </h2>
+    container.appendChild(card);
+});
 
-                </div>
-            </div>
-        </div>
-    </section>
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.classList.add("show");
+        }
+    });
+});
 
-    <section id="produtos" class="py-32 bg-milky relative z-10">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-black text-petroleum mb-12 uppercase tracking-tighter">BioTech Germano</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white">
-                    <h3 class="text-2xl font-bold mb-4">Germano Prime</h3>
-                    <p class="text-petroleum/60 text-sm">Alta performance e precisão molecular.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+setTimeout(() => {
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+}, 200);
+</script>
 
-    <script>
-        function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
-        initLucide();
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const canvas = document.getElementById("hero-canvas");
-            const context = canvas.getContext("2d");
-            const heroEl = document.getElementById("scroll-hero");
-            
-            const text01 = document.getElementById("text-01");
-            const text02 = document.getElementById("text-02");
-            const text03 = document.getElementById("text-03");
-
-            const frameCount = 78;
-            const images = [];
-            let loadedImages = 0;
-
-            const getUrl = (index) => `./frame_${index.toString().padStart(2, '0')}_delay-0.041s.webp`;
-
-            const resizeCanvas = () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                if (images[0]) drawImage(images[0]);
-            };
-
-            const drawImage = (img) => {
-                const canvasRatio = canvas.width / canvas.height;
-                const imgRatio = img.width / img.height;
-                let drawWidth, drawHeight, x = 0, y = 0;
-                if (canvasRatio > imgRatio) {
-                    drawWidth = canvas.width;
-                    drawHeight = img.height * (canvas.width / img.width);
-                    y = (canvas.height - drawHeight) / 2;
-                } else {
-                    drawHeight = canvas.height;
-                    drawWidth = img.width * (canvas.height / img.height);
-                    x = (canvas.width - drawWidth) / 2;
-                }
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(img, x, y, drawWidth, drawHeight);
-            };
-
-            for (let i = 0; i < frameCount; i++) {
-                const img = new Image();
-                img.onload = () => {
-                    loadedImages++;
-                    images[i] = img;
-                    document.getElementById("progress-bar").style.width = `${(loadedImages / frameCount) * 100}%`;
-                    if (loadedImages === frameCount) {
-                        setTimeout(() => {
-                            document.getElementById("loader").style.opacity = "0";
-                            setTimeout(() => document.getElementById("loader").style.visibility = "hidden", 500);
-                            document.body.style.overflow = "auto";
-                            resizeCanvas();
-                        }, 400);
-                    }
-                };
-                img.src = getUrl(i);
-            }
-
-            window.addEventListener("resize", resizeCanvas);
-            
-            window.addEventListener("scroll", () => {
-                const scrollY = window.scrollY;
-                const maxScroll = heroEl.offsetHeight - window.innerHeight;
-                const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
-                
-                // Sequência de frames
-                const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
-                if (images[frameIndex]) {
-                    requestAnimationFrame(() => drawImage(images[frameIndex]));
-                }
-
-                // LÓGICA DINÂMICA DE TEXTOS
-                
-                // Texto 1: (0% a 25%)
-                if (fraction <= 0.25) {
-                    text01.style.opacity = 1 - (fraction * 4);
-                    text01.style.transform = `translateY(${-(fraction * 100)}px)`;
-                    text01.style.display = "block";
-                } else {
-                    text01.style.display = "none";
-                }
-
-                // Texto 2: (35% a 65%)
-                if (fraction > 0.35 && fraction <= 0.70) {
-                    const localFrac = (fraction - 0.35) / 0.15; 
-                    const fadeOutFrac = (fraction - 0.55) / 0.15;
-                    let opacity = fraction > 0.55 ? 1 - fadeOutFrac : localFrac;
-                    
-                    text02.style.opacity = Math.max(0, Math.min(1, opacity));
-                    text02.style.display = "block";
-                } else {
-                    text02.style.display = "none";
-                }
-
-                // Texto 3: (75% a 100%) - O Grande Final
-                if (fraction > 0.75) {
-                    const localFrac = (fraction - 0.75) / 0.15; 
-                    text03.style.opacity = Math.max(0, Math.min(1, localFrac));
-                    text03.style.transform = `scale(${0.95 + (Math.min(1, localFrac) * 0.05)})`;
-                    text03.style.display = "block";
-                } else {
-                    text03.style.display = "none";
-                }
-            });
-        });
-    </script>
 </body>
 </html>
+```
