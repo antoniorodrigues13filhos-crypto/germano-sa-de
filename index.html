@@ -34,16 +34,23 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .reveal {
+        /* EFEITO VORA/AURA PARALLAX */
+        .parallax-card {
             opacity: 0;
-            transform: translateY(60px);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(100px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .reveal.show {
+        .parallax-card.active {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Delay para o efeito cascata lateral */
+        .card-delay-1 { transition-delay: 0.1s; }
+        .card-delay-2 { transition-delay: 0.3s; }
+        .card-delay-3 { transition-delay: 0.5s; }
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -64,10 +71,10 @@
             <div class="flex items-center">
                 <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
             </div>
-            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
-                <a href="#scroll-hero" class="hover:text-emerald transition-colors">Inovação</a>
-                <a href="#produtos" class="hover:text-emerald transition-colors">Produtos</a>
-                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-petroleum-dark transition-all cursor-pointer">Falar com Especialista</button>
+            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum text-white">
+                <a href="#scroll-hero" class="hover:text-emerald transition-colors uppercase">Inovação</a>
+                <a href="#biotech-section" class="hover:text-emerald transition-colors uppercase">Produtos</a>
+                <button class="bg-white text-petroleum px-8 py-3 rounded-full font-bold hover:bg-emerald hover:text-white transition-all cursor-pointer">Falar com Especialista</button>
             </div>
         </div>
     </nav>
@@ -79,7 +86,7 @@
             
             <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl">
-                    <h1 id="text-01" class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
+                    <h1 id="text-01" class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
                         Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
                     </h1>
                     <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute">
@@ -94,12 +101,58 @@
         </div>
     </section>
 
-    <section id="produtos" class="py-32 bg-milky relative z-10">
+    <section id="biotech-section" class="relative z-10 bg-[#0F171A] py-40 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-black text-petroleum mb-12 uppercase tracking-tighter">BioTech Germano</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="produtos-container"></div>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-white/10 pb-12">
+                <div>
+                    <span class="text-emerald-light font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
+                    <h2 class="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">BioTech <br/> Germano</h2>
+                </div>
+                <p class="text-white/40 max-w-sm text-right hidden md:block italic">
+                    Tecnologia de ponta desenvolvida em Anápolis para maximizar o rendimento do seu rebanho.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12" id="produtos-container">
+                <div class="parallax-card card-delay-1 group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                        <img src="produtos/produto%20calmix%20cromovita1.png" alt="Calmix" 
+                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Calmix Cromovita</h3>
+                    <p class="text-white/50 leading-relaxed">Equilíbrio nutricional e redução drástica de estresse do rebanho sob manejo intensivo.</p>
+                </div>
+
+                <div class="parallax-card card-delay-2 group cursor-pointer md:mt-24">
+                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                        <img src="produtos/produto%20fort%20vit%20+%203.png" alt="Fort Vit" 
+                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Fort Vit + 3</h3>
+                    <p class="text-white/50 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior e acabamento de carcaça.</p>
+                </div>
+
+                <div class="parallax-card card-delay-3 group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                        <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" alt="Núcleo" 
+                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Núcleo Acelerado</h3>
+                    <p class="text-white/50 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde com eficiência alimentar molecular.</p>
+                </div>
+            </div>
         </div>
     </section>
+
+    <footer class="bg-[#0F171A] py-20 border-t border-white/5">
+        <div class="text-center">
+            <img src="logo_germano-removebg-preview.png" class="w-24 mx-auto mb-8 opacity-20" alt="">
+            <p class="text-white/20 text-xs tracking-widest uppercase">© 2026 Germano Saúde Animal | Anápolis-GO</p>
+        </div>
+    </footer>
 
     <script>
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
@@ -194,55 +247,16 @@
                     text03.style.opacity = Math.max(0, Math.min(1, localFrac));
                     text03.style.display = "block";
                 } else { text03.style.display = "none"; }
-            });
 
-            // PRODUTOS
-            const produtos = [
-                {
-                    nome: "Calmix Cromovita",
-                    descricao: "Equilíbrio nutricional e redução de estresse do rebanho.",
-                    imagem: "produtos/produto%20calmix%20cromovita1.png"
-                },
-                {
-                    nome: "Fort Vit + 3",
-                    descricao: "Máximo desempenho e imunidade superior.",
-                    imagem: "produtos/produto%20fort%20vit%20+%203.png"
-                },
-                {
-                    nome: "Germano Núcleo Acelerado",
-                    descricao: "Aceleração de ganho de peso e eficiência alimentar.",
-                    imagem: "produtos/produto%20germano%20nucleo%20acelerado%202.png"
-                }
-            ];
-
-            const containerProdutos = document.getElementById("produtos-container");
-            produtos.forEach(produto => {
-                const card = document.createElement("div");
-                card.className = "reveal group p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:shadow-emerald/20 cursor-pointer";
-                card.innerHTML = `
-                    <div class="mb-6 overflow-hidden rounded-2xl bg-petroleum/5">
-                        <img src="${produto.imagem}" class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Germano+Produto'">
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald">${produto.nome}</h3>
-                    <p class="text-petroleum/60 text-sm">${produto.descricao}</p>
-                `;
-                containerProdutos.appendChild(card);
-            });
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if(entry.isIntersecting) entry.target.classList.add("show");
+                // EFEITO PARALLAX VORA (REVEAL ON SCROLL)
+                document.querySelectorAll('.parallax-card').forEach(card => {
+                    const cardTop = card.getBoundingClientRect().top;
+                    if(cardTop < window.innerHeight * 0.85) {
+                        card.classList.add('active');
+                    }
                 });
-            }, { threshold: 0.1 });
-
-            setTimeout(() => {
-                document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
-            }, 600);
+            });
         });
     </script>
 </body>
 </html>
-
-</body>
-</html>
-```
