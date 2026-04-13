@@ -34,10 +34,11 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* EFEITO PARALLAX DE TRANSIÇÃO (ESTILO VORA) */
         .parallax-card {
             opacity: 0;
-            transform: translateY(100px);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(120px);
+            transition: all 1.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .parallax-card.active {
@@ -71,7 +72,7 @@
             <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
                 <a href="#scroll-hero" class="hover:text-emerald transition-colors uppercase">Inovação</a>
                 <a href="#biotech-section" class="hover:text-emerald transition-colors uppercase">Produtos</a>
-                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald transition-all cursor-pointer font-bold">Falar com Especialista</button>
+                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald transition-all cursor-pointer font-bold uppercase text-xs tracking-widest">Falar com Especialista</button>
             </div>
         </div>
     </nav>
@@ -79,7 +80,7 @@
     <section id="scroll-hero" style="height:400vh;position:relative;background-color:#000;">
         <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top, #0F3A47, transparent 70%);z-index:1;opacity:0.6;"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, var(--color-milky), transparent 40%);z-index:1;opacity:0.8;"></div>
             
             <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl">
@@ -98,54 +99,51 @@
         </div>
     </section>
 
-    <section id="biotech-section" class="relative z-10 bg-[#0F171A] py-40 overflow-hidden">
+    <section id="biotech-section" class="relative z-10 bg-milky py-40 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-white/10 pb-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
                 <div>
-                    <span class="text-emerald-light font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
-                    <h2 class="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">BioTech <br/> Germano</h2>
+                    <span class="text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
+                    <h2 class="text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase">BioTech <br/> Germano</h2>
                 </div>
-                <p class="text-white/40 max-w-sm text-right hidden md:block italic">
+                <p class="text-petroleum/60 max-w-sm text-right hidden md:block italic">
                     Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="parallax-card card-delay-1 group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20calmix%20cromovita1.png" alt="Calmix" 
-                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Calmix Cromovita</h3>
-                    <p class="text-white/50 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
                 </div>
 
                 <div class="parallax-card card-delay-2 group cursor-pointer md:mt-24">
-                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto-fort-vit.png" alt="Fort Vit" 
-                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Fort Vit + 3</h3>
-                    <p class="text-white/50 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
                 </div>
 
                 <div class="parallax-card card-delay-3 group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-3xl aspect-[4/5] bg-white/5 mb-8">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" alt="Núcleo" 
-                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F171A] to-transparent opacity-60"></div>
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-emerald-light transition-colors">Núcleo Acelerado</h3>
-                    <p class="text-white/50 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-[#0F171A] py-20 border-t border-white/5">
-        <div class="text-center text-white/20 text-xs tracking-widest uppercase">
+    <footer class="bg-milky py-20 border-t border-petroleum/5">
+        <div class="text-center text-petroleum/30 text-xs tracking-widest uppercase font-bold">
             © 2026 Germano Saúde Animal
         </div>
     </footer>
@@ -243,9 +241,10 @@
                     text03.style.display = "block";
                 } else { text03.style.display = "none"; }
 
+                // GATILHO PARALLAX
                 document.querySelectorAll('.parallax-card').forEach(card => {
                     const cardTop = card.getBoundingClientRect().top;
-                    if(cardTop < window.innerHeight * 0.85) card.classList.add('active');
+                    if(cardTop < window.innerHeight * 0.9) card.classList.add('active');
                 });
             });
         });
