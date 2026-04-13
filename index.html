@@ -45,18 +45,17 @@
             transform: translateY(0);
         }
 
-        /* Estilos do Chat */
         #whatsapp-chat {
             display: none;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #whatsapp-chat.active {
             display: block;
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
     </style>
 
@@ -64,7 +63,7 @@
 </head>
 <body class="antialiased selection:bg-emerald selection:text-white">
 
-    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
+    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s, visibility 0.5s;">
         <div class="mb-6 animate-pulse">
             <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
         </div>
@@ -74,36 +73,39 @@
     </div>
 
     <div class="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
-        <div id="whatsapp-chat" class="mb-6 w-[320px] bg-white rounded-[32px] shadow-2xl border border-petroleum/5 overflow-hidden">
+        <div id="whatsapp-chat" class="mb-6 w-[340px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden">
             <div class="bg-petroleum p-6 flex items-center gap-4">
-                <div class="relative w-12 h-12 rounded-full overflow-hidden bg-white/10 border border-white/20">
-                    <img src="atendente.png" alt="Atendente Germano" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Germano+Suporte&background=047857&color=fff'">
-                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full"></span>
+                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-milky">
+                    <img src="camila.jpg" alt="Camila Germano" class="w-full h-full object-cover">
+                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold text-sm">Consultoria Germano</h4>
-                    <p class="text-white/60 text-xs">Online agora</p>
+                    <h4 class="text-white font-bold text-base leading-tight">Camila</h4>
+                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora
+                    </p>
                 </div>
                 <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="p-6 bg-milky/50">
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm leading-relaxed">
-                    Olá! Sou da equipe técnica da <strong>Germano</strong>. Como posso ajudar no desempenho do seu rebanho hoje?
+            <div class="p-6 bg-milky/30">
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed">
+                    Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br>
+                    Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
                 </div>
-                <p class="text-[10px] text-petroleum/30 mt-4 uppercase font-bold tracking-widest text-center">Início da conversa</p>
+                <p class="text-[10px] text-petroleum/30 mt-4 uppercase font-bold tracking-[0.2em] text-center">Resposta em menos de 5 min</p>
             </div>
             <div class="p-6 pt-0">
-                <a href="https://wa.me/5562999999999" target="_blank" class="flex items-center justify-center gap-3 bg-emerald hover:bg-emerald-dark text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-emerald/20">
-                    <img src="3d-round-with-whatsapp-logo.png" class="w-5 h-5" alt="">
-                    Iniciar Atendimento
+                <a href="https://wa.me/5562999999999" target="_blank" class="flex items-center justify-center gap-3 bg-emerald hover:bg-[#03664a] text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-emerald/20 transform active:scale-95">
+                    <img src="3d-round-with-whatsapp-logo.png" class="w-6 h-6" alt="">
+                    Iniciar Conversa
                 </a>
             </div>
         </div>
         <button onclick="toggleChat()" class="group flex items-center justify-center relative cursor-pointer">
             <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping group-hover:animate-none"></span>
-            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110">
+            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
                 <img src="3d-round-with-whatsapp-logo.png" alt="WhatsApp" class="w-10 h-10 object-contain">
             </div>
         </button>
@@ -125,7 +127,6 @@
     <section id="scroll-hero" style="height:400vh;position:relative;background-color:#000;">
         <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100vw;height:100vh;display:block;"></canvas>
-            
             <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl">
                     <h1 id="text-01" class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
@@ -154,7 +155,6 @@
                     Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
                 </p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="parallax-card card-delay-1 group cursor-pointer">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
@@ -163,7 +163,6 @@
                     <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
                     <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
                 </div>
-
                 <div class="parallax-card card-delay-2 group cursor-pointer md:mt-24">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto-fort-vit.png" alt="Fort Vit" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -171,7 +170,6 @@
                     <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
                     <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
                 </div>
-
                 <div class="parallax-card card-delay-3 group cursor-pointer">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" alt="Núcleo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -206,11 +204,9 @@
             const text01 = document.getElementById("text-01");
             const text02 = document.getElementById("text-02");
             const text03 = document.getElementById("text-03");
-            
             const frameCount = 78;
             const images = [];
             let loadedImages = 0;
-
             const getUrl = (index) => `./frame_${index.toString().padStart(2, '0')}_delay-0.041s.webp`;
 
             const resizeCanvas = () => {
@@ -224,7 +220,6 @@
                 const imgRatio = img.width / img.height;
                 let drawWidth, drawHeight, x = 0, y = 0;
                 
-                // LÓGICA COVER (PARA NÃO TER BORDAS PRETAS)
                 if (canvasRatio > imgRatio) {
                     drawWidth = canvas.width;
                     drawHeight = img.height * (canvas.width / img.width);
@@ -234,7 +229,6 @@
                     drawWidth = img.width * (canvas.height / img.height);
                     x = (canvas.width - drawWidth) / 2;
                 }
-                
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.drawImage(img, x, y, drawWidth, drawHeight);
             };
@@ -260,16 +254,12 @@
             }
 
             window.addEventListener("resize", resizeCanvas);
-            
             window.addEventListener("scroll", () => {
                 const scrollY = window.scrollY;
                 const maxScroll = heroEl.offsetHeight - window.innerHeight;
                 const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
-                
                 const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
-                if (images[frameIndex]) {
-                    requestAnimationFrame(() => drawImage(images[frameIndex]));
-                }
+                if (images[frameIndex]) requestAnimationFrame(() => drawImage(images[frameIndex]));
 
                 if (fraction <= 0.25) {
                     text01.style.opacity = 1 - (fraction * 4);
