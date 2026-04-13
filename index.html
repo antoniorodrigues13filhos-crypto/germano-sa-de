@@ -30,7 +30,6 @@
             overflow: hidden; 
         }
 
-        /* Efeito de Vidro Ultra Transparente */
         .glass-nav {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(40px);
@@ -86,11 +85,11 @@
             
             <div id="hero-text-container" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl mt-24">
-                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl">
-                        PRECISÃO <br/> <span class="text-emerald-light">MOLECULAR</span>
+                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl uppercase">
+                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
                     </h1>
-                    <p class="text-white/70 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto drop-shadow-md">
-                        Nutrição avançada de Anápolis-GO para o mundo.
+                    <p class="text-white/90 text-lg md:text-2xl font-bold tracking-tight max-w-3xl mx-auto drop-shadow-md">
+                        Um único animal afetado pode reduzir drasticamente sua produção.
                     </p>
                 </div>
             </div>
@@ -103,7 +102,7 @@
                 <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-4 tracking-tight">BioTech Germano</h2>
                 <p class="text-petroleum/60 text-xl font-medium">Nutrição de alta performance projetada em Anápolis.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div class="glass-card p-10 rounded-[40px] hover:translate-y-[-10px] transition-all duration-300">
                     <div class="w-12 h-12 bg-emerald/10 rounded-2xl flex items-center justify-center mb-6 text-emerald">
                         <i data-lucide="microscope"></i>
@@ -191,6 +190,7 @@
                     requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
                 const title = document.getElementById("hero-text-container");
+                // Mantendo o ritmo de fade e subida original
                 title.style.opacity = 1 - (fraction * 4);
                 title.style.transform = `translateY(${-(fraction * 120)}px)`;
             });
