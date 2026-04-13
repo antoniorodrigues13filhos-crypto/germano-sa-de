@@ -31,7 +31,7 @@
         }
 
         .glass-nav {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
@@ -55,20 +55,22 @@
         <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
             <div id="progress-bar" style="height:100%;background:white;width:0%;transition:width 0.2s;"></div>
         </div>
-        <p id="loading-text" class="text-white/60 mt-4 text-xs font-medium tracking-[0.2em] uppercase">Iniciando Tecnologia Germano</p>
+        <p id="loading-text" class="text-white/60 mt-4 text-xs font-medium tracking-[0.2em] uppercase">Tecnologia Germano</p>
     </div>
 
     <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="logo_germano-removebg-preview.png" alt="Logo Germano" class="w-16 h-16 object-contain">
+                <img src="logo_germano-removebg-preview.png" 
+                     alt="Logo Germano" 
+                     class="w-28 h-28 object-contain scale-125 transform-gpu origin-left">
             </div>
             
             <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
                 <a href="#scroll-hero" class="hover:text-emerald transition-colors">Inovação</a>
                 <a href="#produtos" class="hover:text-emerald transition-colors">Produtos</a>
                 <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-petroleum-dark transition-all shadow-lg shadow-petroleum/10">
-                    Especialista
+                    Falar com Especialista
                 </button>
             </div>
         </div>
@@ -94,33 +96,33 @@
 
     <section id="produtos" class="py-32 bg-milky relative z-10">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-16 tracking-tight">Catálogo de Alta Performance</h2>
+            <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-16 tracking-tight">Linha de Performance</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div class="glass-card p-10 rounded-[40px] hover:translate-y-[-10px] transition-transform">
                     <div class="w-12 h-12 bg-emerald/10 rounded-2xl flex items-center justify-center mb-6 text-emerald">
                         <i data-lucide="microscope"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-4">Germano Prime</h3>
-                    <p class="text-petroleum/60 text-sm leading-relaxed mb-8">Otimização máxima para bovinos de corte com minerais quelatados.</p>
-                    <div class="h-[1px] bg-petroleum/10 w-full"></div>
+                    <p class="text-petroleum/60 text-sm leading-relaxed mb-8">Otimização máxima para bovinos com tecnologia de minerais quelatados.</p>
                 </div>
                 </div>
         </div>
     </section>
 
+    <footer class="bg-petroleum py-12 text-center text-white/40 text-xs tracking-widest uppercase font-bold">
+        <p>© 2026 Germano Saúde Animal | Anápolis-GO</p>
+    </footer>
+
     <script>
-        // Init Lucide Icons
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
         initLucide();
 
-        // Canvas / Video Scrubbing Logic
         document.addEventListener("DOMContentLoaded", () => {
             const canvas = document.getElementById("hero-canvas");
             const context = canvas.getContext("2d");
             const frameCount = 78;
             const images = [];
             let loadedImages = 0;
-
             const progressBar = document.getElementById("progress-bar");
             const loader = document.getElementById("loader");
 
@@ -139,7 +141,6 @@
                 const canvasRatio = canvas.width / canvas.height;
                 const imgRatio = img.width / img.height;
                 let drawWidth, drawHeight, x = 0, y = 0;
-
                 if (canvasRatio > imgRatio) {
                     drawWidth = canvas.width;
                     drawHeight = img.height * (canvas.width / img.width);
@@ -177,14 +178,11 @@
                 const maxScroll = document.getElementById("scroll-hero").offsetHeight - window.innerHeight;
                 const fraction = Math.min(1, scrollY / maxScroll);
                 const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
-                
                 if (images[frameIndex]) {
                     requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
-
                 const title = document.getElementById("hero-text-container");
                 title.style.opacity = 1 - (fraction * 3);
-                title.style.transform = `translateY(${-fraction * 50}px)`;
             });
         });
     </script>
