@@ -14,10 +14,7 @@
     <style type="text/tailwindcss">
         @theme {
             --color-petroleum: #0F3A47;
-            --color-petroleum-dark: #0A2730;
-            --color-petroleum-light: #1A5465;
             --color-emerald: #047857;
-            --color-emerald-dark: #065F46;
             --color-emerald-light: #10B981;
             --color-milky: #F5F7F5;
             --font-sans: 'Inter', sans-serif;
@@ -36,14 +33,6 @@
             -webkit-backdrop-filter: blur(40px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(15, 58, 71, 0.05);
-        }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -52,28 +41,22 @@
 
     <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease-out,visibility 0.5s;">
         <div class="mb-6 animate-pulse">
-            <img src="logo_germano-removebg-preview.png" alt="Germano Saúde Animal" class="w-40 h-40 object-contain">
+            <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
         </div>
         <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
             <div id="progress-bar" style="height:100%;background:white;width:0%;transition:width 0.2s;"></div>
         </div>
-        <p id="loading-text" class="text-white/60 mt-4 text-xs font-medium tracking-[0.2em] uppercase text-center">Inovação em Nutrição</p>
     </div>
 
     <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav">
         <div class="max-w-7xl mx-auto px-6 py-0 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="logo_germano-removebg-preview.png" 
-                     alt="Logo Germano" 
-                     class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
+                <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
             </div>
-            
             <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
                 <a href="#scroll-hero" class="hover:text-emerald transition-colors">Inovação</a>
                 <a href="#produtos" class="hover:text-emerald transition-colors">Produtos</a>
-                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-petroleum-dark transition-all shadow-lg shadow-petroleum/10 cursor-pointer">
-                    Falar com Especialista
-                </button>
+                <button class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-petroleum-dark transition-all cursor-pointer">Falar com Especialista</button>
             </div>
         </div>
     </nav>
@@ -83,14 +66,17 @@
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
             <div style="position:absolute;inset:0;background:linear-gradient(to top, #0F3A47, transparent 70%);z-index:1;opacity:0.6;"></div>
             
-            <div id="hero-text-container" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
-                <div class="text-center px-6 max-w-5xl mt-24">
-                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl uppercase">
+            <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
+                <div class="text-center px-6 max-w-5xl">
+                    
+                    <h1 id="text-01" class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
                         Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
                     </h1>
-                    <p class="text-white/90 text-lg md:text-2xl font-bold tracking-tight max-w-3xl mx-auto drop-shadow-md">
+
+                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 translate-y-10">
                         Um único animal afetado pode reduzir drasticamente sua produção.
                     </p>
+
                 </div>
             </div>
         </div>
@@ -98,28 +84,15 @@
 
     <section id="produtos" class="py-32 bg-milky relative z-10">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-16">
-                <h2 class="text-4xl md:text-6xl font-black text-petroleum mb-4 tracking-tight">BioTech Germano</h2>
-                <p class="text-petroleum/60 text-xl font-medium">Nutrição de alta performance projetada em Anápolis.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="glass-card p-10 rounded-[40px] hover:translate-y-[-10px] transition-all duration-300">
-                    <div class="w-12 h-12 bg-emerald/10 rounded-2xl flex items-center justify-center mb-6 text-emerald">
-                        <i data-lucide="microscope"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 text-petroleum">Germano Prime</h3>
-                    <p class="text-petroleum/60 text-sm leading-relaxed mb-8">Otimização máxima para bovinos com tecnologia de minerais quelatados.</p>
-                    <button class="text-emerald font-bold flex items-center gap-2 hover:gap-4 transition-all uppercase text-xs tracking-widest cursor-pointer">
-                        Explorar <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+            <h2 class="text-4xl font-black text-petroleum mb-12">BioTech Germano</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white">
+                    <h3 class="text-2xl font-bold mb-4">Germano Prime</h3>
+                    <p class="text-petroleum/60 text-sm">Alta performance e precisão molecular.</p>
                 </div>
             </div>
         </div>
     </section>
-
-    <footer class="bg-petroleum py-12 text-center text-white/40 text-xs tracking-widest uppercase font-bold">
-        <p>© 2026 Germano Saúde Animal | Anápolis-GO</p>
-    </footer>
 
     <script>
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
@@ -128,16 +101,16 @@
         document.addEventListener("DOMContentLoaded", () => {
             const canvas = document.getElementById("hero-canvas");
             const context = canvas.getContext("2d");
+            const heroEl = document.getElementById("scroll-hero");
+            
+            const text01 = document.getElementById("text-01");
+            const text02 = document.getElementById("text-02");
+
             const frameCount = 78;
             const images = [];
             let loadedImages = 0;
-            const progressBar = document.getElementById("progress-bar");
-            const loader = document.getElementById("loader");
 
-            const getUrl = (index) => {
-                const pad = index.toString().padStart(2, '0');
-                return `./frame_${pad}_delay-0.041s.webp`;
-            };
+            const getUrl = (index) => `./frame_${index.toString().padStart(2, '0')}_delay-0.041s.webp`;
 
             const resizeCanvas = () => {
                 canvas.width = window.innerWidth;
@@ -167,11 +140,11 @@
                 img.onload = () => {
                     loadedImages++;
                     images[i] = img;
-                    if (progressBar) progressBar.style.width = `${(loadedImages / frameCount) * 100}%`;
+                    document.getElementById("progress-bar").style.width = `${(loadedImages / frameCount) * 100}%`;
                     if (loadedImages === frameCount) {
                         setTimeout(() => {
-                            loader.style.opacity = "0";
-                            setTimeout(() => loader.style.visibility = "hidden", 500);
+                            document.getElementById("loader").style.opacity = "0";
+                            setTimeout(() => document.getElementById("loader").style.visibility = "hidden", 500);
                             document.body.style.overflow = "auto";
                             resizeCanvas();
                         }, 400);
@@ -181,18 +154,42 @@
             }
 
             window.addEventListener("resize", resizeCanvas);
+            
             window.addEventListener("scroll", () => {
                 const scrollY = window.scrollY;
-                const maxScroll = document.getElementById("scroll-hero").offsetHeight - window.innerHeight;
+                const maxScroll = heroEl.offsetHeight - window.innerHeight;
                 const fraction = Math.min(1, scrollY / maxScroll);
+                
+                // Sequência de frames
                 const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
                 if (images[frameIndex]) {
                     requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
-                const title = document.getElementById("hero-text-container");
-                // Mantendo o ritmo de fade e subida original
-                title.style.opacity = 1 - (fraction * 4);
-                title.style.transform = `translateY(${-(fraction * 120)}px)`;
+
+                // DINÂMICA DE TEXTOS
+                // Texto 01: Fica visível de 0% a 20% do scroll, depois some
+                if (fraction < 0.25) {
+                    text01.style.opacity = 1 - (fraction * 4);
+                    text01.style.transform = `translateY(${-(fraction * 100)}px)`;
+                    text01.style.display = "block";
+                } else {
+                    text01.style.display = "none";
+                }
+
+                // Texto 02: Surge entre 35% e 65% do scroll
+                if (fraction > 0.35 && fraction < 0.75) {
+                    const localFrac = (fraction - 0.35) / 0.15; // Fade in rápido
+                    const fadeOutFrac = (fraction - 0.60) / 0.15; // Fade out
+                    
+                    let opacity = localFrac;
+                    if (fraction > 0.60) opacity = 1 - fadeOutFrac;
+                    
+                    text02.style.opacity = Math.max(0, Math.min(1, opacity));
+                    text02.style.transform = `translateY(${20 - (Math.min(1, localFrac) * 20)}px)`;
+                    text02.style.display = "block";
+                } else {
+                    text02.style.display = "none";
+                }
             });
         });
     </script>
