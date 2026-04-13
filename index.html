@@ -34,11 +34,10 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* ===== ADICIONADO ===== */
         .reveal {
             opacity: 0;
             transform: translateY(60px);
-            transition: all 1s ease;
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .reveal.show {
@@ -75,16 +74,30 @@
 
     <section id="scroll-hero" style="height:400vh;position:relative;background-color:#000;">
         <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
-            <canvas id="hero-canvas"></canvas>
+            <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, #0F3A47, transparent 70%);z-index:1;opacity:0.6;"></div>
+            
+            <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
+                <div class="text-center px-6 max-w-5xl">
+                    <h1 id="text-01" class="text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
+                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
+                    </h1>
+                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute">
+                        Um único animal afetado pode reduzir drasticamente sua produção.
+                    </p>
+                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 absolute uppercase">
+                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/> 
+                        <span class="text-xl font-light tracking-widest block mt-4 text-white/60">Simples assim.</span>
+                    </h2>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="produtos" class="py-32 bg-milky relative z-10">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-4xl font-black text-petroleum mb-12 uppercase tracking-tighter">BioTech Germano</h2>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="produtos-container"></div>
-
         </div>
     </section>
 
@@ -96,6 +109,9 @@
             const canvas = document.getElementById("hero-canvas");
             const context = canvas.getContext("2d");
             const heroEl = document.getElementById("scroll-hero");
+            const text01 = document.getElementById("text-01");
+            const text02 = document.getElementById("text-02");
+            const text03 = document.getElementById("text-03");
             
             const frameCount = 78;
             const images = [];
@@ -106,86 +122,124 @@
             const resizeCanvas = () => {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
+                if(images[0]) drawImage(images[0]);
+            };
+
+            const drawImage = (img) => {
+                const canvasRatio = canvas.width / canvas.height;
+                const imgRatio = img.width / img.height;
+                let drawWidth, drawHeight, x = 0, y = 0;
+                if (canvasRatio > imgRatio) {
+                    drawWidth = canvas.width;
+                    drawHeight = img.height * (canvas.width / img.width);
+                    y = (canvas.height - drawHeight) / 2;
+                } else {
+                    drawHeight = canvas.height;
+                    drawWidth = img.width * (canvas.height / img.height);
+                    x = (canvas.width - drawWidth) / 2;
+                }
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, x, y, drawWidth, drawHeight);
             };
 
             for (let i = 0; i < frameCount; i++) {
                 const img = new Image();
                 img.onload = () => {
                     loadedImages++;
+                    images[i] = img;
+                    document.getElementById("progress-bar").style.width = `${(loadedImages / frameCount) * 100}%`;
                     if (loadedImages === frameCount) {
-                        document.getElementById("loader").style.display = "none";
-                        document.body.style.overflow = "auto";
-                        resizeCanvas();
+                        setTimeout(() => {
+                            document.getElementById("loader").style.opacity = "0";
+                            setTimeout(() => {
+                                document.getElementById("loader").style.visibility = "hidden";
+                                document.body.style.overflow = "auto";
+                                resizeCanvas();
+                            }, 500);
+                        }, 400);
                     }
                 };
                 img.src = getUrl(i);
             }
-        });
 
-        /* ===== NOVO SISTEMA DE PRODUTOS ATUALIZADO ===== */
-
-        const produtos = [
-            {
-                nome: "Calmix Cromovita",
-                descricao: "Solução avançada para o equilíbrio nutricional e redução de estresse do rebanho.",
-                imagem: "produtos/produto%20calmix%20cromovita1.png"
-            },
-            {
-                nome: "Fort Vit + 3",
-                descricao: "Complexo vitamínico de alta concentração para máximo desempenho e imunidade.",
-                imagem: "produtos/produto%20fort%20vit%20+%203.png"
-            },
-            {
-                nome: "Germano Núcleo Acelerado",
-                descricao: "Tecnologia molecular para aceleração de ganho de peso e eficiência alimentar.",
-                imagem: "produtos/produto%20germano%20nucleo%20acelerado%202.png"
-            }
-        ];
-
-        const containerProdutos = document.getElementById("produtos-container");
-
-        produtos.forEach(produto => {
-            const card = document.createElement("div");
-
-            card.className = `
-                reveal group p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white
-                transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:shadow-emerald/20 cursor-pointer
-            `;
-
-            card.innerHTML = `
-                <div class="mb-6 overflow-hidden rounded-2xl">
-                    <img src="${produto.imagem}" 
-                        class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
-                </div>
-
-                <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald">
-                    ${produto.nome}
-                </h3>
-
-                <p class="text-petroleum/60 text-sm">
-                    ${produto.descricao}
-                </p>
-            `;
-
-            containerProdutos.appendChild(card);
-        });
-
-        /* ===== ANIMAÇÃO REVEAL ===== */
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting){
-                    entry.target.classList.add("show");
+            window.addEventListener("resize", resizeCanvas);
+            
+            window.addEventListener("scroll", () => {
+                const scrollY = window.scrollY;
+                const maxScroll = heroEl.offsetHeight - window.innerHeight;
+                const fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
+                
+                const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
+                if (images[frameIndex]) {
+                    requestAnimationFrame(() => drawImage(images[frameIndex]));
                 }
+
+                // TEXTOS DINÂMICOS
+                if (fraction <= 0.25) {
+                    text01.style.opacity = 1 - (fraction * 4);
+                    text01.style.transform = `translateY(${-(fraction * 100)}px)`;
+                    text01.style.display = "block";
+                } else { text01.style.display = "none"; }
+
+                if (fraction > 0.35 && fraction <= 0.70) {
+                    const localFrac = (fraction - 0.35) / 0.15; 
+                    const fadeOutFrac = (fraction - 0.55) / 0.15;
+                    let opacity = fraction > 0.55 ? 1 - fadeOutFrac : localFrac;
+                    text02.style.opacity = Math.max(0, Math.min(1, opacity));
+                    text02.style.display = "block";
+                } else { text02.style.display = "none"; }
+
+                if (fraction > 0.75) {
+                    const localFrac = (fraction - 0.75) / 0.15; 
+                    text03.style.opacity = Math.max(0, Math.min(1, localFrac));
+                    text03.style.display = "block";
+                } else { text03.style.display = "none"; }
             });
+
+            // PRODUTOS
+            const produtos = [
+                {
+                    nome: "Calmix Cromovita",
+                    descricao: "Equilíbrio nutricional e redução de estresse do rebanho.",
+                    imagem: "produtos/produto%20calmix%20cromovita1.png"
+                },
+                {
+                    nome: "Fort Vit + 3",
+                    descricao: "Máximo desempenho e imunidade superior.",
+                    imagem: "produtos/produto%20fort%20vit%20+%203.png"
+                },
+                {
+                    nome: "Germano Núcleo Acelerado",
+                    descricao: "Aceleração de ganho de peso e eficiência alimentar.",
+                    imagem: "produtos/produto%20germano%20nucleo%20acelerado%202.png"
+                }
+            ];
+
+            const containerProdutos = document.getElementById("produtos-container");
+            produtos.forEach(produto => {
+                const card = document.createElement("div");
+                card.className = "reveal group p-10 rounded-[40px] bg-white/50 backdrop-blur-md border border-white transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:shadow-emerald/20 cursor-pointer";
+                card.innerHTML = `
+                    <div class="mb-6 overflow-hidden rounded-2xl bg-petroleum/5">
+                        <img src="${produto.imagem}" class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Germano+Produto'">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 group-hover:text-emerald">${produto.nome}</h3>
+                    <p class="text-petroleum/60 text-sm">${produto.descricao}</p>
+                `;
+                containerProdutos.appendChild(card);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) entry.target.classList.add("show");
+                });
+            }, { threshold: 0.1 });
+
+            setTimeout(() => {
+                document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+            }, 600);
         });
-
-        setTimeout(() => {
-            document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
-        }, 300);
-
     </script>
-
 </body>
 </html>
 
