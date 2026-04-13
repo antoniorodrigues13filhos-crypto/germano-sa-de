@@ -58,7 +58,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Scrollbar suave para o chat */
         #chat-history::-webkit-scrollbar { width: 4px; }
         #chat-history::-webkit-scrollbar-track { background: transparent; }
         #chat-history::-webkit-scrollbar-thumb { background: #0F3A4720; border-radius: 10px; }
@@ -111,7 +110,7 @@
                         <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <p class="text-[9px] text-petroleum/30 mt-2 text-center uppercase tracking-widest font-bold">Camila responde em segundos</p>
+                <p class="text-[9px] text-petroleum/30 mt-2 text-center uppercase tracking-widest font-bold">Respostas automáticas simuladas</p>
             </div>
         </div>
 
@@ -200,7 +199,6 @@
     </footer>
 
     <script>
-        // --- LÓGICA DO CHAT SIMULADO ---
         function toggleChat() {
             const chat = document.getElementById('whatsapp-chat');
             chat.classList.toggle('active');
@@ -210,20 +208,21 @@
         function sendMessage() {
             const input = document.getElementById('user-input');
             const history = document.getElementById('chat-history');
-            const msg = input.value.trim();
+            const text = input.value.trim().toLowerCase();
 
-            if (msg === "") return;
+            if (text === "") return;
 
             // Adiciona mensagem do usuário
             const userDiv = document.createElement('div');
             userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
-            userDiv.innerText = msg;
+            userDiv.innerText = input.value;
             history.appendChild(userDiv);
             
+            const currentMsg = input.value; // Guarda o texto original
             input.value = "";
             history.scrollTop = history.scrollHeight;
 
-            // Simula "Digitando..."
+            // Simula Digitante
             const typingDiv = document.createElement('div');
             typingDiv.className = "text-[10px] text-petroleum/40 font-bold animate-pulse italic ml-2";
             typingDiv.id = "typing-indicator";
@@ -231,29 +230,45 @@
             history.appendChild(typingDiv);
             history.scrollTop = history.scrollHeight;
 
-            // Resposta Automática após 2 segundos
+            // Lógica de Respostas da Demonstração
             setTimeout(() => {
                 document.getElementById('typing-indicator').remove();
                 
                 const responseDiv = document.createElement('div');
                 responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]";
                 
-                // Sugestão de resposta inteligente
-                responseDiv.innerHTML = "<strong>Camila:</strong> Ótima pergunta! Para te dar um suporte técnico bem preciso sobre isso, vou te conectar agora com nosso especialista no WhatsApp.";
-                
+                let reply = "";
+                let shouldRedirect = false;
+
+                if (text.includes("bom dia") || text.includes("boa tarde") || text.includes("olá") || text.includes("ola")) {
+                    reply = "Olá! Tudo bem? Como posso ajudar você e seu rebanho hoje?";
+                } else if (text.includes("dúvida") || text.includes("duvida") || text.includes("ajuda")) {
+                    reply = "Com certeza! Pode me falar qual sua dúvida? Estou aqui para ajudar.";
+                } else if (text.includes("preço") || text.includes("valor") || text.includes("quanto custa")) {
+                    reply = "Nossos protocolos variam conforme a necessidade do seu rebanho. Mas vou te passar para um consultor comercial agora mesmo para te enviar a tabela!";
+                    shouldRedirect = true;
+                } else if (text.includes("entrega") || text.includes("prazo") || text.includes("onde entrega")) {
+                    reply = "Entregamos em todo o Brasil com logística própria e parceiros! Vou te conectar para calcularmos o frete para sua região.";
+                    shouldRedirect = true;
+                } else {
+                    reply = "Entendido! Para te dar uma resposta técnica mais detalhada, vou te direcionar para nosso atendimento especializado no WhatsApp.";
+                    shouldRedirect = true;
+                }
+
+                responseDiv.innerHTML = `<strong>Camila:</strong> ${reply}`;
                 history.appendChild(responseDiv);
                 history.scrollTop = history.scrollHeight;
 
-                // Abre o WhatsApp após a resposta
-                setTimeout(() => {
-                    const zapUrl = `https://wa.me/5562999999999?text=${encodeURIComponent("Olá Camila, eu estava no site e tenho uma dúvida: " + msg)}`;
-                    window.open(zapUrl, "_blank");
-                }, 1500);
-
-            }, 2000);
+                if (shouldRedirect) {
+                    setTimeout(() => {
+                        const zapUrl = `https://wa.me/5562999999999?text=${encodeURIComponent("Olá Camila, eu estava no site e tenho uma dúvida: " + currentMsg)}`;
+                        window.open(zapUrl, "_blank");
+                    }, 2000);
+                }
+            }, 1500);
         }
 
-        // --- LÓGICA DO VÍDEO E SCROLL (ESTRUTURA MANTIDA) ---
+        // LÓGICA DE VÍDEO E SCROLL MANTIDA
         function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
         initLucide();
 
