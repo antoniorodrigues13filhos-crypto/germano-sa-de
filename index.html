@@ -46,7 +46,6 @@
         #whatsapp-chat { display: none; opacity: 0; transform: translateY(30px) scale(0.95); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #whatsapp-chat.active { display: block; opacity: 1; transform: translateY(0) scale(1); }
 
-        /* Otimização de Performance Desktop/Mobile */
         img, iframe { content-visibility: auto; }
         canvas { transform: translateZ(0); backface-visibility: hidden; }
     </style>
@@ -114,9 +113,16 @@
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100vw;height:100vh;display:block;"></canvas>
             <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl">
-                    <h1 id="text-01" class="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase drop-shadow-2xl">Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span></h1>
-                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight opacity-0 absolute text-center w-full">Um único animal afetado pode reduzir drasticamente sua produção.</p>
-                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter opacity-0 absolute uppercase text-center w-full">Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span></h2>
+                    <h1 id="text-01" class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">
+                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
+                    </h1>
+                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute text-center w-full">
+                        Um único animal afetado pode reduzir drasticamente sua produção.
+                    </p>
+                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 absolute uppercase text-center w-full">
+                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/> 
+                        <span class="text-xl font-light tracking-widest block mt-4 text-white/60">Simples assim.</span>
+                    </h2>
                 </div>
             </div>
         </div>
@@ -125,30 +131,30 @@
     <section id="biotech-section" class="relative z-10 bg-milky py-40 overflow-hidden text-left">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
-                <div><span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span><h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase">BioTech <br/> Germano</h2></div>
-                <p class="reveal-text text-petroleum/60 max-w-sm text-right hidden md:block italic">Tecnologia desenvolvida para maximizar o rendimento do seu rebanho.</p>
+                <div><span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span><h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">BioTech <br/> Germano</h2></div>
+                <p class="reveal-text text-petroleum/60 max-w-sm text-right hidden md:block italic">Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
                 <div class="parallax-card group cursor-pointer text-left">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Calmix Cromovita</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
                 </div>
                 <div class="parallax-card group cursor-pointer md:mt-24 text-left">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto-fort-vit.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Fort Vit + 3</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
                 </div>
                 <div class="parallax-card group cursor-pointer text-left">
                     <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
                         <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Núcleo Acelerado</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso.</p>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
                 </div>
             </div>
         </div>
@@ -158,14 +164,14 @@
         <div class="max-w-7xl mx-auto px-6 text-left">
             <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
                 <div class="w-full lg:w-1/2 flex flex-col justify-center text-left">
-                    <h2 class="text-4xl md:text-6xl font-black text-petroleum tracking-tighter uppercase mb-4">Envie-nos uma <span class="text-emerald">Mensagem</span></h2>
+                    <h2 class="text-4xl md:text-6xl font-black text-petroleum tracking-tighter uppercase leading-tight mb-4">Envie-nos uma <span class="text-emerald">Mensagem</span></h2>
                     <div class="w-20 h-1.5 bg-emerald mb-8 rounded-full"></div>
-                    <p class="text-petroleum/70 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido.</p>
+                    <p class="text-petroleum/70 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><input type="text" placeholder="Nome" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left"><input type="tel" placeholder="Telefone" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left"></div>
                         <input type="email" placeholder="E-mail" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
                         <textarea placeholder="Mensagem" rows="5" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium resize-none text-left"></textarea>
-                        <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all">Solicitar Atendimento Especializado</button>
+                        <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer">Solicitar Atendimento Especializado</button>
                     </form>
                 </div>
                 <div class="w-full lg:w-1/2 flex flex-col text-left">
@@ -226,7 +232,6 @@
                 img.src = getUrl(i);
             }
 
-            // PERFORMANCE: Carregamento do Mapa e Animações sob demanda
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
