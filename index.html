@@ -37,45 +37,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .reveal-text {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        .reveal-text { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal-text.active { opacity: 1; transform: translateY(0); }
 
-        .reveal-text.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .parallax-card { opacity: 0; transform: translateY(120px); transition: all 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .parallax-card.active { opacity: 1; transform: translateY(0); }
 
-        .parallax-card {
-            opacity: 0;
-            transform: translateY(120px);
-            transition: all 1.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        #whatsapp-chat { display: none; opacity: 0; transform: translateY(30px) scale(0.95); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #whatsapp-chat.active { display: block; opacity: 1; transform: translateY(0) scale(1); }
 
-        .parallax-card.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #whatsapp-chat {
-            display: none;
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #whatsapp-chat.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        iframe {
-            will-change: transform;
-            transform: translateZ(0);
-        }
+        /* Otimização de Performance Desktop/Mobile */
+        img, iframe { content-visibility: auto; }
+        canvas { transform: translateZ(0); backface-visibility: hidden; }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -93,52 +66,45 @@
 
     <div class="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
         <div id="whatsapp-chat" class="mb-6 w-[340px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden flex flex-col">
-            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0">
+            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0 text-left">
                 <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-white flex items-center justify-center">
                     <img src="assets/camila.jpg.jpg" alt="Camila" class="w-full h-full object-cover block">
                     <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
                 </div>
                 <div>
                     <h4 class="text-white font-bold text-base leading-tight">Camila</h4>
-                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora
-                    </p>
+                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora</p>
                 </div>
-                <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
+                <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <div id="chat-history" class="p-6 bg-milky/30 h-[280px] overflow-y-auto flex flex-col gap-4">
+            <div id="chat-history" class="p-6 bg-milky/30 h-[280px] overflow-y-auto flex flex-col gap-4 text-left">
                 <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]">
-                    Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br>
-                    Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
+                    Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br> Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
                 </div>
             </div>
             <div class="p-4 bg-white border-t border-petroleum/5">
-                <div class="flex gap-2 items-center bg-milky rounded-2xl px-4 py-2 border border-petroleum/5 focus-within:border-emerald transition-colors">
+                <div class="flex gap-2 items-center bg-milky rounded-2xl px-4 py-2 border border-petroleum/5 focus-within:border-emerald">
                     <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-petroleum outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl hover:bg-emerald-dark transition-all transform active:scale-90"><i data-lucide="send" class="w-4 h-4"></i></button>
+                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl active:scale-90"><i data-lucide="send" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </div>
-        <button onclick="toggleChat()" class="group flex items-center justify-center relative cursor-pointer">
-            <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping group-hover:animate-none"></span>
-            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+        <button onclick="toggleChat()" class="group relative cursor-pointer flex items-center justify-center">
+            <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping"></span>
+            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110">
                 <img src="3d-round-with-whatsapp-logo.png" alt="WhatsApp" class="w-10 h-10 object-contain">
             </div>
         </button>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav text-left">
+    <nav class="fixed top-0 w-full z-50 transition-all duration-300 glass-nav">
         <div class="max-w-7xl mx-auto px-6 py-0 flex justify-between items-center text-left">
-            <div class="flex items-center">
-                <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left text-left">
-            </div>
+            <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
             <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
-                <a href="#scroll-hero" class="hover:text-emerald transition-colors uppercase">Inovação</a>
-                <a href="#biotech-section" class="hover:text-emerald transition-colors uppercase">Produtos</a>
-                <a href="#contato" class="hover:text-emerald transition-colors uppercase">Contato</a>
-                <button onclick="toggleChat()" class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald transition-all cursor-pointer font-bold uppercase text-xs tracking-widest">Falar com Especialista</button>
+                <a href="#scroll-hero" class="hover:text-emerald uppercase transition-colors">Inovação</a>
+                <a href="#biotech-section" class="hover:text-emerald uppercase transition-colors">Produtos</a>
+                <a href="#contato" class="hover:text-emerald uppercase transition-colors">Contato</a>
+                <button onclick="toggleChat()" class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald font-bold uppercase text-xs tracking-widest cursor-pointer transition-all">Falar com Especialista</button>
             </div>
         </div>
     </nav>
@@ -148,9 +114,9 @@
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100vw;height:100vh;display:block;"></canvas>
             <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;">
                 <div class="text-center px-6 max-w-5xl">
-                    <h1 id="text-01" class="text-5xl md:text-8xl font-black text-white tracking-tighter leading-tight mb-6 uppercase drop-shadow-2xl">Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span></h1>
-                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0 absolute">Um único animal afetado pode reduzir drasticamente sua produção.</p>
-                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 absolute uppercase">Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/> <span class="text-xl font-light tracking-widest block mt-4 text-white/60">Simples assim.</span></h2>
+                    <h1 id="text-01" class="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase drop-shadow-2xl">Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span></h1>
+                    <p id="text-02" class="text-white/95 text-2xl md:text-4xl font-bold tracking-tight opacity-0 absolute text-center w-full">Um único animal afetado pode reduzir drasticamente sua produção.</p>
+                    <h2 id="text-03" class="text-4xl md:text-6xl font-black text-white tracking-tighter opacity-0 absolute uppercase text-center w-full">Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span></h2>
                 </div>
             </div>
         </div>
@@ -159,13 +125,31 @@
     <section id="biotech-section" class="relative z-10 bg-milky py-40 overflow-hidden text-left">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
-                <div><span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span><h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">BioTech <br/> Germano</h2></div>
-                <p class="reveal-text text-petroleum/60 max-w-sm text-right hidden md:block italic">Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.</p>
+                <div><span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span><h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase">BioTech <br/> Germano</h2></div>
+                <p class="reveal-text text-petroleum/60 max-w-sm text-right hidden md:block italic">Tecnologia desenvolvida para maximizar o rendimento do seu rebanho.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
-                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Calmix Cromovita</h3><p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse.</p></div>
-                <div class="parallax-card group cursor-pointer md:mt-24"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto-fort-vit.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Fort Vit + 3</h3><p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade.</p></div>
-                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Núcleo Acelerado</h3><p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso.</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="parallax-card group cursor-pointer text-left">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Calmix Cromovita</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse.</p>
+                </div>
+                <div class="parallax-card group cursor-pointer md:mt-24 text-left">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto-fort-vit.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Fort Vit + 3</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade.</p>
+                </div>
+                <div class="parallax-card group cursor-pointer text-left">
+                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 uppercase">Núcleo Acelerado</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -184,20 +168,12 @@
                         <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all">Solicitar Atendimento Especializado</button>
                     </form>
                 </div>
-
                 <div class="w-full lg:w-1/2 flex flex-col text-left">
-                    <div id="map-container" class="flex-1 bg-milky rounded-[40px] overflow-hidden border border-petroleum/5 shadow-2xl relative group min-h-[450px] text-left">
-                        <iframe 
-                            data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" 
-                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" 
-                            class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
-                        </iframe>
-                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-petroleum/5 shadow-lg text-left">
-                            <div class="flex flex-col md:flex-row justify-between gap-6 text-left">
-                                <div class="text-left"><h4 class="font-bold text-petroleum uppercase tracking-wider text-xs mb-3 flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-emerald"></i> Endereço</h4><p class="text-[11px] md:text-xs text-petroleum/70 font-medium">Av. Senador José Lourenço Dias, 63<br>Anápolis - GO</p></div>
-                                <div class="border-t md:border-t-0 md:border-l border-petroleum/10 pt-6 md:pt-0 md:pl-6 text-left"><h4 class="font-bold text-petroleum uppercase tracking-wider text-xs mb-3 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-emerald"></i> Atendimento</h4><p class="text-[11px] md:text-xs text-petroleum/70 font-medium">Seg a Sex: 08:00 – 18:00<br>Sáb: 08:00 – 12:00 (Aberto)</p></div>
-                            </div>
-                            <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" target="_blank" class="mt-6 w-full flex items-center justify-center gap-2 bg-emerald text-white text-[10px] font-bold uppercase py-3 rounded-xl hover:bg-emerald-dark transition-all">Abrir no GPS</a>
+                    <div id="map-container" class="flex-1 bg-milky rounded-[40px] overflow-hidden border border-petroleum/5 shadow-2xl relative group min-h-[450px]">
+                        <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-petroleum/5 shadow-lg text-left text-petroleum">
+                            <h4 class="font-bold uppercase tracking-wider text-xs mb-3">Germano Saúde Animal</h4>
+                            <p class="text-[11px] md:text-xs font-medium leading-relaxed">Av. Senador José Lourenço Dias, 63<br>Anápolis - GO<br><span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span></p>
                         </div>
                     </div>
                 </div>
@@ -209,38 +185,32 @@
 
     <script>
         function toggleChat() { const chat = document.getElementById('whatsapp-chat'); chat.classList.toggle('active'); if(chat.classList.contains('active')) initLucide(); }
-        
         function sendMessage() {
-            const input = document.getElementById('user-input'), history = document.getElementById('chat-history'), text = input.value.trim().toLowerCase();
-            if (text === "") return;
+            const input = document.getElementById('user-input'), history = document.getElementById('chat-history');
+            if (!input.value.trim()) return;
             const userDiv = document.createElement('div'); userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
             userDiv.innerText = input.value; history.appendChild(userDiv); input.value = ""; history.scrollTop = history.scrollHeight;
-            const typingDiv = document.createElement('div'); typingDiv.className = "text-[10px] text-petroleum/40 font-bold animate-pulse italic ml-2"; typingDiv.id = "typing-indicator"; typingDiv.innerText = "Camila está digitando...";
-            history.appendChild(typingDiv); history.scrollTop = history.scrollHeight;
             setTimeout(() => {
-                const indicator = document.getElementById('typing-indicator'); if(indicator) indicator.remove();
                 const responseDiv = document.createElement('div'); responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum self-start max-w-[85%]";
-                responseDiv.innerHTML = `<strong>Camila:</strong> Entendido! Para te dar um suporte técnico bem preciso, vou te conectar agora com nosso especialista no WhatsApp.`;
+                responseDiv.innerHTML = `<strong>Camila:</strong> Entendido! Vou te conectar agora com nosso especialista no WhatsApp.`;
                 history.appendChild(responseDiv); history.scrollTop = history.scrollHeight;
-                setTimeout(() => { window.open(`https://wa.me/5562993024012`, "_blank"); }, 2000);
-            }, 1500);
+                setTimeout(() => { window.open(`https://wa.me/5562993024012`, "_blank"); }, 1500);
+            }, 1000);
         }
 
-        function initLucide(){ if(window.lucide){ lucide.createIcons(); }else{ setTimeout(initLucide,100); } }
-        initLucide();
+        function initLucide(){ if(window.lucide){ lucide.createIcons(); } }
 
         document.addEventListener("DOMContentLoaded", () => {
             const canvas = document.getElementById("hero-canvas"), context = canvas.getContext("2d"), heroEl = document.getElementById("scroll-hero"), text01 = document.getElementById("text-01"), text02 = document.getElementById("text-02"), text03 = document.getElementById("text-03");
             const frameCount = 78, images = []; let loadedImages = 0;
             const getUrl = (index) => `./frame_${index.toString().padStart(2, '0')}_delay-0.041s.webp`;
 
-            const resizeCanvas = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if(images[0]) drawImage(images[0]); };
             const drawImage = (img) => {
-                const canvasRatio = canvas.width / canvas.height, imgRatio = img.width / img.height;
-                let drawWidth, drawHeight, x = 0, y = 0;
-                if (canvasRatio > imgRatio) { drawWidth = canvas.width; drawHeight = img.height * (canvas.width / img.width); y = (canvas.height - drawHeight) / 2; }
-                else { drawHeight = canvas.height; drawWidth = img.width * (canvas.height / img.height); x = (canvas.width - drawWidth) / 2; }
-                context.clearRect(0, 0, canvas.width, canvas.height); context.drawImage(img, x, y, drawWidth, drawHeight);
+                const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
+                const x = (canvas.width - img.width * ratio) / 2;
+                const y = (canvas.height - img.height * ratio) / 2;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, x, y, img.width * ratio, img.height * ratio);
             };
 
             for (let i = 0; i < frameCount; i++) {
@@ -249,12 +219,14 @@
                     loadedImages++; images[i] = img;
                     document.getElementById("progress-bar").style.width = `${(loadedImages / frameCount) * 100}%`;
                     if (loadedImages === frameCount) {
-                        setTimeout(() => { document.getElementById("loader").style.opacity = "0"; setTimeout(() => { document.getElementById("loader").style.visibility = "hidden"; document.body.style.overflow = "auto"; resizeCanvas(); }, 500); }, 400);
+                        document.getElementById("loader").style.opacity = "0";
+                        setTimeout(() => { document.getElementById("loader").style.visibility = "hidden"; document.body.style.overflow = "auto"; canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawImage(images[0]); }, 500);
                     }
                 };
                 img.src = getUrl(i);
             }
 
+            // PERFORMANCE: Carregamento do Mapa e Animações sob demanda
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -264,15 +236,16 @@
                         document.querySelectorAll('.reveal-text, .parallax-card').forEach(el => el.classList.add('active'));
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.05 });
             observer.observe(document.getElementById('contato'));
+            observer.observe(document.getElementById('biotech-section'));
 
-            window.addEventListener("resize", resizeCanvas);
             window.addEventListener("scroll", () => {
-                const scrollY = window.scrollY, maxScroll = heroEl.offsetHeight - window.innerHeight, fraction = Math.max(0, Math.min(1, scrollY / maxScroll));
+                const fraction = Math.min(1, window.scrollY / (heroEl.offsetHeight - window.innerHeight));
                 const frameIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
                 if (images[frameIndex]) requestAnimationFrame(() => drawImage(images[frameIndex]));
-                text01.style.opacity = fraction <= 0.25 ? 1 - (fraction * 4) : 0;
+                
+                text01.style.opacity = 1 - (fraction * 4);
                 if (fraction > 0.35 && fraction <= 0.70) { text02.style.opacity = fraction > 0.55 ? 1 - ((fraction - 0.55) / 0.15) : (fraction - 0.35) / 0.15; } else { text02.style.opacity = 0; }
                 text03.style.opacity = fraction > 0.75 ? (fraction - 0.75) / 0.15 : 0;
             });
