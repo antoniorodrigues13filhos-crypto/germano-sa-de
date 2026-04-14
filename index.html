@@ -72,10 +72,9 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Otimização PC/Mobile do Iframe */
         iframe {
             will-change: transform;
-            transform: translateZ(0); /* Força aceleração de hardware no PC */
+            transform: translateZ(0);
         }
     </style>
 
@@ -164,9 +163,9 @@
                 <p class="reveal-text text-petroleum/60 max-w-sm text-right hidden md:block italic">Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
-                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20calmix%20cromovita1.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Calmix Cromovita</h3><p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse.</p></div>
-                <div class="parallax-card group cursor-pointer md:mt-24"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto-fort-vit.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Fort Vit + 3</h3><p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade.</p></div>
-                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Núcleo Acelerado</h3><p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso.</p></div>
+                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Calmix Cromovita</h3><p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse.</p></div>
+                <div class="parallax-card group cursor-pointer md:mt-24"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto-fort-vit.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Fort Vit + 3</h3><p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade.</p></div>
+                <div class="parallax-card group cursor-pointer"><div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm text-left"><img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><h3 class="text-3xl font-bold text-petroleum mb-4 uppercase tracking-tight">Núcleo Acelerado</h3><p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso.</p></div>
             </div>
         </div>
     </section>
@@ -256,7 +255,6 @@
                 img.src = getUrl(i);
             }
 
-            // Otimização PC/Mobile do Mapa via Intersection Observer
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
