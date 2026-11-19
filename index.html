@@ -21,12 +21,42 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
     <style type="text/tailwindcss">
+        @font-face {
+            font-family: "Brier";
+            src: url("../assets/cdn.prod.website-files.com/67b5a02dc5d338960b17a7e9/67b6113a220f85ad6497495a_Brier-Bold.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "Mona Sans Variable";
+            src: url("../assets/cdn.prod.website-files.com/67b5a02dc5d338960b17a7e9/67bc6274c5b4108b123aa4d5_MonaSans-VariableFont_wdth,wght.woff2") format("woff2");
+            font-weight: 200 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
         @theme {
             --color-petroleum: #0F3A47;
             --color-emerald: #047857;
             --color-emerald-light: #10B981;
-            --color-milky: #FFFFFF;
-            --font-sans: 'Inter', sans-serif;
+            --color-milky: #F8F8F3;
+            --font-sans: "Mona Sans Variable", "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --bg: #F8F8F3;
+            --lime: #D2FF00;
+            --dark-green: #282C20;
+            --ink: #1C1E16;
+            --border: rgba(40, 44, 32, 0.16);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
         }
 
         html.lenis, html.lenis body {
@@ -41,18 +71,159 @@
             overflow: hidden;
         }
 
+        html,
         body {
-            font-family: var(--font-sans);
-            background-color: #FFFFFF;
-            color: var(--color-petroleum);
+            margin: 0;
+            width: 100%;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "Mona Sans Variable", "Inter", system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
             overflow: hidden;
         }
 
+        /* Palco e camadas WebGL no padrão liquid-motion.css */
+        .liquid-stage {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .gl-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        canvas.gl {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform;
+        }
+
+        .gl-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #hero-canvas {
+            z-index: 0;
+        }
+
+        #fluid-canvas {
+            z-index: 1;
+        }
+
+        /* Loading overlay no padrão liquid-motion.css */
+        .liquid-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: var(--bg);
+            color: var(--dark-green);
+            pointer-events: none;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .liquid-loader.is-loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .liquid-loader-title {
+            font-family: "Brier", "Inter", serif;
+            font-size: clamp(1.75rem, 3.5vw, 3rem);
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .liquid-loader-status {
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.65;
+        }
+
+        /* Interactive HUD no padrão liquid-motion.css (esquerda para não colidir com o WhatsApp) */
+        .liquid-ui {
+            position: fixed;
+            left: 1.5rem;
+            bottom: 1.5rem;
+            z-index: 60;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.625rem;
+            align-items: center;
+        }
+
+        .liquid-pill {
+            appearance: none;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.65rem 1.1rem;
+            background: rgba(248, 248, 243, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--dark-green);
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+        }
+
+        .liquid-pill:hover {
+            background: var(--lime);
+            border-color: var(--dark-green);
+            color: var(--dark-green);
+        }
+
+        .liquid-pill:active {
+            transform: scale(0.97);
+        }
+
+        .liquid-pill.is-active {
+            background: var(--dark-green);
+            border-color: var(--dark-green);
+            color: var(--lime);
+        }
+
+        @media (max-width: 640px) {
+            .liquid-ui {
+                left: 1rem;
+                right: 5.5rem;
+                bottom: 1.25rem;
+                justify-content: flex-start;
+            }
+
+            .liquid-pill {
+                padding: 0.55rem 0.9rem;
+                font-size: 0.6875rem;
+            }
+        }
+
         .glass-nav {
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border-bottom: 1px solid rgba(15, 58, 71, 0.06);
+            background: rgba(248, 248, 243, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
         }
 
         .reveal-mask {
@@ -65,29 +236,11 @@
         }
 
         .hero-legible {
-            text-shadow: 0 4px 28px rgba(255, 255, 255, 0.9), 0 1px 10px rgba(255, 255, 255, 0.75);
+            text-shadow: 0 4px 28px rgba(248, 248, 243, 0.92), 0 1px 10px rgba(248, 248, 243, 0.8);
         }
 
-        /* Camada 0: Fundo animado de 78 frames */
-        #hero-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-            display: block;
-        }
-
-        /* Camada 1: Véu branco com recorte líquido orgânico (CFD + FBM) */
-        #fluid-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-            display: block;
+        .font-display {
+            font-family: "Brier", "Inter", serif;
         }
 
         #whatsapp-chat {
@@ -97,6 +250,7 @@
             transition: opacity 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
                         transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
         #whatsapp-chat.active {
             display: flex;
             opacity: 1;
@@ -104,61 +258,62 @@
         }
 
         img, iframe { content-visibility: auto; }
-
-        canvas {
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            will-change: transform;
-        }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="antialiased selection:bg-emerald selection:text-white">
+<body class="antialiased selection:bg-[#D2FF00] selection:text-[#282C20]">
 
-    <!-- CAMADA 0: FUNDO ANIMADO (78 FRAMES) -->
-    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <!-- CAMADAS FIXAS DE FUNDO + MÁSCARA LÍQUIDA (padrão .gl-wrap) -->
+    <div class="gl-wrap" aria-hidden="true">
+        <canvas id="hero-canvas" class="gl gl-canvas"></canvas>
+        <canvas id="fluid-canvas" class="gl gl-canvas"></canvas>
+    </div>
 
-    <!-- CAMADA 1: VÉU BRANCO QUE SE ABRE COM LÍQUIDO E FALHAS NATURAIS -->
-    <canvas id="fluid-canvas" aria-hidden="true"></canvas>
-
-    <!-- LOADER BRANCO -->
-    <div id="loader" style="position:fixed;inset:0;background:#FFFFFF;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-        <div class="mb-6 animate-pulse">
-            <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
+    <!-- LOADER (padrão .liquid-loader) -->
+    <div id="loader" class="liquid-loader">
+        <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-32 h-32 object-contain mb-1">
+        <div class="liquid-loader-title">Germano</div>
+        <div style="width:14rem;height:2px;background:rgba(40,44,32,0.14);border-radius:99px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:var(--dark-green);width:0%;"></div>
         </div>
-        <div style="width:16rem;height:2px;background:rgba(15,58,71,0.12);border-radius:99px;overflow:hidden;">
-            <div id="progress-bar" style="height:100%;background:linear-gradient(90deg,#0F3A47,#10B981);width:0%;"></div>
-        </div>
+        <div id="loader-status" class="liquid-loader-status">Carregando experiência · 0%</div>
+    </div>
+
+    <!-- HUD INTERATIVO DO FLUIDO (padrão .liquid-ui / .liquid-pill) -->
+    <div class="liquid-ui" role="group" aria-label="Controles do efeito líquido">
+        <button id="btn-gaps" type="button" class="liquid-pill is-active">Falhas: ON</button>
+        <button id="btn-autoflow" type="button" class="liquid-pill">Fluxo Auto</button>
+        <button id="btn-clear" type="button" class="liquid-pill">Limpar</button>
     </div>
 
     <!-- WHATSAPP WIDGET -->
-    <div class="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
-        <div id="whatsapp-chat" class="mb-6 w-[340px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.18)] border border-petroleum/10 overflow-hidden flex-col">
-            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0 text-left">
-                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-white flex items-center justify-center">
+    <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end">
+        <div id="whatsapp-chat" class="mb-5 w-[340px] max-w-[calc(100vw-3rem)] bg-[#F8F8F3] rounded-[32px] shadow-[0_20px_60px_rgba(28,30,22,0.18)] border border-[rgba(40,44,32,0.16)] overflow-hidden flex-col">
+            <div class="bg-[#282C20] p-6 flex items-center gap-4 shrink-0 text-left">
+                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#D2FF00] shadow-lg bg-white flex items-center justify-center">
                     <img src="assets/camila.jpg.jpg" alt="Camila" class="w-full h-full object-cover block">
-                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
+                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-[#D2FF00] border-2 border-[#282C20] rounded-full animate-pulse"></span>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold text-base leading-tight">Camila</h4>
-                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora
+                    <h4 class="text-[#F8F8F3] font-bold text-base leading-tight">Camila</h4>
+                    <p class="text-[#D2FF00] text-xs font-medium flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-[#D2FF00] rounded-full"></span> Online agora
                     </p>
                 </div>
-                <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer">
+                <button onclick="toggleChat()" class="ml-auto text-[#F8F8F3]/50 hover:text-[#D2FF00] transition-colors cursor-pointer">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div id="chat-history" class="p-6 bg-gray-50 h-[280px] overflow-y-auto flex flex-col gap-4 text-left" data-lenis-prevent>
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]">
+            <div id="chat-history" class="p-6 bg-[#F8F8F3] h-[280px] overflow-y-auto flex flex-col gap-4 text-left" data-lenis-prevent>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-[rgba(40,44,32,0.12)] text-sm text-[#1C1E16] leading-relaxed self-start max-w-[85%]">
                     Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br> Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
                 </div>
             </div>
-            <div class="p-4 bg-white border-t border-petroleum/5">
-                <div class="flex gap-2 items-center bg-gray-50 rounded-2xl px-4 py-2 border border-petroleum/10 focus-within:border-emerald">
-                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-petroleum outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl active:scale-90 cursor-pointer">
+            <div class="p-4 bg-white border-t border-[rgba(40,44,32,0.12)]">
+                <div class="flex gap-2 items-center bg-[#F8F8F3] rounded-2xl px-4 py-2 border border-[rgba(40,44,32,0.14)] focus-within:border-[#282C20]">
+                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-[#1C1E16] outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="bg-[#282C20] text-[#D2FF00] p-2 rounded-xl active:scale-90 cursor-pointer hover:bg-emerald hover:text-white transition-colors">
                         <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -166,7 +321,7 @@
         </div>
         <button onclick="toggleChat()" class="group relative cursor-pointer flex items-center justify-center">
             <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping"></span>
-            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110">
+            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 border border-[rgba(40,44,32,0.16)]">
                 <img src="3d-round-with-whatsapp-logo.png" alt="WhatsApp" class="w-10 h-10 object-contain">
             </div>
         </button>
@@ -178,130 +333,132 @@
             <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="block">
                 <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
             </a>
-            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
+            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-[#282C20]">
                 <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="hover:text-emerald uppercase transition-colors">Inovação</a>
                 <a href="#biotech-section" data-scroll-to="#biotech-section" class="hover:text-emerald uppercase transition-colors">Produtos</a>
                 <a href="#contato" data-scroll-to="#contato" class="hover:text-emerald uppercase transition-colors">Contato</a>
-                <button onclick="toggleChat()" class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald font-bold uppercase text-xs tracking-widest cursor-pointer transition-all">
+                <button onclick="toggleChat()" class="bg-[#282C20] text-[#F8F8F3] px-8 py-3 rounded-full hover:bg-[#D2FF00] hover:text-[#282C20] font-bold uppercase text-xs tracking-widest cursor-pointer transition-all border border-[#282C20]">
                     Falar com Especialista
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SOBRE O VÉU BRANCO LÍQUIDO -->
-    <section id="scroll-hero" class="relative z-10 bg-transparent" style="height:420vh;">
-        <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;pointer-events:none;">
-            <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;">
-                <div class="relative w-full max-w-5xl h-full flex items-center justify-center px-6">
-                    <h1 id="text-01" class="hero-text-item hero-legible absolute text-center w-full px-6 text-5xl md:text-8xl font-black text-petroleum tracking-tighter leading-tight uppercase">
-                        Soluções ecológicas <br/> <span class="text-emerald">para seu rebanho</span>
-                    </h1>
+    <main class="liquid-stage relative z-10">
+        <!-- HERO SOBRE O VÉU OFF-WHITE LÍQUIDO -->
+        <section id="scroll-hero" class="relative bg-transparent" style="height:420vh;">
+            <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;pointer-events:none;">
+                <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;">
+                    <div class="relative w-full max-w-5xl h-full flex items-center justify-center px-6">
+                        <h1 id="text-01" class="hero-text-item hero-legible font-display absolute text-center w-full px-6 text-5xl md:text-8xl font-black text-[#282C20] tracking-tighter leading-tight uppercase">
+                            Soluções ecológicas <br/> <span class="text-emerald">para seu rebanho</span>
+                        </h1>
 
-                    <p id="text-02" class="hero-text-item hero-legible absolute text-center w-full px-6 text-petroleum text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto opacity-0">
-                        Um único animal afetado pode reduzir drasticamente sua produção.
-                    </p>
+                        <p id="text-02" class="hero-text-item hero-legible absolute text-center w-full px-6 text-[#1C1E16] text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto opacity-0">
+                            Um único animal afetado pode reduzir drasticamente sua produção.
+                        </p>
 
-                    <h2 id="text-03" class="hero-text-item hero-legible absolute text-center w-full px-6 text-4xl md:text-6xl font-black text-petroleum tracking-tighter leading-tight opacity-0 uppercase">
-                        Quem trata certo, <br/> <span class="text-emerald">lucra mais.</span> <br/>
-                        <span class="text-xl font-medium tracking-widest block mt-4 text-petroleum/70">Simples assim.</span>
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- BIOTECH PRODUTOS -->
-    <section id="biotech-section" class="relative z-10 bg-transparent py-40 overflow-hidden text-left">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
-                <div>
-                    <div class="reveal-mask">
-                        <span class="reveal-text hero-legible text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
-                    </div>
-                    <div class="reveal-mask">
-                        <h2 class="reveal-text hero-legible text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">
-                            BioTech <br/> Germano
+                        <h2 id="text-03" class="hero-text-item hero-legible font-display absolute text-center w-full px-6 text-4xl md:text-6xl font-black text-[#282C20] tracking-tighter leading-tight opacity-0 uppercase">
+                            Quem trata certo, <br/> <span class="text-emerald">lucra mais.</span> <br/>
+                            <span class="text-xl font-medium tracking-widest block mt-4 text-[#282C20]/70 font-sans">Simples assim.</span>
                         </h2>
                     </div>
                 </div>
-                <div class="reveal-mask hidden md:block">
-                    <p class="reveal-text hero-legible text-petroleum/75 max-w-sm text-right italic">
-                        Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
-                    </p>
-                </div>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
-                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white/95 backdrop-blur-sm border border-petroleum/10 mb-8 shadow-sm">
-                        <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" alt="Calmix Cromovita" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="hero-legible text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
-                    <p class="hero-legible text-petroleum/70 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
-                </div>
-
-                <div class="parallax-card group cursor-pointer md:mt-24 text-left" data-parallax-speed="-35">
-                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white/95 backdrop-blur-sm border border-petroleum/10 mb-8 shadow-sm">
-                        <img src="produtos/produto-fort-vit.png" loading="lazy" alt="Fort Vit + 3" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="hero-legible text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
-                    <p class="hero-legible text-petroleum/70 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
-                </div>
-
-                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                    <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white/95 backdrop-blur-sm border border-petroleum/10 mb-8 shadow-sm">
-                        <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" alt="Núcleo Acelerado" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="hero-legible text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
-                    <p class="hero-legible text-petroleum/70 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTATO -->
-    <section id="contato" class="relative z-10 bg-transparent py-32 border-t border-petroleum/10 overflow-hidden text-left">
-        <div class="max-w-7xl mx-auto px-6 text-left">
-            <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
-                <div class="w-full lg:w-1/2 flex flex-col justify-center text-left contact-reveal">
-                    <h2 class="hero-legible text-4xl md:text-6xl font-black text-petroleum tracking-tighter uppercase leading-tight mb-4">
-                        Envie-nos uma <span class="text-emerald">Mensagem</span>
-                    </h2>
-                    <div class="w-20 h-1.5 bg-emerald mb-8 rounded-full"></div>
-                    <p class="hero-legible text-petroleum/75 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
-                    <form class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <input type="text" placeholder="Nome" class="w-full bg-white/85 backdrop-blur-md border border-petroleum/10 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
-                            <input type="tel" placeholder="Telefone" class="w-full bg-white/85 backdrop-blur-md border border-petroleum/10 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
+        <!-- BIOTECH PRODUTOS -->
+        <section id="biotech-section" class="relative bg-transparent py-40 overflow-hidden text-left">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-[rgba(40,44,32,0.16)] pb-12">
+                    <div>
+                        <div class="reveal-mask">
+                            <span class="reveal-text hero-legible text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
                         </div>
-                        <input type="email" placeholder="E-mail" class="w-full bg-white/85 backdrop-blur-md border border-petroleum/10 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
-                        <textarea placeholder="Mensagem" rows="5" class="w-full bg-white/85 backdrop-blur-md border border-petroleum/10 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium resize-none text-left"></textarea>
-                        <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer">
-                            Solicitar Atendimento Especializado
-                        </button>
-                    </form>
-                </div>
-                <div class="w-full lg:w-1/2 flex flex-col text-left contact-reveal">
-                    <div id="map-container" class="flex-1 bg-white/90 backdrop-blur-sm rounded-[40px] overflow-hidden border border-petroleum/10 shadow-2xl relative group min-h-[450px]">
-                        <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
-                        <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-petroleum/10 shadow-lg text-left text-petroleum">
-                            <h4 class="font-bold uppercase tracking-wider text-xs mb-3">Germano Saúde Animal</h4>
-                            <p class="text-[11px] md:text-xs font-medium leading-relaxed">
-                                Av. Senador José Lourenço Dias, 63<br>
-                                Anápolis - GO<br>
-                                <span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span>
-                            </p>
+                        <div class="reveal-mask">
+                            <h2 class="reveal-text hero-legible font-display text-5xl md:text-7xl font-black text-[#282C20] tracking-tighter uppercase leading-tight">
+                                BioTech <br/> Germano
+                            </h2>
                         </div>
                     </div>
+                    <div class="reveal-mask hidden md:block">
+                        <p class="reveal-text hero-legible text-[#1C1E16]/75 max-w-sm text-right italic">
+                            Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+                    <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
+                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
+                            <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" alt="Calmix Cromovita" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                        </div>
+                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
+                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
+                    </div>
+
+                    <div class="parallax-card group cursor-pointer md:mt-24 text-left" data-parallax-speed="-35">
+                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
+                            <img src="produtos/produto-fort-vit.png" loading="lazy" alt="Fort Vit + 3" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                        </div>
+                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
+                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
+                    </div>
+
+                    <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
+                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
+                            <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" alt="Núcleo Acelerado" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                        </div>
+                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
+                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="relative z-10 bg-transparent py-20 border-t border-petroleum/10 text-center">
-        <div class="hero-legible text-petroleum/50 text-xs tracking-widest uppercase font-bold text-center">© 2026 Germano Saúde Animal</div>
-    </footer>
+        <!-- CONTATO -->
+        <section id="contato" class="relative bg-transparent py-32 border-t border-[rgba(40,44,32,0.16)] overflow-hidden text-left">
+            <div class="max-w-7xl mx-auto px-6 text-left">
+                <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
+                    <div class="w-full lg:w-1/2 flex flex-col justify-center text-left contact-reveal">
+                        <h2 class="hero-legible font-display text-4xl md:text-6xl font-black text-[#282C20] tracking-tighter uppercase leading-tight mb-4">
+                            Envie-nos uma <span class="text-emerald">Mensagem</span>
+                        </h2>
+                        <div class="w-20 h-1.5 bg-[#282C20] mb-8 rounded-full"></div>
+                        <p class="hero-legible text-[#1C1E16]/75 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <input type="text" placeholder="Nome" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
+                                <input type="tel" placeholder="Telefone" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
+                            </div>
+                            <input type="email" placeholder="E-mail" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
+                            <textarea placeholder="Mensagem" rows="5" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium resize-none text-left"></textarea>
+                            <button type="button" class="w-full bg-[#282C20] text-[#F8F8F3] font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-[#D2FF00] hover:text-[#282C20] shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer border border-[#282C20]">
+                                Solicitar Atendimento Especializado
+                            </button>
+                        </form>
+                    </div>
+                    <div class="w-full lg:w-1/2 flex flex-col text-left contact-reveal">
+                        <div id="map-container" class="flex-1 bg-[#F8F8F3]/90 backdrop-blur-sm rounded-[40px] overflow-hidden border border-[rgba(40,44,32,0.16)] shadow-2xl relative group min-h-[450px]">
+                            <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
+                            <div class="absolute bottom-6 left-6 right-6 bg-[#F8F8F3]/95 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-[rgba(40,44,32,0.16)] shadow-lg text-left text-[#1C1E16]">
+                                <h4 class="font-bold uppercase tracking-wider text-xs mb-3 text-[#282C20]">Germano Saúde Animal</h4>
+                                <p class="text-[11px] md:text-xs font-medium leading-relaxed">
+                                    Av. Senador José Lourenço Dias, 63<br>
+                                    Anápolis - GO<br>
+                                    <span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="relative bg-transparent py-20 border-t border-[rgba(40,44,32,0.16)] text-center pb-28">
+            <div class="hero-legible text-[#282C20]/60 text-xs tracking-widest uppercase font-bold text-center">© 2026 Germano Saúde Animal</div>
+        </footer>
+    </main>
 
     <script>
         /* Detecção Safari / iPhone */
@@ -326,7 +483,7 @@
 
             const userText = input.value.trim();
             const userDiv = document.createElement("div");
-            userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
+            userDiv.className = "bg-[#282C20] text-[#F8F8F3] p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
             userDiv.innerText = userText;
             history.appendChild(userDiv);
             input.value = "";
@@ -334,7 +491,7 @@
 
             setTimeout(() => {
                 const responseDiv = document.createElement("div");
-                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum self-start max-w-[85%]";
+                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-[rgba(40,44,32,0.12)] text-sm text-[#1C1E16] self-start max-w-[85%]";
                 responseDiv.innerHTML = `<strong>Camila:</strong> Entendido! Vou te conectar agora com nosso especialista no WhatsApp.`;
                 history.appendChild(responseDiv);
                 history.scrollTop = history.scrollHeight;
@@ -357,13 +514,14 @@
         }
 
         /* =========================================================
-           ORGANIC LIQUID REVEAL MASK (CFD + FBM + FALHAS NATURAIS)
-           Recorta a camada branca com tensão superficial líquida,
-           filamentos, gotículas e falhas orgânicas ao passar o cursor
+           LIQUID MOTION REVEAL (CFD + FBM + FALHAS + INTERPOLAÇÃO)
+           Véu na cor exata --bg (#F8F8F3) que abre com aspecto
+           líquido orgânico apenas onde o fluido passa
         ========================================================= */
         function initLiquidReveal() {
             const fluidCanvas = document.getElementById("fluid-canvas");
-            if (!fluidCanvas || typeof THREE === "undefined") return { resize: () => {} };
+            const noop = { resize: () => {}, clear: () => {}, setGaps: () => {}, setAutoFlow: () => {} };
+            if (!fluidCanvas || typeof THREE === "undefined") return noop;
 
             let renderer;
             try {
@@ -375,7 +533,7 @@
                     powerPreference: "high-performance"
                 });
             } catch (e) {
-                return { resize: () => {} };
+                return noop;
             }
 
             renderer.autoClear = false;
@@ -401,17 +559,17 @@
                 });
             }
 
-            // ----- Parâmetros para comportamento líquido orgânico -----
-            const SIM_RES          = isMobile ? 0.18 : 0.25; // maior definição para filamentos e gotículas
-            const CURSOR_SIZE      = 28;    // área base do respingo líquido
-            const MOUSE_FORCE      = 62;    // impulso do líquido
-            const DISSIPATION      = 0.965; // fluidez do movimento
-            const MASK_DISSIPATION = 0.974; // tempo de abertura (quebra em falhas e gotas antes de sumir)
+            // ----- Parâmetros da simulação -----
+            const SIM_RES          = isMobile ? 0.18 : 0.26;
+            const CURSOR_SIZE      = 28;
+            const MOUSE_FORCE      = 64;
+            const DISSIPATION      = 0.966;
+            const MASK_DISSIPATION = 0.975;
             const VISCOUS          = 30;
-            const ITER_POISSON     = 6;     // projeção de pressão mais limpa para curvas líquidas
+            const ITER_POISSON     = 6;
             const ITER_VISCOUS     = 4;
             const DT               = 0.015;
-            const STRAIGHTNESS     = 0.65;  // menor rigidez = mais redemoinhos naturais
+            const STRAIGHTNESS     = 0.62;
             const IS_BOUNCE        = false;
             const IS_VISCOUS       = false;
             const BFECC            = true;
@@ -437,16 +595,19 @@
                 mask_1:       createFBO(simW, simH)
             };
 
-            for (const key in fbos) {
-                renderer.setRenderTarget(fbos[key]);
-                renderer.clear();
+            function clearAllFBOs() {
+                for (const key in fbos) {
+                    renderer.setRenderTarget(fbos[key]);
+                    renderer.clear();
+                }
+                renderer.setRenderTarget(null);
             }
-            renderer.setRenderTarget(null);
+            clearAllFBOs();
 
             let maskRead  = fbos.mask_0;
             let maskWrite = fbos.mask_1;
+            let autoFlowEnabled = false;
 
-            // ----- Bloco de ruído orgânico (Value Noise + FBM) -----
             const GLSL_NOISE = `
             float hash21(vec2 p) {
                 p = fract(p * vec2(123.34, 456.21));
@@ -477,7 +638,6 @@
                 return value;
             }`;
 
-            // ----- Shaders GLSL -----
             const VS_BASE = `
             attribute vec3 position;
             uniform vec2 px;
@@ -501,7 +661,7 @@
                 gl_Position = vec4(position, 1.0);
             }`;
 
-            // Véu branco com recorte líquido nítido, filamentos, gotículas e falhas internas
+            // Véu #F8F8F3 com recorte líquido nítido, filamentos e falhas naturais
             const FS_OUTPUT = `
             precision highp float;
             uniform sampler2D velocity;
@@ -509,6 +669,7 @@
             uniform vec2 px;
             uniform float uTime;
             uniform float uAspect;
+            uniform float uGapAmount;
             varying vec2 uv;
             ${GLSL_NOISE}
 
@@ -516,44 +677,39 @@
                 vec2 vel = texture2D(velocity, uv).xy;
                 float speed = length(vel);
 
-                // Coordenadas proporcionais para gotas e falhas circulares em qualquer tela
                 vec2 p = vec2(uv.x * uAspect, uv.y);
 
-                // Domain Warping em 2 estágios: cria filamentos líquidos que acompanham o fluxo
-                float nFlow = fbm(p * 5.2 - vel * 0.55 + vec2(uTime * 0.14, -uTime * 0.10));
-                float nDetail = fbm(p * 11.5 + vec2(nFlow * 1.65) - vel * 0.95 + vec2(-uTime * 0.09, uTime * 0.13));
+                // Domain warping orgânico para contorno líquido com tensão superficial
+                float nFlow   = fbm(p * 5.0 - vel * 0.60 + vec2(uTime * 0.14, -uTime * 0.10));
+                float nDetail = fbm(p * 11.2 + vec2(nFlow * 1.7) - vel * 1.05 + vec2(-uTime * 0.08, uTime * 0.12));
 
-                // Distorção líquida na leitura da máscara
-                vec2 liquidWarp = vel * 0.024 + (vec2(nFlow, nDetail) - 0.5) * 0.038;
+                vec2 liquidWarp = vel * 0.026 + (vec2(nFlow, nDetail) - 0.5) * 0.04;
                 vec2 warpedUv = clamp(uv - liquidWarp, 0.0, 1.0);
                 float density = texture2D(maskTex, warpedUv).r;
 
-                float rawField = density + speed * 0.22;
-
-                // Ativa ruído e falhas apenas onde o fluido passou (mantém o resto 100% branco puro)
+                float rawField = density + speed * 0.24;
                 float activeZone = smoothstep(0.015, 0.16, rawField);
 
-                // Ruído de borda para quebrar o contorno em gotículas e filamentos
-                float edgeBreak = (nDetail - 0.48) * 0.62 * activeZone;
+                // Quebra orgânica das bordas em gotas e filamentos
+                float edgeBreak = (nDetail - 0.48) * 0.64 * activeZone;
 
-                // Falhas naturais (buracos orgânicos no interior e nas bordas do rastro líquido)
-                float gapNoiseA = fbm(p * 14.0 - vel * 0.75 + vec2(nFlow * 1.2, uTime * 0.05));
-                float gapNoiseB = vnoise(p * 26.0 + vec2(nDetail * 2.0) - vel * 1.1);
+                // Falhas naturais internas e na retração do líquido
+                float gapNoiseA = fbm(p * 14.5 - vel * 0.8 + vec2(nFlow * 1.25, uTime * 0.05));
+                float gapNoiseB = vnoise(p * 27.0 + vec2(nDetail * 2.1) - vel * 1.15);
                 float combinedGaps = gapNoiseA * 0.72 + gapNoiseB * 0.28;
 
-                // Falhas aparecem de leve no meio do traço e se abrem mais conforme o líquido retrai
                 float thinning = 1.0 - smoothstep(0.35, 1.15, density);
-                float gaps = smoothstep(0.50, 0.74, combinedGaps) * (0.34 + 0.48 * thinning) * activeZone;
+                float gaps = smoothstep(0.49, 0.73, combinedGaps) * (0.36 + 0.50 * thinning) * activeZone * uGapAmount;
 
-                // Campo final com tensão superficial (recorte bem líquido e definido)
-                float liquidField = rawField * (0.78 + nFlow * 0.68) + edgeBreak - gaps;
-                float reveal = smoothstep(0.21, 0.275, liquidField);
+                float liquidField = rawField * (0.78 + nFlow * 0.70) + edgeBreak - gaps;
+                float reveal = smoothstep(0.215, 0.275, liquidField);
 
-                // Menisco molhado sutil na borda do líquido (dá sensação de profundidade/tensão superficial)
+                // Cor exata de --bg: #F8F8F3 (248/255, 248/255, 243/255)
+                vec3 bgVeil = vec3(0.9725, 0.9725, 0.9529);
                 float rimOuter = smoothstep(0.15, 0.22, liquidField) * (1.0 - smoothstep(0.23, 0.30, liquidField));
                 float sheen = smoothstep(0.45, 0.85, nDetail) * rimOuter;
-                vec3 wetEdgeColor = mix(vec3(0.89, 0.96, 0.94), vec3(0.98, 1.0, 0.99), sheen);
-                vec3 veilColor = mix(vec3(1.0), wetEdgeColor, rimOuter * 0.85);
+                vec3 wetEdge = mix(vec3(0.91, 0.94, 0.88), vec3(0.99, 1.0, 0.97), sheen);
+                vec3 veilColor = mix(bgVeil, wetEdge, rimOuter * 0.8);
 
                 float alpha = clamp(1.0 - reveal, 0.0, 1.0);
                 gl_FragColor = vec4(veilColor * alpha, alpha);
@@ -590,7 +746,6 @@
                 }
             }`;
 
-            // Advecção da máscara arrastada com mais intensidade pela correnteza do fluido
             const FS_ADVECTION_MASK = `
             precision highp float;
             uniform sampler2D velocity;
@@ -635,11 +790,11 @@
                 gl_FragColor = vec4(force * d, 0.0, 1.0);
             }`;
 
-            // Carimbo líquido irregular com respingos e micro-falhas no próprio pincel
             const FS_MASK_STAMP = `
             precision highp float;
             uniform float strength;
             uniform float uTime;
+            uniform float uGapAmount;
             varying vec2 vUv;
             ${GLSL_NOISE}
 
@@ -647,19 +802,17 @@
                 vec2 p = (vUv - 0.5) * 2.0;
                 float r = length(p);
 
-                float nMain = vnoise(p * 3.0 + vec2(uTime * 1.9, -uTime * 1.4));
-                float nFine = vnoise(p * 7.2 - vec2(uTime * 2.3, uTime * 1.6));
+                float nMain = vnoise(p * 3.1 + vec2(uTime * 1.9, -uTime * 1.4));
+                float nFine = vnoise(p * 7.5 - vec2(uTime * 2.3, uTime * 1.6));
 
-                // Contorno orgânico irregular (parece respingo líquido, não um círculo geométrico)
-                float warpedR = r + (nMain - 0.5) * 0.48 + (nFine - 0.5) * 0.24;
+                float warpedR = r + ((nMain - 0.5) * 0.48 + (nFine - 0.5) * 0.24) * (0.45 + 0.55 * uGapAmount);
                 float d = 1.0 - clamp(warpedR, 0.0, 1.0);
                 d = d * d;
 
-                // Pequenas falhas e respingos satélites na pincelada
-                float breakUp = smoothstep(0.24, 0.72, nMain * 0.6 + nFine * 0.4);
-                float splash = smoothstep(0.76, 0.90, nFine) * smoothstep(1.0, 0.35, r) * 0.55;
+                float breakUp = mix(1.0, smoothstep(0.24, 0.72, nMain * 0.6 + nFine * 0.4), uGapAmount);
+                float splash = smoothstep(0.75, 0.90, nFine) * smoothstep(1.0, 0.35, r) * 0.55 * uGapAmount;
 
-                float amount = (d * (0.38 + 0.92 * breakUp) + splash) * strength;
+                float amount = (d * (0.40 + 0.90 * breakUp) + splash) * strength;
                 gl_FragColor = vec4(amount, 0.0, 0.0, 1.0);
             }`;
 
@@ -806,11 +959,12 @@
                 depthTest: false,
                 depthWrite: false,
                 uniforms: {
-                    px:       { value: cellScale },
-                    center:   { value: new THREE.Vector2() },
-                    scale:    { value: new THREE.Vector2(CURSOR_SIZE * 1.65, CURSOR_SIZE * 1.65) },
-                    strength: { value: 0.0 },
-                    uTime:    { value: 0.0 }
+                    px:         { value: cellScale },
+                    center:     { value: new THREE.Vector2() },
+                    scale:      { value: new THREE.Vector2(CURSOR_SIZE * 1.6, CURSOR_SIZE * 1.6) },
+                    strength:   { value: 0.0 },
+                    uTime:      { value: 0.0 },
+                    uGapAmount: { value: 1.0 }
                 }
             });
             const maskStampScene = new THREE.Scene();
@@ -883,25 +1037,30 @@
                 depthTest: false,
                 depthWrite: false,
                 uniforms: {
-                    velocity: { value: fbos.vel_0.texture },
-                    maskTex:  { value: maskRead.texture },
-                    px:       { value: cellScale },
-                    uTime:    { value: 0.0 },
-                    uAspect:  { value: window.innerWidth / Math.max(window.innerHeight, 1) }
+                    velocity:   { value: fbos.vel_0.texture },
+                    maskTex:    { value: maskRead.texture },
+                    px:         { value: cellScale },
+                    uTime:      { value: 0.0 },
+                    uAspect:    { value: window.innerWidth / Math.max(window.innerHeight, 1) },
+                    uGapAmount: { value: 1.0 }
                 }
             });
             const outScene = makeQuadScene(outMat);
 
             // ----- Rastreamento de cursor / toque -----
-            const mouse    = new THREE.Vector2();
-            const mouseOld = new THREE.Vector2();
-            const diff     = new THREE.Vector2();
-            let hasPointer = false;
+            const mouse     = new THREE.Vector2();
+            const mouseOld  = new THREE.Vector2();
+            const prevFrame = new THREE.Vector2();
+            const diff      = new THREE.Vector2();
+            const interpPos = new THREE.Vector2();
+            let hasPointer  = false;
+            let lastUserMove = 0;
 
             function updatePointer(clientX, clientY, resetPrev = false) {
                 const nx = (clientX / window.innerWidth) * 2 - 1;
                 const ny = -(clientY / window.innerHeight) * 2 + 1;
                 mouse.set(nx, ny);
+                lastUserMove = performance.now();
                 if (!hasPointer || resetPrev) {
                     mouseOld.copy(mouse);
                     hasPointer = true;
@@ -921,6 +1080,10 @@
             let lastTime = startTime;
             const INTERVAL = 1000 / 60;
 
+            function clampCoord(val, margin) {
+                return Math.min(Math.max(val, -1 + margin), 1 - margin);
+            }
+
             function simulate() {
                 requestAnimationFrame(simulate);
                 if (document.hidden) return;
@@ -931,6 +1094,17 @@
 
                 const elapsed = (now - startTime) * 0.001;
 
+                // Fluxo automático suave (somente quando o usuário ativar o botão "Fluxo Auto")
+                if (autoFlowEnabled && now - lastUserMove > 1400) {
+                    const ax = Math.sin(elapsed * 0.95) * 0.55;
+                    const ay = Math.sin(elapsed * 1.45) * 0.38;
+                    if (!hasPointer) {
+                        mouseOld.set(ax, ay);
+                        hasPointer = true;
+                    }
+                    mouse.set(ax, ay);
+                }
+
                 if (IS_BOUNCE) boundarySpace.set(0, 0);
                 else           boundarySpace.copy(cellScale);
 
@@ -939,23 +1113,31 @@
                 advMat.uniforms.isBFECC.value  = BFECC;
                 renderToFBO(fbos.vel_1, advScene);
 
-                // 2. Força externa do cursor
+                // 2. Força externa interpolada (rastro líquido contínuo sem quebras artificiais)
+                prevFrame.copy(mouseOld);
                 diff.subVectors(mouse, mouseOld);
                 mouseOld.copy(mouse);
+
                 const moveLen = diff.length();
                 const hasMove = moveLen > 0.0005;
+                const steps = hasMove ? Math.min(6, Math.max(1, Math.ceil(moveLen / 0.035))) : 0;
 
-                const ex = CURSOR_SIZE * cellScale.x;
-                const ey = CURSOR_SIZE * cellScale.y;
-                const clampedX = Math.min(Math.max(mouse.x, -1 + ex + cellScale.x * 2), 1 - ex - cellScale.x * 2);
-                const clampedY = Math.min(Math.max(mouse.y, -1 + ey + cellScale.y * 2), 1 - ey - cellScale.y * 2);
+                const marginX = CURSOR_SIZE * cellScale.x + cellScale.x * 2;
+                const marginY = CURSOR_SIZE * cellScale.y + cellScale.y * 2;
 
                 if (hasMove) {
-                    const fx = THREE.MathUtils.clamp(diff.x * 0.5 * MOUSE_FORCE, -4.0, 4.0);
-                    const fy = THREE.MathUtils.clamp(diff.y * 0.5 * MOUSE_FORCE, -4.0, 4.0);
+                    const fx = THREE.MathUtils.clamp((diff.x / steps) * 0.5 * MOUSE_FORCE, -3.8, 3.8);
+                    const fy = THREE.MathUtils.clamp((diff.y / steps) * 0.5 * MOUSE_FORCE, -3.8, 3.8);
                     forceMat.uniforms.force.value.set(fx, fy);
-                    forceMat.uniforms.center.value.set(clampedX, clampedY);
-                    renderToFBO(fbos.vel_1, forceScene);
+
+                    for (let s = 1; s <= steps; s++) {
+                        interpPos.lerpVectors(prevFrame, mouse, s / steps);
+                        forceMat.uniforms.center.value.set(
+                            clampCoord(interpPos.x, marginX),
+                            clampCoord(interpPos.y, marginY)
+                        );
+                        renderToFBO(fbos.vel_1, forceScene);
+                    }
                 }
 
                 // 3. Viscosidade (opcional)
@@ -991,23 +1173,31 @@
                 presMat.uniforms.pressure.value = presResult.texture;
                 renderToFBO(fbos.vel_0, presScene);
 
-                // 7. Advecção + Carimbo orgânico da máscara líquida
+                // 7. Advecção + Carimbo interpolado da máscara líquida
                 advMaskMat.uniforms.velocity.value = fbos.vel_0.texture;
                 advMaskMat.uniforms.maskTex.value  = maskRead.texture;
                 renderToFBO(maskWrite, advMaskScene);
 
                 if (hasMove) {
-                    maskStampMat.uniforms.center.value.set(clampedX, clampedY);
-                    maskStampMat.uniforms.strength.value = THREE.MathUtils.clamp(moveLen * 24.0, 0.32, 1.05);
-                    maskStampMat.uniforms.uTime.value    = elapsed;
-                    renderToFBO(maskWrite, maskStampScene);
+                    const perStepStrength = THREE.MathUtils.clamp((moveLen * 24.0) / Math.sqrt(steps), 0.24, 0.92);
+                    maskStampMat.uniforms.strength.value = perStepStrength;
+
+                    for (let s = 1; s <= steps; s++) {
+                        interpPos.lerpVectors(prevFrame, mouse, s / steps);
+                        maskStampMat.uniforms.center.value.set(
+                            clampCoord(interpPos.x, marginX),
+                            clampCoord(interpPos.y, marginY)
+                        );
+                        maskStampMat.uniforms.uTime.value = elapsed + s * 0.13;
+                        renderToFBO(maskWrite, maskStampScene);
+                    }
                 }
 
                 const tmp = maskRead;
                 maskRead  = maskWrite;
                 maskWrite = tmp;
 
-                // 8. Render final do véu branco com recorte líquido e falhas
+                // 8. Render final do véu #F8F8F3 com recorte líquido e falhas
                 outMat.uniforms.velocity.value = fbos.vel_0.texture;
                 outMat.uniforms.maskTex.value  = maskRead.texture;
                 outMat.uniforms.uTime.value    = elapsed;
@@ -1019,6 +1209,16 @@
             simulate();
 
             return {
+                clear: clearAllFBOs,
+                setGaps: (enabled) => {
+                    const val = enabled ? 1.0 : 0.0;
+                    outMat.uniforms.uGapAmount.value = val;
+                    maskStampMat.uniforms.uGapAmount.value = val;
+                },
+                setAutoFlow: (enabled) => {
+                    autoFlowEnabled = enabled;
+                    if (enabled) lastUserMove = 0;
+                },
                 resize: () => {
                     const w = window.innerWidth;
                     const h = window.innerHeight;
@@ -1040,8 +1240,32 @@
             initLucide();
             gsap.registerPlugin(ScrollTrigger);
 
-            /* Inicia máscara líquida branca com falhas naturais */
+            /* Inicia máscara líquida */
             const fluid = initLiquidReveal();
+
+            /* Controles .liquid-pill */
+            const btnGaps = document.getElementById("btn-gaps");
+            const btnAuto = document.getElementById("btn-autoflow");
+            const btnClear = document.getElementById("btn-clear");
+
+            let gapsOn = true;
+            btnGaps?.addEventListener("click", () => {
+                gapsOn = !gapsOn;
+                fluid.setGaps(gapsOn);
+                btnGaps.classList.toggle("is-active", gapsOn);
+                btnGaps.textContent = gapsOn ? "Falhas: ON" : "Falhas: OFF";
+            });
+
+            let autoOn = false;
+            btnAuto?.addEventListener("click", () => {
+                autoOn = !autoOn;
+                fluid.setAutoFlow(autoOn);
+                btnAuto.classList.toggle("is-active", autoOn);
+            });
+
+            btnClear?.addEventListener("click", () => {
+                fluid.clear();
+            });
 
             /* 1. Lenis Smooth Scroll sincronizado com GSAP Ticker */
             const lenis = new Lenis({
@@ -1072,6 +1296,7 @@
             const context = canvas.getContext("2d", { alpha: false });
             const loader = document.getElementById("loader");
             const progressBar = document.getElementById("progress-bar");
+            const loaderStatus = document.getElementById("loader-status");
 
             const frameCount = 78;
             const images = new Array(frameCount);
@@ -1235,23 +1460,19 @@
 
             function finishLoading() {
                 initScrollAnimations();
-                gsap.to(loader, {
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power2.out",
-                    onComplete: () => {
-                        loader.style.visibility = "hidden";
-                        document.body.style.overflow = "auto";
-                        lenis.start();
-                        ScrollTrigger.refresh();
-                    }
-                });
+                loader.classList.add("is-loaded");
+                setTimeout(() => {
+                    document.body.style.overflow = "auto";
+                    lenis.start();
+                    ScrollTrigger.refresh();
+                }, 500);
             }
 
             function onAssetDone() {
                 loadedImages++;
-                const pct = (loadedImages / frameCount) * 100;
+                const pct = Math.round((loadedImages / frameCount) * 100);
                 gsap.to(progressBar, { width: `${pct}%`, duration: 0.2, ease: "power1.out", overwrite: true });
+                if (loaderStatus) loaderStatus.textContent = `Carregando experiência · ${pct}%`;
                 if (loadedImages === frameCount) {
                     finishLoading();
                 }
