@@ -14,10 +14,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- GSAP 3.13.0 + ScrollTrigger + Lenis (parâmetros de fluidez do app.js) -->
+    <!-- GSAP 3.13.0 + ScrollTrigger + Lenis + Three.js -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
     <style type="text/tailwindcss">
         @theme {
@@ -58,12 +59,20 @@
             overflow: clip;
         }
 
-        .hero-text-item {
+        .hero-text-item,
+        .parallax-card {
             will-change: transform, opacity;
         }
 
-        .parallax-card {
-            will-change: transform, opacity;
+        /* Canvas do efeito Liquid Motion (overlay transparente sem bloquear interação) */
+        #fluid-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 40;
+            display: block;
         }
 
         #whatsapp-chat {
@@ -91,6 +100,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="antialiased selection:bg-emerald selection:text-white">
+
+    <!-- LIQUID MOTION CANVAS (CFD WebGL) -->
+    <canvas id="fluid-canvas" aria-hidden="true"></canvas>
 
     <!-- LOADER -->
     <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;">
@@ -163,7 +175,6 @@
     <section id="scroll-hero" style="height:420vh;position:relative;background-color:#000;">
         <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
             <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
-            <!-- Vinheta sutil para contraste do texto -->
             <div style="position:absolute;inset:0;background:radial-gradient(circle at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%);pointer-events:none;z-index:1;"></div>
 
             <div style="position:absolute;inset:0;z-index:2;display:flex;justify-content:center;align-items:center;pointer-events:none;">
@@ -278,7 +289,7 @@
     </footer>
 
     <script>
-        /* Detecção Safari / iPhone (parâmetro do app.js) */
+        /* Detecção Safari / iPhone */
         (function detectPlatform() {
             const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
             const isIphone = /iPhone/i.test(navigator.userAgent);
@@ -322,7 +333,6 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        /* Debounce (parâmetro 250ms do app.js) */
         function debounce(fn, wait = 250) {
             let timer;
             return function (...args) {
@@ -331,9 +341,515 @@
             };
         }
 
+        /* =========================================================
+           LIQUID MOTION / FLUID CURSOR EFFECT (CFD GLSL)
+           Passos: Advecção → Força → Viscosidade → Divergência →
+                   Poisson → Pressão → Renderização Transparente
+        ========================================================= */
+        function initLiquidMotion() {
+            const fluidCanvas = document.getElementById("fluid-canvas");
+            if (!fluidCanvas || typeof THREE === "undefined") return { resize: () => {} };
+
+            let renderer;
+            try {
+                renderer = new THREE.WebGLRenderer({
+                    canvas: fluidCanvas,
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: "high-performance"
+                });
+            } catch (e) {
+                return { resize: () => {} };
+            }
+
+            renderer.autoClear = false;
+            renderer.setClearColor(0x000000, 0);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const isMobile = /iPad|iPhone|iPod|Android/i.test(navigator.userAgent);
+            const hasFloatRT = !isMobile && (
+                renderer.extensions.get("EXT_color_buffer_float") ||
+                renderer.extensions.get("WEBGL_color_buffer_float")
+            );
+            const FBOType = hasFloatRT ? THREE.FloatType : THREE.HalfFloatType;
+
+            function createFBO(w, h) {
+                return new THREE.WebGLRenderTarget(w, h, {
+                    type: FBOType,
+                    minFilter: THREE.LinearFilter,
+                    magFilter: THREE.LinearFilter,
+                    format: THREE.RGBAFormat,
+                    depthBuffer: false,
+                    stencilBuffer: false
+                });
+            }
+
+            // ----- Parâmetros de simulação -----
+            const SIM_RES      = 0.1;
+            const CURSOR_SIZE  = 18;
+            const MOUSE_FORCE  = 50;
+            const DISSIPATION  = 0.96;
+            const VISCOUS      = 30;
+            const ITER_POISSON = 4;
+            const ITER_VISCOUS = 4;
+            const DT           = 0.014;
+            const STRAIGHTNESS = 1.0;
+            const IS_BOUNCE    = false;
+            const IS_VISCOUS   = false;
+            const BFECC        = true;
+
+            let simW = Math.max(16, Math.round(SIM_RES * window.innerWidth));
+            let simH = Math.max(16, Math.round(SIM_RES * window.innerHeight));
+            let pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
+            let pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
+
+            const cellScale     = new THREE.Vector2(pxX, pxY);
+            const fboSize       = new THREE.Vector2(simW, simH);
+            const boundarySpace = new THREE.Vector2();
+
+            const fbos = {
+                vel_0:        createFBO(simW, simH),
+                vel_1:        createFBO(simW, simH),
+                vel_viscous0: createFBO(simW, simH),
+                vel_viscous1: createFBO(simW, simH),
+                div:          createFBO(simW, simH),
+                pressure_0:   createFBO(simW, simH),
+                pressure_1:   createFBO(simW, simH)
+            };
+
+            // ----- Shaders GLSL -----
+            const VS_BASE = `
+            attribute vec3 position;
+            uniform vec2 px;
+            uniform vec2 boundarySpace;
+            varying vec2 uv;
+            precision highp float;
+            void main(){
+                vec3 pos = position;
+                vec2 scale = 1.0 - boundarySpace * 2.0;
+                pos.xy = pos.xy * scale;
+                uv = vec2(0.5) + (pos.xy) * 0.5;
+                gl_Position = vec4(pos, 1.0);
+            }`;
+
+            const VS_OUTPUT = `
+            attribute vec3 position;
+            varying vec2 uv;
+            precision highp float;
+            void main(){
+                uv = vec2(0.5) + position.xy * 0.5;
+                gl_Position = vec4(position, 1.0);
+            }`;
+
+            // Saída transparente harmonizada com a paleta Germano + brilho especular líquido
+            const FS_OUTPUT = `
+            precision highp float;
+            uniform sampler2D velocity;
+            uniform vec2 px;
+            varying vec2 uv;
+            void main(){
+                vec2 vel = texture2D(velocity, uv).xy;
+                float len = length(vel);
+
+                // Gradiente local para simular relevo/brilho líquido
+                float vx1 = length(texture2D(velocity, uv + vec2(px.x * 2.0, 0.0)).xy);
+                float vx0 = length(texture2D(velocity, uv - vec2(px.x * 2.0, 0.0)).xy);
+                float vy1 = length(texture2D(velocity, uv + vec2(0.0, px.y * 2.0)).xy);
+                float vy0 = length(texture2D(velocity, uv - vec2(0.0, px.y * 2.0)).xy);
+                vec3 normal = normalize(vec3((vx0 - vx1) * 3.5, (vy0 - vy1) * 3.5, 1.0));
+                float spec = pow(max(dot(normal, normalize(vec3(-0.35, 0.55, 0.8))), 0.0), 10.0);
+
+                // Paleta Germano: Petróleo (#0F3A47) -> Esmeralda (#047857) -> Esmeralda Claro (#10B981)
+                vec3 cPetroleum    = vec3(0.059, 0.227, 0.278);
+                vec3 cEmerald      = vec3(0.016, 0.471, 0.341);
+                vec3 cEmeraldLight = vec3(0.063, 0.725, 0.506);
+
+                float dirMix = clamp(vel.x * 0.5 + 0.5, 0.0, 1.0);
+                vec3 baseColor = mix(cPetroleum, cEmerald, dirMix);
+                baseColor = mix(baseColor, cEmeraldLight, smoothstep(0.05, 0.45, len));
+                vec3 finalColor = baseColor + vec3(0.75, 1.0, 0.92) * spec * 0.45;
+
+                float alpha = smoothstep(0.015, 0.55, len) * 0.52;
+                gl_FragColor = vec4(finalColor, alpha);
+            }`;
+
+            const FS_ADVECTION = `
+            precision highp float;
+            uniform sampler2D velocity;
+            uniform float dt;
+            uniform float dissipation;
+            uniform bool isBFECC;
+            uniform vec2 fboSize;
+            uniform vec2 px;
+            varying vec2 uv;
+            void main(){
+                vec2 ratio = max(fboSize.x, fboSize.y) / fboSize;
+                if(isBFECC == false){
+                    vec2 vel = texture2D(velocity, uv).xy;
+                    vec2 uv2 = uv - vel * dt * ratio;
+                    vec2 newVel = texture2D(velocity, uv2).xy * dissipation;
+                    gl_FragColor = vec4(newVel, 0.0, 0.0);
+                } else {
+                    vec2 spot_new  = uv;
+                    vec2 vel_old   = texture2D(velocity, uv).xy;
+                    vec2 spot_old  = spot_new - vel_old * dt * ratio;
+                    vec2 vel_new1  = texture2D(velocity, spot_old).xy;
+                    vec2 spot_new2 = spot_old + vel_new1 * dt * ratio;
+                    vec2 error     = spot_new2 - spot_new;
+                    vec2 spot_new3 = spot_new - error / 2.0;
+                    vec2 vel_2     = texture2D(velocity, spot_new3).xy;
+                    vec2 spot_old2 = spot_new3 - vel_2 * dt * ratio;
+                    vec2 newVel2   = texture2D(velocity, spot_old2).xy * dissipation;
+                    gl_FragColor   = vec4(newVel2, 0.0, 0.0);
+                }
+            }`;
+
+            const VS_FORCE = `
+            attribute vec3 position;
+            attribute vec2 uv;
+            uniform vec2 center;
+            uniform vec2 scale;
+            uniform vec2 px;
+            varying vec2 vUv;
+            precision highp float;
+            void main(){
+                vec2 pos = position.xy * scale * 2.0 * px + center;
+                vUv = uv;
+                gl_Position = vec4(pos, 0.0, 1.0);
+            }`;
+
+            const FS_FORCE = `
+            precision highp float;
+            uniform vec2 force;
+            uniform vec2 center;
+            uniform vec2 scale;
+            uniform vec2 px;
+            varying vec2 vUv;
+            void main(){
+                vec2 circle = (vUv - 0.5) * 2.0;
+                float d = 1.0 - min(length(circle), 1.0);
+                d *= d;
+                gl_FragColor = vec4(force * d, 0.0, 1.0);
+            }`;
+
+            const FS_VISCOUS = `
+            precision highp float;
+            uniform sampler2D velocity;
+            uniform sampler2D velocity_new;
+            uniform float v;
+            uniform vec2 px;
+            uniform float dt;
+            varying vec2 uv;
+            void main(){
+                vec2 old  = texture2D(velocity, uv).xy;
+                vec2 new0 = texture2D(velocity_new, uv + vec2(px.x * 2.0, 0.0)).xy;
+                vec2 new1 = texture2D(velocity_new, uv - vec2(px.x * 2.0, 0.0)).xy;
+                vec2 new2 = texture2D(velocity_new, uv + vec2(0.0, px.y * 2.0)).xy;
+                vec2 new3 = texture2D(velocity_new, uv - vec2(0.0, px.y * 2.0)).xy;
+                vec2 result = 4.0 * old + v * dt * (new0 + new1 + new2 + new3);
+                result /= 4.0 * (1.0 + v * dt);
+                gl_FragColor = vec4(result, 0.0, 0.0);
+            }`;
+
+            const FS_DIVERGENCE = `
+            precision highp float;
+            uniform sampler2D velocity;
+            uniform float dt;
+            uniform vec2 px;
+            varying vec2 uv;
+            void main(){
+                float x0 = texture2D(velocity, uv - vec2(px.x, 0.0)).x;
+                float x1 = texture2D(velocity, uv + vec2(px.x, 0.0)).x;
+                float y0 = texture2D(velocity, uv - vec2(0.0, px.y)).y;
+                float y1 = texture2D(velocity, uv + vec2(0.0, px.y)).y;
+                float divergence = (x1 - x0 + y1 - y0) / 2.0;
+                gl_FragColor = vec4(divergence / dt);
+            }`;
+
+            const FS_POISSON = `
+            precision highp float;
+            uniform sampler2D pressure;
+            uniform sampler2D divergence;
+            uniform float straightness;
+            uniform vec2 px;
+            varying vec2 uv;
+            void main(){
+                float p0 = texture2D(pressure, uv + vec2(px.x * 2.0, 0.0)).r;
+                float p1 = texture2D(pressure, uv - vec2(px.x * 2.0, 0.0)).r;
+                float p2 = texture2D(pressure, uv + vec2(0.0, px.y * 2.0)).r;
+                float p3 = texture2D(pressure, uv - vec2(0.0, px.y * 2.0)).r;
+                float div = texture2D(divergence, uv).r;
+                float newP = (p0 + p1 + p2 + p3) / (4.0 + straightness) - div;
+                gl_FragColor = vec4(newP);
+            }`;
+
+            const FS_PRESSURE = `
+            precision highp float;
+            uniform sampler2D pressure;
+            uniform sampler2D velocity;
+            uniform vec2 px;
+            uniform float dt;
+            varying vec2 uv;
+            void main(){
+                float step = 1.0;
+                float p0 = texture2D(pressure, uv + vec2(px.x * step, 0.0)).r;
+                float p1 = texture2D(pressure, uv - vec2(px.x * step, 0.0)).r;
+                float p2 = texture2D(pressure, uv + vec2(0.0, px.y * step)).r;
+                float p3 = texture2D(pressure, uv - vec2(0.0, px.y * step)).r;
+                vec2 v = texture2D(velocity, uv).xy;
+                vec2 gradP = vec2(p0 - p1, p2 - p3) * 0.5;
+                v = v - gradP * dt;
+                gl_FragColor = vec4(v, 0.0, 1.0);
+            }`;
+
+            const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const fullQuadGeo = new THREE.PlaneGeometry(2, 2);
+
+            function makeQuadScene(material) {
+                const scene = new THREE.Scene();
+                scene.add(new THREE.Mesh(fullQuadGeo, material));
+                return scene;
+            }
+
+            function renderToFBO(fbo, scene) {
+                renderer.setRenderTarget(fbo);
+                renderer.render(scene, orthoCamera);
+                renderer.setRenderTarget(null);
+            }
+
+            const advMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_BASE,
+                fragmentShader: FS_ADVECTION,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    boundarySpace: { value: cellScale },
+                    px:            { value: cellScale },
+                    fboSize:       { value: fboSize },
+                    velocity:      { value: fbos.vel_0.texture },
+                    dt:            { value: DT },
+                    isBFECC:       { value: BFECC },
+                    dissipation:   { value: DISSIPATION }
+                }
+            });
+            const advScene = makeQuadScene(advMat);
+
+            const forceMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_FORCE,
+                fragmentShader: FS_FORCE,
+                blending: THREE.AdditiveBlending,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    px:     { value: cellScale },
+                    force:  { value: new THREE.Vector2() },
+                    center: { value: new THREE.Vector2() },
+                    scale:  { value: new THREE.Vector2(CURSOR_SIZE, CURSOR_SIZE) }
+                }
+            });
+            const forceScene = new THREE.Scene();
+            forceScene.add(new THREE.Mesh(new THREE.PlaneGeometry(1, 1), forceMat));
+
+            const viscMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_BASE,
+                fragmentShader: FS_VISCOUS,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    boundarySpace: { value: boundarySpace },
+                    velocity:      { value: fbos.vel_1.texture },
+                    velocity_new:  { value: fbos.vel_viscous0.texture },
+                    v:             { value: VISCOUS },
+                    px:            { value: cellScale },
+                    dt:            { value: DT }
+                }
+            });
+            const viscScene = makeQuadScene(viscMat);
+
+            const divMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_BASE,
+                fragmentShader: FS_DIVERGENCE,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    boundarySpace: { value: boundarySpace },
+                    velocity:      { value: fbos.vel_viscous0.texture },
+                    px:            { value: cellScale },
+                    dt:            { value: DT }
+                }
+            });
+            const divScene = makeQuadScene(divMat);
+
+            const poisMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_BASE,
+                fragmentShader: FS_POISSON,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    boundarySpace: { value: boundarySpace },
+                    pressure:      { value: fbos.pressure_1.texture },
+                    divergence:    { value: fbos.div.texture },
+                    px:            { value: cellScale },
+                    straightness:  { value: STRAIGHTNESS }
+                }
+            });
+            const poisScene = makeQuadScene(poisMat);
+
+            const presMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_BASE,
+                fragmentShader: FS_PRESSURE,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    boundarySpace: { value: boundarySpace },
+                    pressure:      { value: fbos.pressure_0.texture },
+                    velocity:      { value: fbos.vel_viscous0.texture },
+                    px:            { value: cellScale },
+                    dt:            { value: DT }
+                }
+            });
+            const presScene = makeQuadScene(presMat);
+
+            const outMat = new THREE.RawShaderMaterial({
+                vertexShader: VS_OUTPUT,
+                fragmentShader: FS_OUTPUT,
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+                uniforms: {
+                    velocity: { value: fbos.vel_0.texture },
+                    px:       { value: cellScale }
+                }
+            });
+            const outScene = makeQuadScene(outMat);
+
+            // ----- Rastreamento de cursor / toque -----
+            const mouse    = new THREE.Vector2();
+            const mouseOld = new THREE.Vector2();
+            const diff     = new THREE.Vector2();
+            let hasPointer = false;
+
+            function updatePointer(clientX, clientY, resetPrev = false) {
+                const nx = (clientX / window.innerWidth) * 2 - 1;
+                const ny = -(clientY / window.innerHeight) * 2 + 1;
+                mouse.set(nx, ny);
+                if (!hasPointer || resetPrev) {
+                    mouseOld.copy(mouse);
+                    hasPointer = true;
+                }
+            }
+
+            window.addEventListener("mousemove", (e) => updatePointer(e.clientX, e.clientY), { passive: true });
+            window.addEventListener("touchstart", (e) => {
+                if (e.touches.length === 1) updatePointer(e.touches[0].clientX, e.touches[0].clientY, true);
+            }, { passive: true });
+            window.addEventListener("touchmove", (e) => {
+                if (e.touches.length === 1) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+            }, { passive: true });
+
+            // ----- Loop sincronizado a 60fps -----
+            let lastTime = performance.now();
+            const INTERVAL = 1000 / 60;
+
+            function simulate() {
+                requestAnimationFrame(simulate);
+                if (document.hidden) return;
+
+                const now = performance.now();
+                if (now - lastTime < INTERVAL) return;
+                lastTime = now;
+
+                if (IS_BOUNCE) boundarySpace.set(0, 0);
+                else           boundarySpace.copy(cellScale);
+
+                // 1. Advecção (BFECC)
+                advMat.uniforms.velocity.value = fbos.vel_0.texture;
+                advMat.uniforms.isBFECC.value  = BFECC;
+                renderToFBO(fbos.vel_1, advScene);
+
+                // 2. Força externa do cursor (somada sobre vel_1 sem limpar o buffer)
+                diff.subVectors(mouse, mouseOld);
+                mouseOld.copy(mouse);
+
+                if (diff.lengthSq() > 0.0000001) {
+                    const fx = THREE.MathUtils.clamp(diff.x * 0.5 * MOUSE_FORCE, -3.5, 3.5);
+                    const fy = THREE.MathUtils.clamp(diff.y * 0.5 * MOUSE_FORCE, -3.5, 3.5);
+                    const ex = CURSOR_SIZE * cellScale.x;
+                    const ey = CURSOR_SIZE * cellScale.y;
+                    forceMat.uniforms.force.value.set(fx, fy);
+                    forceMat.uniforms.center.value.set(
+                        Math.min(Math.max(mouse.x, -1 + ex + cellScale.x * 2), 1 - ex - cellScale.x * 2),
+                        Math.min(Math.max(mouse.y, -1 + ey + cellScale.y * 2), 1 - ey - cellScale.y * 2)
+                    );
+                    renderToFBO(fbos.vel_1, forceScene);
+                }
+
+                // 3. Viscosidade (opcional)
+                let velResult = fbos.vel_1;
+                if (IS_VISCOUS) {
+                    for (let i = 0; i < ITER_VISCOUS; i++) {
+                        const src = i % 2 === 0 ? fbos.vel_viscous0 : fbos.vel_viscous1;
+                        const dst = i % 2 === 0 ? fbos.vel_viscous1 : fbos.vel_viscous0;
+                        viscMat.uniforms.velocity.value     = fbos.vel_1.texture;
+                        viscMat.uniforms.velocity_new.value = src.texture;
+                        renderToFBO(dst, viscScene);
+                        velResult = dst;
+                    }
+                }
+
+                // 4. Divergência
+                divMat.uniforms.velocity.value = velResult.texture;
+                renderToFBO(fbos.div, divScene);
+
+                // 5. Poisson (pressão iterativa)
+                let presResult = fbos.pressure_1;
+                for (let i = 0; i < ITER_POISSON; i++) {
+                    const src = i % 2 === 0 ? fbos.pressure_0 : fbos.pressure_1;
+                    const dst = i % 2 === 0 ? fbos.pressure_1 : fbos.pressure_0;
+                    poisMat.uniforms.pressure.value   = src.texture;
+                    poisMat.uniforms.divergence.value = fbos.div.texture;
+                    renderToFBO(dst, poisScene);
+                    presResult = dst;
+                }
+
+                // 6. Subtração de gradiente de pressão
+                presMat.uniforms.velocity.value = velResult.texture;
+                presMat.uniforms.pressure.value = presResult.texture;
+                renderToFBO(fbos.vel_0, presScene);
+
+                // 7. Render final transparente na tela
+                outMat.uniforms.velocity.value = fbos.vel_0.texture;
+                renderer.setRenderTarget(null);
+                renderer.clear();
+                renderer.render(outScene, orthoCamera);
+            }
+
+            simulate();
+
+            return {
+                resize: () => {
+                    const w = window.innerWidth;
+                    const h = window.innerHeight;
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                    renderer.setSize(w, h);
+                    simW = Math.max(16, Math.round(SIM_RES * w));
+                    simH = Math.max(16, Math.round(SIM_RES * h));
+                    pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
+                    pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
+                    cellScale.set(pxX, pxY);
+                    fboSize.set(simW, simH);
+                    for (const key in fbos) fbos[key].setSize(simW, simH);
+                }
+            };
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             initLucide();
             gsap.registerPlugin(ScrollTrigger);
+
+            /* Inicia simulação Liquid Motion */
+            const fluid = initLiquidMotion();
 
             /* 1. Lenis Smooth Scroll sincronizado com GSAP Ticker */
             const lenis = new Lenis({
@@ -343,7 +859,7 @@
                 touchMultiplier: 1.5
             });
             window.lenis = lenis;
-            lenis.stop(); // Bloqueado até o fim do preload
+            lenis.stop();
 
             lenis.on("scroll", ScrollTrigger.update);
             gsap.ticker.add((time) => {
@@ -351,14 +867,11 @@
             });
             gsap.ticker.lagSmoothing(0);
 
-            /* Navegação suave nos links do menu */
             document.querySelectorAll("[data-scroll-to]").forEach((link) => {
                 link.addEventListener("click", (e) => {
                     e.preventDefault();
                     const target = link.getAttribute("data-scroll-to");
-                    if (target) {
-                        lenis.scrollTo(target, { duration: 1.4 });
-                    }
+                    if (target) lenis.scrollTo(target, { duration: 1.4 });
                 });
             });
 
@@ -409,7 +922,7 @@
             function initScrollAnimations() {
                 resizeCanvas();
 
-                /* 3. Timeline principal do Hero com scrub: 0.5 (parâmetro do app.js) */
+                /* 3. Timeline principal do Hero com scrub: 0.5[cite: 1] */
                 const heroTl = gsap.timeline({
                     scrollTrigger: {
                         trigger: "#scroll-hero",
@@ -420,7 +933,6 @@
                     }
                 });
 
-                // Animação fluida dos 78 frames ao longo de toda a timeline (0 -> 1)
                 heroTl.to(playhead, {
                     frame: frameCount - 1,
                     ease: "none",
@@ -428,14 +940,12 @@
                     onUpdate: () => renderFrame(Math.round(playhead.frame))
                 }, 0);
 
-                // Texto 01: sai suavemente para cima com leve redução de escala
                 heroTl.fromTo("#text-01",
                     { opacity: 1, y: 0, scale: 1 },
                     { opacity: 0, y: -60, scale: 0.96, ease: "power2.inOut", duration: 0.24 },
                     0.06
                 );
 
-                // Texto 02: entra de baixo e sai para cima com suavidade
                 heroTl.fromTo("#text-02",
                     { opacity: 0, y: 50, scale: 0.96 },
                     { opacity: 1, y: 0, scale: 1, ease: "power2.out", duration: 0.16 },
@@ -446,14 +956,13 @@
                     0.54
                 );
 
-                // Texto 03: entra no terço final e permanece nítido até o final da seção
                 heroTl.fromTo("#text-03",
                     { opacity: 0, y: 60, scale: 0.95 },
                     { opacity: 1, y: 0, scale: 1, ease: "power3.out", duration: 0.20 },
                     0.74
                 );
 
-                /* 4. Revelação mascarada dos textos BioTech (start: "top 80%" do app.js) */
+                /* 4. Revelação mascarada BioTech (top 80%)[cite: 1] */
                 gsap.from("#biotech-section .reveal-text", {
                     yPercent: 110,
                     opacity: 0,
@@ -467,7 +976,7 @@
                     }
                 });
 
-                /* 5. Entrada + Parallax contínuo nos cards de produtos */
+                /* 5. Entrada + Parallax nos cards */
                 gsap.from(".parallax-card", {
                     y: 90,
                     opacity: 0,
@@ -498,7 +1007,7 @@
                     });
                 });
 
-                /* 6. Seção Contato + Lazy Load do mapa via ScrollTrigger */
+                /* 6. Seção Contato + Lazy Load do mapa */
                 gsap.from("#contato .contact-reveal", {
                     y: 50,
                     opacity: 0,
@@ -524,9 +1033,10 @@
                     }
                 });
 
-                /* 7. Resize com debounce de 250ms (parâmetro do app.js) */
+                /* 7. Resize com debounce de 250ms[cite: 1] */
                 window.addEventListener("resize", debounce(() => {
                     resizeCanvas();
+                    fluid.resize();
                     ScrollTrigger.refresh();
                 }, 250));
             }
