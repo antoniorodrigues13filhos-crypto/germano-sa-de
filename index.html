@@ -64,7 +64,6 @@
             will-change: transform, opacity;
         }
 
-        /* Halo suave para manter legibilidade quando o fundo escuro/fotográfico é revelado atrás do texto */
         .hero-legible {
             text-shadow: 0 4px 28px rgba(255, 255, 255, 0.9), 0 1px 10px rgba(255, 255, 255, 0.75);
         }
@@ -80,7 +79,7 @@
             display: block;
         }
 
-        /* Camada 1: Véu branco com recorte líquido (Liquid Motion CFD) */
+        /* Camada 1: Véu branco com recorte líquido orgânico (CFD + FBM) */
         #fluid-canvas {
             position: fixed;
             inset: 0;
@@ -120,7 +119,7 @@
     <!-- CAMADA 0: FUNDO ANIMADO (78 FRAMES) -->
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
 
-    <!-- CAMADA 1: VÉU BRANCO QUE SE ABRE COM O LÍQUIDO -->
+    <!-- CAMADA 1: VÉU BRANCO QUE SE ABRE COM LÍQUIDO E FALHAS NATURAIS -->
     <canvas id="fluid-canvas" aria-hidden="true"></canvas>
 
     <!-- LOADER BRANCO -->
@@ -358,9 +357,9 @@
         }
 
         /* =========================================================
-           LIQUID REVEAL MASK (CFD GLSL)
-           O site fica 100% branco (#FFFFFF) e o fluido recorta a
-           camada branca revelando o fundo apenas onde o líquido passa
+           ORGANIC LIQUID REVEAL MASK (CFD + FBM + FALHAS NATURAIS)
+           Recorta a camada branca com tensão superficial líquida,
+           filamentos, gotículas e falhas orgânicas ao passar o cursor
         ========================================================= */
         function initLiquidReveal() {
             const fluidCanvas = document.getElementById("fluid-canvas");
@@ -402,23 +401,23 @@
                 });
             }
 
-            // ----- Parâmetros de simulação -----
-            const SIM_RES          = isMobile ? 0.14 : 0.18; // borda líquida mais nítida mantendo 60fps
-            const CURSOR_SIZE      = 24;   // tamanho do rastro líquido que revela o fundo
-            const MOUSE_FORCE      = 50;
-            const DISSIPATION      = 0.96; // dissipação da velocidade do fluido
-            const MASK_DISSIPATION = 0.968; // tempo que a janela revelada permanece aberta antes de voltar ao branco
+            // ----- Parâmetros para comportamento líquido orgânico -----
+            const SIM_RES          = isMobile ? 0.18 : 0.25; // maior definição para filamentos e gotículas
+            const CURSOR_SIZE      = 28;    // área base do respingo líquido
+            const MOUSE_FORCE      = 62;    // impulso do líquido
+            const DISSIPATION      = 0.965; // fluidez do movimento
+            const MASK_DISSIPATION = 0.974; // tempo de abertura (quebra em falhas e gotas antes de sumir)
             const VISCOUS          = 30;
-            const ITER_POISSON     = 4;
+            const ITER_POISSON     = 6;     // projeção de pressão mais limpa para curvas líquidas
             const ITER_VISCOUS     = 4;
-            const DT               = 0.014;
-            const STRAIGHTNESS     = 1.0;
+            const DT               = 0.015;
+            const STRAIGHTNESS     = 0.65;  // menor rigidez = mais redemoinhos naturais
             const IS_BOUNCE        = false;
             const IS_VISCOUS       = false;
             const BFECC            = true;
 
-            let simW = Math.max(24, Math.round(SIM_RES * window.innerWidth));
-            let simH = Math.max(24, Math.round(SIM_RES * window.innerHeight));
+            let simW = Math.max(32, Math.round(SIM_RES * window.innerWidth));
+            let simH = Math.max(32, Math.round(SIM_RES * window.innerHeight));
             let pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
             let pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
 
@@ -438,7 +437,6 @@
                 mask_1:       createFBO(simW, simH)
             };
 
-            // Limpa todos os buffers na inicialização para garantir tela 100% branca
             for (const key in fbos) {
                 renderer.setRenderTarget(fbos[key]);
                 renderer.clear();
@@ -447,6 +445,37 @@
 
             let maskRead  = fbos.mask_0;
             let maskWrite = fbos.mask_1;
+
+            // ----- Bloco de ruído orgânico (Value Noise + FBM) -----
+            const GLSL_NOISE = `
+            float hash21(vec2 p) {
+                p = fract(p * vec2(123.34, 456.21));
+                p += dot(p, p + 45.32);
+                return fract(p.x * p.y);
+            }
+
+            float vnoise(vec2 p) {
+                vec2 i = floor(p);
+                vec2 f = fract(p);
+                vec2 u = f * f * (3.0 - 2.0 * f);
+                float a = hash21(i);
+                float b = hash21(i + vec2(1.0, 0.0));
+                float c = hash21(i + vec2(0.0, 1.0));
+                float d = hash21(i + vec2(1.0, 1.0));
+                return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+            }
+
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amp = 0.5;
+                mat2 rot = mat2(0.80, 0.60, -0.60, 0.80);
+                for (int i = 0; i < 4; i++) {
+                    value += amp * vnoise(p);
+                    p = rot * p * 2.05 + vec2(17.3, 9.2);
+                    amp *= 0.5;
+                }
+                return value;
+            }`;
 
             // ----- Shaders GLSL -----
             const VS_BASE = `
@@ -472,33 +501,61 @@
                 gl_Position = vec4(position, 1.0);
             }`;
 
-            // Véu branco (#FFFFFF) que se torna transparente onde o fluido passa
+            // Véu branco com recorte líquido nítido, filamentos, gotículas e falhas internas
             const FS_OUTPUT = `
             precision highp float;
             uniform sampler2D velocity;
             uniform sampler2D maskTex;
             uniform vec2 px;
+            uniform float uTime;
+            uniform float uAspect;
             varying vec2 uv;
+            ${GLSL_NOISE}
+
             void main(){
                 vec2 vel = texture2D(velocity, uv).xy;
                 float speed = length(vel);
 
-                // Distorção orgânica nas bordas da máscara pela velocidade do líquido
-                vec2 warpedUv = clamp(uv - vel * 0.012, 0.0, 1.0);
+                // Coordenadas proporcionais para gotas e falhas circulares em qualquer tela
+                vec2 p = vec2(uv.x * uAspect, uv.y);
+
+                // Domain Warping em 2 estágios: cria filamentos líquidos que acompanham o fluxo
+                float nFlow = fbm(p * 5.2 - vel * 0.55 + vec2(uTime * 0.14, -uTime * 0.10));
+                float nDetail = fbm(p * 11.5 + vec2(nFlow * 1.65) - vel * 0.95 + vec2(-uTime * 0.09, uTime * 0.13));
+
+                // Distorção líquida na leitura da máscara
+                vec2 liquidWarp = vel * 0.024 + (vec2(nFlow, nDetail) - 0.5) * 0.038;
+                vec2 warpedUv = clamp(uv - liquidWarp, 0.0, 1.0);
                 float density = texture2D(maskTex, warpedUv).r;
 
-                // Combina densidade advectada + velocidade para recorte fluido e suave
-                float field = density + speed * 0.22;
-                float reveal = smoothstep(0.08, 0.36, field);
+                float rawField = density + speed * 0.22;
 
-                // Borda sutil com tensão superficial líquida
-                float rim = smoothstep(0.04, 0.22, reveal) * (1.0 - smoothstep(0.22, 0.65, reveal));
-                vec3 veilColor = mix(vec3(1.0), vec3(0.92, 0.98, 0.96), rim * 0.7);
+                // Ativa ruído e falhas apenas onde o fluido passou (mantém o resto 100% branco puro)
+                float activeZone = smoothstep(0.015, 0.16, rawField);
 
-                // Alpha = 1.0 (branco sólido) onde não há líquido; 0.0 (fundo revelado) onde o líquido passa
+                // Ruído de borda para quebrar o contorno em gotículas e filamentos
+                float edgeBreak = (nDetail - 0.48) * 0.62 * activeZone;
+
+                // Falhas naturais (buracos orgânicos no interior e nas bordas do rastro líquido)
+                float gapNoiseA = fbm(p * 14.0 - vel * 0.75 + vec2(nFlow * 1.2, uTime * 0.05));
+                float gapNoiseB = vnoise(p * 26.0 + vec2(nDetail * 2.0) - vel * 1.1);
+                float combinedGaps = gapNoiseA * 0.72 + gapNoiseB * 0.28;
+
+                // Falhas aparecem de leve no meio do traço e se abrem mais conforme o líquido retrai
+                float thinning = 1.0 - smoothstep(0.35, 1.15, density);
+                float gaps = smoothstep(0.50, 0.74, combinedGaps) * (0.34 + 0.48 * thinning) * activeZone;
+
+                // Campo final com tensão superficial (recorte bem líquido e definido)
+                float liquidField = rawField * (0.78 + nFlow * 0.68) + edgeBreak - gaps;
+                float reveal = smoothstep(0.21, 0.275, liquidField);
+
+                // Menisco molhado sutil na borda do líquido (dá sensação de profundidade/tensão superficial)
+                float rimOuter = smoothstep(0.15, 0.22, liquidField) * (1.0 - smoothstep(0.23, 0.30, liquidField));
+                float sheen = smoothstep(0.45, 0.85, nDetail) * rimOuter;
+                vec3 wetEdgeColor = mix(vec3(0.89, 0.96, 0.94), vec3(0.98, 1.0, 0.99), sheen);
+                vec3 veilColor = mix(vec3(1.0), wetEdgeColor, rimOuter * 0.85);
+
                 float alpha = clamp(1.0 - reveal, 0.0, 1.0);
-
-                // Premultiplied alpha (compatível com Chrome, Firefox, Safari e iOS)
                 gl_FragColor = vec4(veilColor * alpha, alpha);
             }`;
 
@@ -533,7 +590,7 @@
                 }
             }`;
 
-            // Advecção da máscara líquida carregada pela corrente do fluido
+            // Advecção da máscara arrastada com mais intensidade pela correnteza do fluido
             const FS_ADVECTION_MASK = `
             precision highp float;
             uniform sampler2D velocity;
@@ -545,7 +602,7 @@
             void main(){
                 vec2 ratio = max(fboSize.x, fboSize.y) / fboSize;
                 vec2 vel = texture2D(velocity, uv).xy;
-                vec2 uvPrev = uv - vel * dt * ratio * 1.35;
+                vec2 uvPrev = uv - vel * dt * ratio * 1.55;
                 float prev = min(texture2D(maskTex, uvPrev).r, 1.35);
                 gl_FragColor = vec4(prev * maskDissipation, 0.0, 0.0, 1.0);
             }`;
@@ -578,16 +635,32 @@
                 gl_FragColor = vec4(force * d, 0.0, 1.0);
             }`;
 
-            // Carimbo circular suave para abrir o líquido na posição do cursor
+            // Carimbo líquido irregular com respingos e micro-falhas no próprio pincel
             const FS_MASK_STAMP = `
             precision highp float;
             uniform float strength;
+            uniform float uTime;
             varying vec2 vUv;
+            ${GLSL_NOISE}
+
             void main(){
-                vec2 circle = (vUv - 0.5) * 2.0;
-                float d = 1.0 - min(length(circle), 1.0);
+                vec2 p = (vUv - 0.5) * 2.0;
+                float r = length(p);
+
+                float nMain = vnoise(p * 3.0 + vec2(uTime * 1.9, -uTime * 1.4));
+                float nFine = vnoise(p * 7.2 - vec2(uTime * 2.3, uTime * 1.6));
+
+                // Contorno orgânico irregular (parece respingo líquido, não um círculo geométrico)
+                float warpedR = r + (nMain - 0.5) * 0.48 + (nFine - 0.5) * 0.24;
+                float d = 1.0 - clamp(warpedR, 0.0, 1.0);
                 d = d * d;
-                gl_FragColor = vec4(d * strength, 0.0, 0.0, 1.0);
+
+                // Pequenas falhas e respingos satélites na pincelada
+                float breakUp = smoothstep(0.24, 0.72, nMain * 0.6 + nFine * 0.4);
+                float splash = smoothstep(0.76, 0.90, nFine) * smoothstep(1.0, 0.35, r) * 0.55;
+
+                float amount = (d * (0.38 + 0.92 * breakUp) + splash) * strength;
+                gl_FragColor = vec4(amount, 0.0, 0.0, 1.0);
             }`;
 
             const FS_VISCOUS = `
@@ -735,8 +808,9 @@
                 uniforms: {
                     px:       { value: cellScale },
                     center:   { value: new THREE.Vector2() },
-                    scale:    { value: new THREE.Vector2(CURSOR_SIZE * 1.45, CURSOR_SIZE * 1.45) },
-                    strength: { value: 0.0 }
+                    scale:    { value: new THREE.Vector2(CURSOR_SIZE * 1.65, CURSOR_SIZE * 1.65) },
+                    strength: { value: 0.0 },
+                    uTime:    { value: 0.0 }
                 }
             });
             const maskStampScene = new THREE.Scene();
@@ -811,7 +885,9 @@
                 uniforms: {
                     velocity: { value: fbos.vel_0.texture },
                     maskTex:  { value: maskRead.texture },
-                    px:       { value: cellScale }
+                    px:       { value: cellScale },
+                    uTime:    { value: 0.0 },
+                    uAspect:  { value: window.innerWidth / Math.max(window.innerHeight, 1) }
                 }
             });
             const outScene = makeQuadScene(outMat);
@@ -841,7 +917,8 @@
             }, { passive: true });
 
             // ----- Loop 60fps -----
-            let lastTime = performance.now();
+            const startTime = performance.now();
+            let lastTime = startTime;
             const INTERVAL = 1000 / 60;
 
             function simulate() {
@@ -851,6 +928,8 @@
                 const now = performance.now();
                 if (now - lastTime < INTERVAL) return;
                 lastTime = now;
+
+                const elapsed = (now - startTime) * 0.001;
 
                 if (IS_BOUNCE) boundarySpace.set(0, 0);
                 else           boundarySpace.copy(cellScale);
@@ -872,8 +951,8 @@
                 const clampedY = Math.min(Math.max(mouse.y, -1 + ey + cellScale.y * 2), 1 - ey - cellScale.y * 2);
 
                 if (hasMove) {
-                    const fx = THREE.MathUtils.clamp(diff.x * 0.5 * MOUSE_FORCE, -3.5, 3.5);
-                    const fy = THREE.MathUtils.clamp(diff.y * 0.5 * MOUSE_FORCE, -3.5, 3.5);
+                    const fx = THREE.MathUtils.clamp(diff.x * 0.5 * MOUSE_FORCE, -4.0, 4.0);
+                    const fy = THREE.MathUtils.clamp(diff.y * 0.5 * MOUSE_FORCE, -4.0, 4.0);
                     forceMat.uniforms.force.value.set(fx, fy);
                     forceMat.uniforms.center.value.set(clampedX, clampedY);
                     renderToFBO(fbos.vel_1, forceScene);
@@ -912,25 +991,26 @@
                 presMat.uniforms.pressure.value = presResult.texture;
                 renderToFBO(fbos.vel_0, presScene);
 
-                // 7. Advecção + Carimbo da máscara líquida que recorta o branco
+                // 7. Advecção + Carimbo orgânico da máscara líquida
                 advMaskMat.uniforms.velocity.value = fbos.vel_0.texture;
                 advMaskMat.uniforms.maskTex.value  = maskRead.texture;
                 renderToFBO(maskWrite, advMaskScene);
 
                 if (hasMove) {
                     maskStampMat.uniforms.center.value.set(clampedX, clampedY);
-                    maskStampMat.uniforms.strength.value = THREE.MathUtils.clamp(moveLen * 22.0, 0.28, 0.95);
+                    maskStampMat.uniforms.strength.value = THREE.MathUtils.clamp(moveLen * 24.0, 0.32, 1.05);
+                    maskStampMat.uniforms.uTime.value    = elapsed;
                     renderToFBO(maskWrite, maskStampScene);
                 }
 
-                // Troca de buffers da máscara
                 const tmp = maskRead;
                 maskRead  = maskWrite;
                 maskWrite = tmp;
 
-                // 8. Render final do véu branco com recorte líquido
+                // 8. Render final do véu branco com recorte líquido e falhas
                 outMat.uniforms.velocity.value = fbos.vel_0.texture;
                 outMat.uniforms.maskTex.value  = maskRead.texture;
+                outMat.uniforms.uTime.value    = elapsed;
                 renderer.setRenderTarget(null);
                 renderer.clear();
                 renderer.render(outScene, orthoCamera);
@@ -944,12 +1024,13 @@
                     const h = window.innerHeight;
                     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
                     renderer.setSize(w, h);
-                    simW = Math.max(24, Math.round(SIM_RES * w));
-                    simH = Math.max(24, Math.round(SIM_RES * h));
+                    simW = Math.max(32, Math.round(SIM_RES * w));
+                    simH = Math.max(32, Math.round(SIM_RES * h));
                     pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
                     pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
                     cellScale.set(pxX, pxY);
                     fboSize.set(simW, simH);
+                    outMat.uniforms.uAspect.value = w / Math.max(h, 1);
                     for (const key in fbos) fbos[key].setSize(simW, simH);
                 }
             };
@@ -959,7 +1040,7 @@
             initLucide();
             gsap.registerPlugin(ScrollTrigger);
 
-            /* Inicia máscara líquida branca */
+            /* Inicia máscara líquida branca com falhas naturais */
             const fluid = initLiquidReveal();
 
             /* 1. Lenis Smooth Scroll sincronizado com GSAP Ticker */
