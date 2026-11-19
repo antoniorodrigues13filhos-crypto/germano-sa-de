@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Germano Saúde Animal | Excelência Nutricional</title>
+    <title>Germano Saúde Animal | Prism Gallery</title>
     
     <link rel="dns-prefetch" href="//maps.googleapis.com">
     <link rel="dns-prefetch" href="//maps.gstatic.com">
@@ -14,49 +14,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- GSAP 3.13.0 + ScrollTrigger + Lenis + Three.js -->
+    <!-- GSAP 3.13.0 + ScrollTrigger + Lenis + Three.js (WebGL Prism) -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
     <style type="text/tailwindcss">
-        @font-face {
-            font-family: "Brier";
-            src: url("../assets/cdn.prod.website-files.com/67b5a02dc5d338960b17a7e9/67b6113a220f85ad6497495a_Brier-Bold.woff2") format("woff2");
-            font-weight: 700;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: "Mona Sans Variable";
-            src: url("../assets/cdn.prod.website-files.com/67b5a02dc5d338960b17a7e9/67bc6274c5b4108b123aa4d5_MonaSans-VariableFont_wdth,wght.woff2") format("woff2");
-            font-weight: 200 900;
-            font-style: normal;
-            font-display: swap;
-        }
-
         @theme {
             --color-petroleum: #0F3A47;
             --color-emerald: #047857;
             --color-emerald-light: #10B981;
-            --color-milky: #F8F8F3;
-            --font-sans: "Mona Sans Variable", "Inter", system-ui, -apple-system, sans-serif;
-        }
-
-        :root {
-            --bg: #F8F8F3;
-            --lime: #D2FF00;
-            --dark-green: #282C20;
-            --ink: #1C1E16;
-            --border: rgba(40, 44, 32, 0.16);
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
+            --color-milky: #F5F7F5;
+            --font-sans: 'Inter', sans-serif;
         }
 
         html.lenis, html.lenis body {
@@ -71,159 +41,18 @@
             overflow: hidden;
         }
 
-        html,
         body {
-            margin: 0;
-            width: 100%;
-            background: var(--bg);
-            color: var(--ink);
-            font-family: "Mona Sans Variable", "Inter", system-ui, -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-milky);
+            color: var(--color-petroleum);
             overflow: hidden;
         }
 
-        /* Palco e camadas WebGL no padrão liquid-motion.css */
-        .liquid-stage {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-        }
-
-        .gl-wrap {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        canvas.gl {
-            display: block;
-            width: 100%;
-            height: 100%;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            will-change: transform;
-        }
-
-        .gl-canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        #hero-canvas {
-            z-index: 0;
-        }
-
-        #fluid-canvas {
-            z-index: 1;
-        }
-
-        /* Loading overlay no padrão liquid-motion.css */
-        .liquid-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            background: var(--bg);
-            color: var(--dark-green);
-            pointer-events: none;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .liquid-loader.is-loaded {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .liquid-loader-title {
-            font-family: "Brier", "Inter", serif;
-            font-size: clamp(1.75rem, 3.5vw, 3rem);
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .liquid-loader-status {
-            font-size: 0.75rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            opacity: 0.65;
-        }
-
-        /* Interactive HUD no padrão liquid-motion.css (esquerda para não colidir com o WhatsApp) */
-        .liquid-ui {
-            position: fixed;
-            left: 1.5rem;
-            bottom: 1.5rem;
-            z-index: 60;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.625rem;
-            align-items: center;
-        }
-
-        .liquid-pill {
-            appearance: none;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            padding: 0.65rem 1.1rem;
-            background: rgba(248, 248, 243, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--dark-green);
-            font-family: inherit;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
-        }
-
-        .liquid-pill:hover {
-            background: var(--lime);
-            border-color: var(--dark-green);
-            color: var(--dark-green);
-        }
-
-        .liquid-pill:active {
-            transform: scale(0.97);
-        }
-
-        .liquid-pill.is-active {
-            background: var(--dark-green);
-            border-color: var(--dark-green);
-            color: var(--lime);
-        }
-
-        @media (max-width: 640px) {
-            .liquid-ui {
-                left: 1rem;
-                right: 5.5rem;
-                bottom: 1.25rem;
-                justify-content: flex-start;
-            }
-
-            .liquid-pill {
-                padding: 0.55rem 0.9rem;
-                font-size: 0.6875rem;
-            }
-        }
-
         .glass-nav {
-            background: rgba(248, 248, 243, 0.72);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .reveal-mask {
@@ -235,12 +64,162 @@
             will-change: transform, opacity;
         }
 
-        .hero-legible {
-            text-shadow: 0 4px 28px rgba(248, 248, 243, 0.92), 0 1px 10px rgba(248, 248, 243, 0.8);
+        /* Palco do Prism Gallery */
+        #prism-viewport {
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        .font-display {
-            font-family: "Brier", "Inter", serif;
+        #prism-viewport.is-dragging {
+            cursor: grabbing;
+        }
+
+        /* Fallback de facetas prismáticas em CSS caso aberto via file:// sem servidor local */
+        #prism-css-fallback {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                98deg,
+                rgba(255, 255, 255, 0.08) 0px,
+                rgba(255, 255, 255, 0.0) 14%,
+                rgba(16, 185, 129, 0.06) 14.2%,
+                rgba(15, 58, 71, 0.10) 14.5%
+            );
+            backdrop-filter: contrast(1.06) saturate(1.12);
+            -webkit-backdrop-filter: contrast(1.06) saturate(1.12);
+        }
+
+        #prism-css-fallback.active {
+            display: block;
+        }
+
+        /* Controles de Galeria Prism (estilo react-gallery) */
+        .prism-hud {
+            position: absolute;
+            left: 50%;
+            bottom: 2.25rem;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(15, 58, 71, 0.48);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .prism-nav-btn {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            transition: background-color 0.25s ease, transform 0.2s ease, color 0.25s ease;
+        }
+
+        .prism-nav-btn:hover {
+            background: #10B981;
+            color: #ffffff;
+            border-color: #10B981;
+        }
+
+        .prism-nav-btn:active {
+            transform: scale(0.92);
+        }
+
+        .prism-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.35);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
+        }
+
+        .prism-dot.is-active {
+            width: 2rem;
+            background: #10B981;
+        }
+
+        /* Reflexo prismático sutil nos cards de produto */
+        .prism-card-frame::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(
+                115deg,
+                transparent 20%,
+                rgba(255, 110, 110, 0.12) 42%,
+                rgba(16, 185, 129, 0.18) 50%,
+                rgba(96, 165, 250, 0.14) 58%,
+                transparent 80%
+            );
+            transform: translateX(-60%);
+            transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+        }
+
+        .parallax-card:hover .prism-card-frame::after {
+            opacity: 1;
+            transform: translateX(60%);
+        }
+
+        /* Container do Tweakpane (canto inferior esquerdo) */
+        #tweakpane-dock {
+            position: fixed;
+            left: 1.5rem;
+            bottom: 1.5rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        #tweakpane-mount {
+            display: none;
+            width: 260px;
+        }
+
+        #tweakpane-mount.open {
+            display: block;
+        }
+
+        .prism-toggle-pill {
+            appearance: none;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            padding: 0.6rem 1.05rem;
+            background: rgba(15, 58, 71, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.25s ease, transform 0.2s ease;
+        }
+
+        .prism-toggle-pill:hover {
+            background: #047857;
         }
 
         #whatsapp-chat {
@@ -258,62 +237,61 @@
         }
 
         img, iframe { content-visibility: auto; }
+
+        canvas {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform;
+        }
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="antialiased selection:bg-[#D2FF00] selection:text-[#282C20]">
+<body class="antialiased selection:bg-emerald selection:text-white">
 
-    <!-- CAMADAS FIXAS DE FUNDO + MÁSCARA LÍQUIDA (padrão .gl-wrap) -->
-    <div class="gl-wrap" aria-hidden="true">
-        <canvas id="hero-canvas" class="gl gl-canvas"></canvas>
-        <canvas id="fluid-canvas" class="gl gl-canvas"></canvas>
-    </div>
-
-    <!-- LOADER (padrão .liquid-loader) -->
-    <div id="loader" class="liquid-loader">
-        <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-32 h-32 object-contain mb-1">
-        <div class="liquid-loader-title">Germano</div>
-        <div style="width:14rem;height:2px;background:rgba(40,44,32,0.14);border-radius:99px;overflow:hidden;">
-            <div id="progress-bar" style="height:100%;background:var(--dark-green);width:0%;"></div>
+    <!-- LOADER -->
+    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+        <div class="mb-6 animate-pulse">
+            <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
         </div>
-        <div id="loader-status" class="liquid-loader-status">Carregando experiência · 0%</div>
+        <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:white;width:0%;"></div>
+        </div>
     </div>
 
-    <!-- HUD INTERATIVO DO FLUIDO (padrão .liquid-ui / .liquid-pill) -->
-    <div class="liquid-ui" role="group" aria-label="Controles do efeito líquido">
-        <button id="btn-gaps" type="button" class="liquid-pill is-active">Falhas: ON</button>
-        <button id="btn-autoflow" type="button" class="liquid-pill">Fluxo Auto</button>
-        <button id="btn-clear" type="button" class="liquid-pill">Limpar</button>
+    <!-- DOCK TWEAKPANE (controles ópticos do Prism Gallery) -->
+    <div id="tweakpane-dock">
+        <div id="tweakpane-mount"></div>
+        <button id="btn-tweakpane" type="button" class="prism-toggle-pill">Ajustar Prisma</button>
     </div>
 
     <!-- WHATSAPP WIDGET -->
-    <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end">
-        <div id="whatsapp-chat" class="mb-5 w-[340px] max-w-[calc(100vw-3rem)] bg-[#F8F8F3] rounded-[32px] shadow-[0_20px_60px_rgba(28,30,22,0.18)] border border-[rgba(40,44,32,0.16)] overflow-hidden flex-col">
-            <div class="bg-[#282C20] p-6 flex items-center gap-4 shrink-0 text-left">
-                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#D2FF00] shadow-lg bg-white flex items-center justify-center">
+    <div class="fixed bottom-8 right-8 z-[100] flex flex-col items-end">
+        <div id="whatsapp-chat" class="mb-6 w-[340px] max-w-[calc(100vw-3rem)] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden flex-col">
+            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0 text-left">
+                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-white flex items-center justify-center">
                     <img src="assets/camila.jpg.jpg" alt="Camila" class="w-full h-full object-cover block">
-                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-[#D2FF00] border-2 border-[#282C20] rounded-full animate-pulse"></span>
+                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
                 </div>
                 <div>
-                    <h4 class="text-[#F8F8F3] font-bold text-base leading-tight">Camila</h4>
-                    <p class="text-[#D2FF00] text-xs font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-[#D2FF00] rounded-full"></span> Online agora
+                    <h4 class="text-white font-bold text-base leading-tight">Camila</h4>
+                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora
                     </p>
                 </div>
-                <button onclick="toggleChat()" class="ml-auto text-[#F8F8F3]/50 hover:text-[#D2FF00] transition-colors cursor-pointer">
+                <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div id="chat-history" class="p-6 bg-[#F8F8F3] h-[280px] overflow-y-auto flex flex-col gap-4 text-left" data-lenis-prevent>
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-[rgba(40,44,32,0.12)] text-sm text-[#1C1E16] leading-relaxed self-start max-w-[85%]">
+            <div id="chat-history" class="p-6 bg-milky/30 h-[280px] overflow-y-auto flex flex-col gap-4 text-left" data-lenis-prevent>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]">
                     Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br> Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
                 </div>
             </div>
-            <div class="p-4 bg-white border-t border-[rgba(40,44,32,0.12)]">
-                <div class="flex gap-2 items-center bg-[#F8F8F3] rounded-2xl px-4 py-2 border border-[rgba(40,44,32,0.14)] focus-within:border-[#282C20]">
-                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-[#1C1E16] outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="bg-[#282C20] text-[#D2FF00] p-2 rounded-xl active:scale-90 cursor-pointer hover:bg-emerald hover:text-white transition-colors">
+            <div class="p-4 bg-white border-t border-petroleum/5">
+                <div class="flex gap-2 items-center bg-milky rounded-2xl px-4 py-2 border border-petroleum/5 focus-within:border-emerald">
+                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-petroleum outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl active:scale-90 cursor-pointer">
                         <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -321,7 +299,7 @@
         </div>
         <button onclick="toggleChat()" class="group relative cursor-pointer flex items-center justify-center">
             <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping"></span>
-            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 border border-[rgba(40,44,32,0.16)]">
+            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110">
                 <img src="3d-round-with-whatsapp-logo.png" alt="WhatsApp" class="w-10 h-10 object-contain">
             </div>
         </button>
@@ -333,132 +311,155 @@
             <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="block">
                 <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
             </a>
-            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-[#282C20]">
+            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
                 <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="hover:text-emerald uppercase transition-colors">Inovação</a>
                 <a href="#biotech-section" data-scroll-to="#biotech-section" class="hover:text-emerald uppercase transition-colors">Produtos</a>
                 <a href="#contato" data-scroll-to="#contato" class="hover:text-emerald uppercase transition-colors">Contato</a>
-                <button onclick="toggleChat()" class="bg-[#282C20] text-[#F8F8F3] px-8 py-3 rounded-full hover:bg-[#D2FF00] hover:text-[#282C20] font-bold uppercase text-xs tracking-widest cursor-pointer transition-all border border-[#282C20]">
+                <button onclick="toggleChat()" class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald font-bold uppercase text-xs tracking-widest cursor-pointer transition-all">
                     Falar com Especialista
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="liquid-stage relative z-10">
-        <!-- HERO SOBRE O VÉU OFF-WHITE LÍQUIDO -->
-        <section id="scroll-hero" class="relative bg-transparent" style="height:420vh;">
-            <div style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;pointer-events:none;">
-                <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;">
-                    <div class="relative w-full max-w-5xl h-full flex items-center justify-center px-6">
-                        <h1 id="text-01" class="hero-text-item hero-legible font-display absolute text-center w-full px-6 text-5xl md:text-8xl font-black text-[#282C20] tracking-tighter leading-tight uppercase">
-                            Soluções ecológicas <br/> <span class="text-emerald">para seu rebanho</span>
-                        </h1>
+    <!-- HERO COM EFEITO PRISM GALLERY SOBRE OS 78 FRAMES -->
+    <section id="scroll-hero" style="height:420vh;position:relative;background-color:#050a0c;">
+        <div id="prism-viewport" style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
+            <!-- Canvas WebGL do Prism Gallery (e canvas 2D oculto para fallback automático) -->
+            <canvas id="prism-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;"></canvas>
+            <canvas id="hero-fallback-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:none;z-index:0;"></canvas>
+            <div id="prism-css-fallback" aria-hidden="true"></div>
 
-                        <p id="text-02" class="hero-text-item hero-legible absolute text-center w-full px-6 text-[#1C1E16] text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto opacity-0">
-                            Um único animal afetado pode reduzir drasticamente sua produção.
-                        </p>
+            <!-- Vinheta cinematográfica -->
+            <div style="position:absolute;inset:0;background:radial-gradient(circle at center, rgba(5,14,18,0.12) 0%, rgba(5,14,18,0.52) 100%);pointer-events:none;z-index:2;"></div>
 
-                        <h2 id="text-03" class="hero-text-item hero-legible font-display absolute text-center w-full px-6 text-4xl md:text-6xl font-black text-[#282C20] tracking-tighter leading-tight opacity-0 uppercase">
-                            Quem trata certo, <br/> <span class="text-emerald">lucra mais.</span> <br/>
-                            <span class="text-xl font-medium tracking-widest block mt-4 text-[#282C20]/70 font-sans">Simples assim.</span>
+            <!-- Textos sincronizados com os slides/frames -->
+            <div style="position:absolute;inset:0;z-index:3;display:flex;justify-content:center;align-items:center;pointer-events:none;">
+                <div class="relative w-full max-w-5xl h-full flex items-center justify-center px-6">
+                    <h1 id="text-01" class="hero-text-item absolute text-center w-full px-6 text-5xl md:text-8xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
+                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
+                    </h1>
+
+                    <p id="text-02" class="hero-text-item absolute text-center w-full px-6 text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0">
+                        Um único animal afetado pode reduzir drasticamente sua produção.
+                    </p>
+
+                    <h2 id="text-03" class="hero-text-item absolute text-center w-full px-6 text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 uppercase drop-shadow-2xl">
+                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/>
+                        <span class="text-xl font-light tracking-widest block mt-4 text-white/75">Simples assim.</span>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Controles da Galeria Prism (arraste lateral, setas e dots) -->
+            <div class="prism-hud" aria-label="Navegação da galeria prismática">
+                <button id="prism-prev" type="button" class="prism-nav-btn" aria-label="Slide anterior">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <div class="flex items-center gap-2 px-1">
+                    <button type="button" class="prism-dot is-active" data-slide="0" aria-label="Slide 1"></button>
+                    <button type="button" class="prism-dot" data-slide="1" aria-label="Slide 2"></button>
+                    <button type="button" class="prism-dot" data-slide="2" aria-label="Slide 3"></button>
+                </div>
+                <span id="prism-counter" class="text-[11px] font-bold tracking-widest text-white/80 tabular-nums px-1">01 / 03</span>
+                <button id="prism-next" type="button" class="prism-nav-btn" aria-label="Próximo slide">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- BIOTECH PRODUTOS -->
+    <section id="biotech-section" class="relative z-10 bg-milky py-40 overflow-hidden text-left">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
+                <div>
+                    <div class="reveal-mask">
+                        <span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
+                    </div>
+                    <div class="reveal-mask">
+                        <h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">
+                            BioTech <br/> Germano
                         </h2>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- BIOTECH PRODUTOS -->
-        <section id="biotech-section" class="relative bg-transparent py-40 overflow-hidden text-left">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-[rgba(40,44,32,0.16)] pb-12">
-                    <div>
-                        <div class="reveal-mask">
-                            <span class="reveal-text hero-legible text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
-                        </div>
-                        <div class="reveal-mask">
-                            <h2 class="reveal-text hero-legible font-display text-5xl md:text-7xl font-black text-[#282C20] tracking-tighter uppercase leading-tight">
-                                BioTech <br/> Germano
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="reveal-mask hidden md:block">
-                        <p class="reveal-text hero-legible text-[#1C1E16]/75 max-w-sm text-right italic">
-                            Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
-                    <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
-                            <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" alt="Calmix Cromovita" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                        </div>
-                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
-                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
-                    </div>
-
-                    <div class="parallax-card group cursor-pointer md:mt-24 text-left" data-parallax-speed="-35">
-                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
-                            <img src="produtos/produto-fort-vit.png" loading="lazy" alt="Fort Vit + 3" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                        </div>
-                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
-                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
-                    </div>
-
-                    <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                        <div class="relative overflow-hidden rounded-[40px] aspect-[4/5] bg-[#F8F8F3]/95 backdrop-blur-sm border border-[rgba(40,44,32,0.16)] mb-8 shadow-sm">
-                            <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" alt="Núcleo Acelerado" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                        </div>
-                        <h3 class="hero-legible text-3xl font-bold text-[#282C20] mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
-                        <p class="hero-legible text-[#1C1E16]/70 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
-                    </div>
+                <div class="reveal-mask hidden md:block">
+                    <p class="reveal-text text-petroleum/60 max-w-sm text-right italic">
+                        Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
+                    </p>
                 </div>
             </div>
-        </section>
 
-        <!-- CONTATO -->
-        <section id="contato" class="relative bg-transparent py-32 border-t border-[rgba(40,44,32,0.16)] overflow-hidden text-left">
-            <div class="max-w-7xl mx-auto px-6 text-left">
-                <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
-                    <div class="w-full lg:w-1/2 flex flex-col justify-center text-left contact-reveal">
-                        <h2 class="hero-legible font-display text-4xl md:text-6xl font-black text-[#282C20] tracking-tighter uppercase leading-tight mb-4">
-                            Envie-nos uma <span class="text-emerald">Mensagem</span>
-                        </h2>
-                        <div class="w-20 h-1.5 bg-[#282C20] mb-8 rounded-full"></div>
-                        <p class="hero-legible text-[#1C1E16]/75 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
-                        <form class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <input type="text" placeholder="Nome" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
-                                <input type="tel" placeholder="Telefone" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
-                            </div>
-                            <input type="email" placeholder="E-mail" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium text-left">
-                            <textarea placeholder="Mensagem" rows="5" class="w-full bg-[#F8F8F3]/88 backdrop-blur-md border border-[rgba(40,44,32,0.16)] rounded-2xl px-6 py-4 outline-none focus:border-[#282C20] transition-all text-[#1C1E16] font-medium resize-none text-left"></textarea>
-                            <button type="button" class="w-full bg-[#282C20] text-[#F8F8F3] font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-[#D2FF00] hover:text-[#282C20] shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer border border-[#282C20]">
-                                Solicitar Atendimento Especializado
-                            </button>
-                        </form>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
+                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" alt="Calmix Cromovita" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
                     </div>
-                    <div class="w-full lg:w-1/2 flex flex-col text-left contact-reveal">
-                        <div id="map-container" class="flex-1 bg-[#F8F8F3]/90 backdrop-blur-sm rounded-[40px] overflow-hidden border border-[rgba(40,44,32,0.16)] shadow-2xl relative group min-h-[450px]">
-                            <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
-                            <div class="absolute bottom-6 left-6 right-6 bg-[#F8F8F3]/95 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-[rgba(40,44,32,0.16)] shadow-lg text-left text-[#1C1E16]">
-                                <h4 class="font-bold uppercase tracking-wider text-xs mb-3 text-[#282C20]">Germano Saúde Animal</h4>
-                                <p class="text-[11px] md:text-xs font-medium leading-relaxed">
-                                    Av. Senador José Lourenço Dias, 63<br>
-                                    Anápolis - GO<br>
-                                    <span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span>
-                                </p>
-                            </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
+                </div>
+
+                <div class="parallax-card group cursor-pointer md:mt-24 text-left" data-parallax-speed="-35">
+                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto-fort-vit.png" loading="lazy" alt="Fort Vit + 3" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
+                </div>
+
+                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
+                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
+                        <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" alt="Núcleo Acelerado" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
+                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="relative z-10 bg-white py-32 border-t border-petroleum/5 overflow-hidden text-left">
+        <div class="max-w-7xl mx-auto px-6 text-left">
+            <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
+                <div class="w-full lg:w-1/2 flex flex-col justify-center text-left contact-reveal">
+                    <h2 class="text-4xl md:text-6xl font-black text-petroleum tracking-tighter uppercase leading-tight mb-4">
+                        Envie-nos uma <span class="text-emerald">Mensagem</span>
+                    </h2>
+                    <div class="w-20 h-1.5 bg-emerald mb-8 rounded-full"></div>
+                    <p class="text-petroleum/70 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <input type="text" placeholder="Nome" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
+                            <input type="tel" placeholder="Telefone" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
+                        </div>
+                        <input type="email" placeholder="E-mail" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
+                        <textarea placeholder="Mensagem" rows="5" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium resize-none text-left"></textarea>
+                        <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer">
+                            Solicitar Atendimento Especializado
+                        </button>
+                    </form>
+                </div>
+                <div class="w-full lg:w-1/2 flex flex-col text-left contact-reveal">
+                    <div id="map-container" class="flex-1 bg-milky rounded-[40px] overflow-hidden border border-petroleum/5 shadow-2xl relative group min-h-[450px]">
+                        <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-petroleum/5 shadow-lg text-left text-petroleum">
+                            <h4 class="font-bold uppercase tracking-wider text-xs mb-3">Germano Saúde Animal</h4>
+                            <p class="text-[11px] md:text-xs font-medium leading-relaxed">
+                                Av. Senador José Lourenço Dias, 63<br>
+                                Anápolis - GO<br>
+                                <span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <footer class="relative bg-transparent py-20 border-t border-[rgba(40,44,32,0.16)] text-center pb-28">
-            <div class="hero-legible text-[#282C20]/60 text-xs tracking-widest uppercase font-bold text-center">© 2026 Germano Saúde Animal</div>
-        </footer>
-    </main>
+    <footer class="bg-milky py-20 border-t border-petroleum/5 text-center">
+        <div class="text-petroleum/30 text-xs tracking-widest uppercase font-bold text-center">© 2026 Germano Saúde Animal</div>
+    </footer>
 
     <script>
         /* Detecção Safari / iPhone */
@@ -483,7 +484,7 @@
 
             const userText = input.value.trim();
             const userDiv = document.createElement("div");
-            userDiv.className = "bg-[#282C20] text-[#F8F8F3] p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
+            userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
             userDiv.innerText = userText;
             history.appendChild(userDiv);
             input.value = "";
@@ -491,7 +492,7 @@
 
             setTimeout(() => {
                 const responseDiv = document.createElement("div");
-                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-[rgba(40,44,32,0.12)] text-sm text-[#1C1E16] self-start max-w-[85%]";
+                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum self-start max-w-[85%]";
                 responseDiv.innerHTML = `<strong>Camila:</strong> Entendido! Vou te conectar agora com nosso especialista no WhatsApp.`;
                 history.appendChild(responseDiv);
                 history.scrollTop = history.scrollHeight;
@@ -514,758 +515,383 @@
         }
 
         /* =========================================================
-           LIQUID MOTION REVEAL (CFD + FBM + FALHAS + INTERPOLAÇÃO)
-           Véu na cor exata --bg (#F8F8F3) que abre com aspecto
-           líquido orgânico apenas onde o fluido passa
+           PRISM GALLERY ENGINE (WebGL GLSL + Dispersão Cromática)
+           Aplica refração de prisma facetado, dispersão espectral
+           em 6 bandas e brilho de vidro sobre os 78 frames do site
         ========================================================= */
-        function initLiquidReveal() {
-            const fluidCanvas = document.getElementById("fluid-canvas");
-            const noop = { resize: () => {}, clear: () => {}, setGaps: () => {}, setAutoFlow: () => {} };
-            if (!fluidCanvas || typeof THREE === "undefined") return noop;
+        function createPrismEngine(images) {
+            const glCanvas = document.getElementById("prism-canvas");
+            const fallbackCanvas = document.getElementById("hero-fallback-canvas");
+            const fallbackCtx = fallbackCanvas.getContext("2d", { alpha: false });
+            const cssFallback = document.getElementById("prism-css-fallback");
 
-            let renderer;
-            try {
-                renderer = new THREE.WebGLRenderer({
-                    canvas: fluidCanvas,
-                    antialias: true,
-                    alpha: true,
-                    premultipliedAlpha: true,
-                    powerPreference: "high-performance"
-                });
-            } catch (e) {
-                return noop;
-            }
-
-            renderer.autoClear = false;
-            renderer.setClearColor(0x000000, 0);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-            renderer.setSize(window.innerWidth, window.innerHeight);
-
-            const isMobile = /iPad|iPhone|iPod|Android/i.test(navigator.userAgent);
-            const hasFloatRT = !isMobile && (
-                renderer.extensions.get("EXT_color_buffer_float") ||
-                renderer.extensions.get("WEBGL_color_buffer_float")
-            );
-            const FBOType = hasFloatRT ? THREE.FloatType : THREE.HalfFloatType;
-
-            function createFBO(w, h) {
-                return new THREE.WebGLRenderTarget(w, h, {
-                    type: FBOType,
-                    minFilter: THREE.LinearFilter,
-                    magFilter: THREE.LinearFilter,
-                    format: THREE.RGBAFormat,
-                    depthBuffer: false,
-                    stencilBuffer: false
-                });
-            }
-
-            // ----- Parâmetros da simulação -----
-            const SIM_RES          = isMobile ? 0.18 : 0.26;
-            const CURSOR_SIZE      = 28;
-            const MOUSE_FORCE      = 64;
-            const DISSIPATION      = 0.966;
-            const MASK_DISSIPATION = 0.975;
-            const VISCOUS          = 30;
-            const ITER_POISSON     = 6;
-            const ITER_VISCOUS     = 4;
-            const DT               = 0.015;
-            const STRAIGHTNESS     = 0.62;
-            const IS_BOUNCE        = false;
-            const IS_VISCOUS       = false;
-            const BFECC            = true;
-
-            let simW = Math.max(32, Math.round(SIM_RES * window.innerWidth));
-            let simH = Math.max(32, Math.round(SIM_RES * window.innerHeight));
-            let pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
-            let pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
-
-            const cellScale     = new THREE.Vector2(pxX, pxY);
-            const fboSize       = new THREE.Vector2(simW, simH);
-            const boundarySpace = new THREE.Vector2();
-
-            const fbos = {
-                vel_0:        createFBO(simW, simH),
-                vel_1:        createFBO(simW, simH),
-                vel_viscous0: createFBO(simW, simH),
-                vel_viscous1: createFBO(simW, simH),
-                div:          createFBO(simW, simH),
-                pressure_0:   createFBO(simW, simH),
-                pressure_1:   createFBO(simW, simH),
-                mask_0:       createFBO(simW, simH),
-                mask_1:       createFBO(simW, simH)
+            // Parâmetros ópticos (editáveis via Tweakpane)
+            const params = {
+                facets: 8,          // número de facetas de vidro do prisma
+                refraction: 0.14,   // força da refração óptica
+                dispersion: 0.48,   // intensidade da aberração cromática RGB
+                curvature: 0.55,    // mistura entre prisma reto (0) e lente cilíndrica (1)
+                angle: 0.12,        // inclinação das facetas (radianos)
+                specular: 0.36,     // reflexo de luz nas bordas das facetas
+                motionBoost: 1.35   // ganho dinâmico durante scroll/arraste
             };
 
-            function clearAllFBOs() {
-                for (const key in fbos) {
-                    renderer.setRenderTarget(fbos[key]);
-                    renderer.clear();
-                }
-                renderer.setRenderTarget(null);
-            }
-            clearAllFBOs();
+            let useFallback = false;
+            let renderer = null;
+            let scene = null;
+            let camera = null;
+            let material = null;
+            let frameTexture = null;
+            let lastFrameIndex = -1;
 
-            let maskRead  = fbos.mask_0;
-            let maskWrite = fbos.mask_1;
-            let autoFlowEnabled = false;
+            const state = {
+                progress: 0,
+                targetVelocity: 0,
+                velocity: 0,
+                targetDrag: 0,
+                drag: 0,
+                targetMouseX: 0.5,
+                targetMouseY: 0.5,
+                mouseX: 0.5,
+                mouseY: 0.5
+            };
 
-            const GLSL_NOISE = `
-            float hash21(vec2 p) {
-                p = fract(p * vec2(123.34, 456.21));
-                p += dot(p, p + 45.32);
-                return fract(p.x * p.y);
-            }
-
-            float vnoise(vec2 p) {
-                vec2 i = floor(p);
-                vec2 f = fract(p);
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                float a = hash21(i);
-                float b = hash21(i + vec2(1.0, 0.0));
-                float c = hash21(i + vec2(0.0, 1.0));
-                float d = hash21(i + vec2(1.0, 1.0));
-                return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-            }
-
-            float fbm(vec2 p) {
-                float value = 0.0;
-                float amp = 0.5;
-                mat2 rot = mat2(0.80, 0.60, -0.60, 0.80);
-                for (int i = 0; i < 4; i++) {
-                    value += amp * vnoise(p);
-                    p = rot * p * 2.05 + vec2(17.3, 9.2);
-                    amp *= 0.5;
-                }
-                return value;
-            }`;
-
-            const VS_BASE = `
+            const VS_PRISM = `
             attribute vec3 position;
-            uniform vec2 px;
-            uniform vec2 boundarySpace;
-            varying vec2 uv;
+            varying vec2 vUv;
             precision highp float;
-            void main(){
-                vec3 pos = position;
-                vec2 scale = 1.0 - boundarySpace * 2.0;
-                pos.xy = pos.xy * scale;
-                uv = vec2(0.5) + (pos.xy) * 0.5;
-                gl_Position = vec4(pos, 1.0);
-            }`;
-
-            const VS_OUTPUT = `
-            attribute vec3 position;
-            varying vec2 uv;
-            precision highp float;
-            void main(){
-                uv = vec2(0.5) + position.xy * 0.5;
+            void main() {
+                vUv = position.xy * 0.5 + 0.5;
                 gl_Position = vec4(position, 1.0);
             }`;
 
-            // Véu #F8F8F3 com recorte líquido nítido, filamentos e falhas naturais
-            const FS_OUTPUT = `
+            const FS_PRISM = `
             precision highp float;
-            uniform sampler2D velocity;
-            uniform sampler2D maskTex;
-            uniform vec2 px;
+            uniform sampler2D uTexture;
+            uniform vec2 uResolution;
+            uniform vec2 uImageSize;
             uniform float uTime;
-            uniform float uAspect;
-            uniform float uGapAmount;
-            varying vec2 uv;
-            ${GLSL_NOISE}
+            uniform float uVelocity;
+            uniform float uDrag;
+            uniform vec2 uMouse;
+            uniform float uFacets;
+            uniform float uRefraction;
+            uniform float uDispersion;
+            uniform float uCurvature;
+            uniform float uAngle;
+            uniform float uSpecular;
+            uniform float uMotionBoost;
+            varying vec2 vUv;
 
-            void main(){
-                vec2 vel = texture2D(velocity, uv).xy;
-                float speed = length(vel);
-
-                vec2 p = vec2(uv.x * uAspect, uv.y);
-
-                // Domain warping orgânico para contorno líquido com tensão superficial
-                float nFlow   = fbm(p * 5.0 - vel * 0.60 + vec2(uTime * 0.14, -uTime * 0.10));
-                float nDetail = fbm(p * 11.2 + vec2(nFlow * 1.7) - vel * 1.05 + vec2(-uTime * 0.08, uTime * 0.12));
-
-                vec2 liquidWarp = vel * 0.026 + (vec2(nFlow, nDetail) - 0.5) * 0.04;
-                vec2 warpedUv = clamp(uv - liquidWarp, 0.0, 1.0);
-                float density = texture2D(maskTex, warpedUv).r;
-
-                float rawField = density + speed * 0.24;
-                float activeZone = smoothstep(0.015, 0.16, rawField);
-
-                // Quebra orgânica das bordas em gotas e filamentos
-                float edgeBreak = (nDetail - 0.48) * 0.64 * activeZone;
-
-                // Falhas naturais internas e na retração do líquido
-                float gapNoiseA = fbm(p * 14.5 - vel * 0.8 + vec2(nFlow * 1.25, uTime * 0.05));
-                float gapNoiseB = vnoise(p * 27.0 + vec2(nDetail * 2.1) - vel * 1.15);
-                float combinedGaps = gapNoiseA * 0.72 + gapNoiseB * 0.28;
-
-                float thinning = 1.0 - smoothstep(0.35, 1.15, density);
-                float gaps = smoothstep(0.49, 0.73, combinedGaps) * (0.36 + 0.50 * thinning) * activeZone * uGapAmount;
-
-                float liquidField = rawField * (0.78 + nFlow * 0.70) + edgeBreak - gaps;
-                float reveal = smoothstep(0.215, 0.275, liquidField);
-
-                // Cor exata de --bg: #F8F8F3 (248/255, 248/255, 243/255)
-                vec3 bgVeil = vec3(0.9725, 0.9725, 0.9529);
-                float rimOuter = smoothstep(0.15, 0.22, liquidField) * (1.0 - smoothstep(0.23, 0.30, liquidField));
-                float sheen = smoothstep(0.45, 0.85, nDetail) * rimOuter;
-                vec3 wetEdge = mix(vec3(0.91, 0.94, 0.88), vec3(0.99, 1.0, 0.97), sheen);
-                vec3 veilColor = mix(bgVeil, wetEdge, rimOuter * 0.8);
-
-                float alpha = clamp(1.0 - reveal, 0.0, 1.0);
-                gl_FragColor = vec4(veilColor * alpha, alpha);
-            }`;
-
-            const FS_ADVECTION = `
-            precision highp float;
-            uniform sampler2D velocity;
-            uniform float dt;
-            uniform float dissipation;
-            uniform bool isBFECC;
-            uniform vec2 fboSize;
-            uniform vec2 px;
-            varying vec2 uv;
-            void main(){
-                vec2 ratio = max(fboSize.x, fboSize.y) / fboSize;
-                if(isBFECC == false){
-                    vec2 vel = texture2D(velocity, uv).xy;
-                    vec2 uv2 = uv - vel * dt * ratio;
-                    vec2 newVel = texture2D(velocity, uv2).xy * dissipation;
-                    gl_FragColor = vec4(newVel, 0.0, 0.0);
+            // Mapeamento exato object-fit: cover dentro do shader
+            vec2 getCoverUv(vec2 uv, vec2 res, vec2 imgSize) {
+                float screenAspect = res.x / max(res.y, 1.0);
+                float imgAspect = imgSize.x / max(imgSize.y, 1.0);
+                vec2 scale = vec2(1.0);
+                if (screenAspect > imgAspect) {
+                    scale.y = imgAspect / screenAspect;
                 } else {
-                    vec2 spot_new  = uv;
-                    vec2 vel_old   = texture2D(velocity, uv).xy;
-                    vec2 spot_old  = spot_new - vel_old * dt * ratio;
-                    vec2 vel_new1  = texture2D(velocity, spot_old).xy;
-                    vec2 spot_new2 = spot_old + vel_new1 * dt * ratio;
-                    vec2 error     = spot_new2 - spot_new;
-                    vec2 spot_new3 = spot_new - error / 2.0;
-                    vec2 vel_2     = texture2D(velocity, spot_new3).xy;
-                    vec2 spot_old2 = spot_new3 - vel_2 * dt * ratio;
-                    vec2 newVel2   = texture2D(velocity, spot_old2).xy * dissipation;
-                    gl_FragColor   = vec4(newVel2, 0.0, 0.0);
+                    scale.x = screenAspect / imgAspect;
                 }
-            }`;
-
-            const FS_ADVECTION_MASK = `
-            precision highp float;
-            uniform sampler2D velocity;
-            uniform sampler2D maskTex;
-            uniform float dt;
-            uniform float maskDissipation;
-            uniform vec2 fboSize;
-            varying vec2 uv;
-            void main(){
-                vec2 ratio = max(fboSize.x, fboSize.y) / fboSize;
-                vec2 vel = texture2D(velocity, uv).xy;
-                vec2 uvPrev = uv - vel * dt * ratio * 1.55;
-                float prev = min(texture2D(maskTex, uvPrev).r, 1.35);
-                gl_FragColor = vec4(prev * maskDissipation, 0.0, 0.0, 1.0);
-            }`;
-
-            const VS_FORCE = `
-            attribute vec3 position;
-            attribute vec2 uv;
-            uniform vec2 center;
-            uniform vec2 scale;
-            uniform vec2 px;
-            varying vec2 vUv;
-            precision highp float;
-            void main(){
-                vec2 pos = position.xy * scale * 2.0 * px + center;
-                vUv = uv;
-                gl_Position = vec4(pos, 0.0, 1.0);
-            }`;
-
-            const FS_FORCE = `
-            precision highp float;
-            uniform vec2 force;
-            uniform vec2 center;
-            uniform vec2 scale;
-            uniform vec2 px;
-            varying vec2 vUv;
-            void main(){
-                vec2 circle = (vUv - 0.5) * 2.0;
-                float d = 1.0 - min(length(circle), 1.0);
-                d *= d;
-                gl_FragColor = vec4(force * d, 0.0, 1.0);
-            }`;
-
-            const FS_MASK_STAMP = `
-            precision highp float;
-            uniform float strength;
-            uniform float uTime;
-            uniform float uGapAmount;
-            varying vec2 vUv;
-            ${GLSL_NOISE}
-
-            void main(){
-                vec2 p = (vUv - 0.5) * 2.0;
-                float r = length(p);
-
-                float nMain = vnoise(p * 3.1 + vec2(uTime * 1.9, -uTime * 1.4));
-                float nFine = vnoise(p * 7.5 - vec2(uTime * 2.3, uTime * 1.6));
-
-                float warpedR = r + ((nMain - 0.5) * 0.48 + (nFine - 0.5) * 0.24) * (0.45 + 0.55 * uGapAmount);
-                float d = 1.0 - clamp(warpedR, 0.0, 1.0);
-                d = d * d;
-
-                float breakUp = mix(1.0, smoothstep(0.24, 0.72, nMain * 0.6 + nFine * 0.4), uGapAmount);
-                float splash = smoothstep(0.75, 0.90, nFine) * smoothstep(1.0, 0.35, r) * 0.55 * uGapAmount;
-
-                float amount = (d * (0.40 + 0.90 * breakUp) + splash) * strength;
-                gl_FragColor = vec4(amount, 0.0, 0.0, 1.0);
-            }`;
-
-            const FS_VISCOUS = `
-            precision highp float;
-            uniform sampler2D velocity;
-            uniform sampler2D velocity_new;
-            uniform float v;
-            uniform vec2 px;
-            uniform float dt;
-            varying vec2 uv;
-            void main(){
-                vec2 old  = texture2D(velocity, uv).xy;
-                vec2 new0 = texture2D(velocity_new, uv + vec2(px.x * 2.0, 0.0)).xy;
-                vec2 new1 = texture2D(velocity_new, uv - vec2(px.x * 2.0, 0.0)).xy;
-                vec2 new2 = texture2D(velocity_new, uv + vec2(0.0, px.y * 2.0)).xy;
-                vec2 new3 = texture2D(velocity_new, uv - vec2(0.0, px.y * 2.0)).xy;
-                vec2 result = 4.0 * old + v * dt * (new0 + new1 + new2 + new3);
-                result /= 4.0 * (1.0 + v * dt);
-                gl_FragColor = vec4(result, 0.0, 0.0);
-            }`;
-
-            const FS_DIVERGENCE = `
-            precision highp float;
-            uniform sampler2D velocity;
-            uniform float dt;
-            uniform vec2 px;
-            varying vec2 uv;
-            void main(){
-                float x0 = texture2D(velocity, uv - vec2(px.x, 0.0)).x;
-                float x1 = texture2D(velocity, uv + vec2(px.x, 0.0)).x;
-                float y0 = texture2D(velocity, uv - vec2(0.0, px.y)).y;
-                float y1 = texture2D(velocity, uv + vec2(0.0, px.y)).y;
-                float divergence = (x1 - x0 + y1 - y0) / 2.0;
-                gl_FragColor = vec4(divergence / dt);
-            }`;
-
-            const FS_POISSON = `
-            precision highp float;
-            uniform sampler2D pressure;
-            uniform sampler2D divergence;
-            uniform float straightness;
-            uniform vec2 px;
-            varying vec2 uv;
-            void main(){
-                float p0 = texture2D(pressure, uv + vec2(px.x * 2.0, 0.0)).r;
-                float p1 = texture2D(pressure, uv - vec2(px.x * 2.0, 0.0)).r;
-                float p2 = texture2D(pressure, uv + vec2(0.0, px.y * 2.0)).r;
-                float p3 = texture2D(pressure, uv - vec2(0.0, px.y * 2.0)).r;
-                float div = texture2D(divergence, uv).r;
-                float newP = (p0 + p1 + p2 + p3) / (4.0 + straightness) - div;
-                gl_FragColor = vec4(newP);
-            }`;
-
-            const FS_PRESSURE = `
-            precision highp float;
-            uniform sampler2D pressure;
-            uniform sampler2D velocity;
-            uniform vec2 px;
-            uniform float dt;
-            varying vec2 uv;
-            void main(){
-                float step = 1.0;
-                float p0 = texture2D(pressure, uv + vec2(px.x * step, 0.0)).r;
-                float p1 = texture2D(pressure, uv - vec2(px.x * step, 0.0)).r;
-                float p2 = texture2D(pressure, uv + vec2(0.0, px.y * step)).r;
-                float p3 = texture2D(pressure, uv - vec2(0.0, px.y * step)).r;
-                vec2 v = texture2D(velocity, uv).xy;
-                vec2 gradP = vec2(p0 - p1, p2 - p3) * 0.5;
-                v = v - gradP * dt;
-                gl_FragColor = vec4(v, 0.0, 1.0);
-            }`;
-
-            const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-            const fullQuadGeo = new THREE.PlaneGeometry(2, 2);
-            const brushGeo    = new THREE.PlaneGeometry(1, 1);
-
-            function makeQuadScene(material) {
-                const scene = new THREE.Scene();
-                scene.add(new THREE.Mesh(fullQuadGeo, material));
-                return scene;
+                return (uv - 0.5) * scale + 0.5;
             }
 
-            function renderToFBO(fbo, scene) {
-                renderer.setRenderTarget(fbo);
-                renderer.render(scene, orthoCamera);
-                renderer.setRenderTarget(null);
+            // Pesos espectrais contínuos (6 bandas: Vermelho -> Laranja -> Verde -> Ciano -> Azul)
+            vec3 spectralWeight(float t) {
+                vec3 c = vec3(
+                    smoothstep(0.68, 0.0, t),
+                    sin(t * 3.14159265),
+                    smoothstep(0.32, 1.0, t)
+                );
+                return max(c, vec3(0.0));
             }
 
-            const advMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_ADVECTION,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace: { value: cellScale },
-                    px:            { value: cellScale },
-                    fboSize:       { value: fboSize },
-                    velocity:      { value: fbos.vel_0.texture },
-                    dt:            { value: DT },
-                    isBFECC:       { value: BFECC },
-                    dissipation:   { value: DISSIPATION }
+            void main() {
+                vec2 centered = vUv - 0.5;
+                float aspect = uResolution.x / max(uResolution.y, 1.0);
+                vec2 p = vec2(centered.x * aspect, centered.y);
+
+                // Rotação sutil das facetas do prisma
+                float ca = cos(uAngle);
+                float sa = sin(uAngle);
+                vec2 rp = mat2(ca, -sa, sa, ca) * p;
+
+                // Deslocamento do prisma pelo arraste lateral e movimento do mouse
+                float mouseShift = (uMouse.x - 0.5) * 0.35;
+                float cellCoord = (rp.x / max(aspect, 0.75) + 0.5) * uFacets + uDrag * 2.4 + mouseShift;
+                float cellF = fract(cellCoord) * 2.0 - 1.0; // -1..1 em cada faceta
+                float cellId = floor(cellCoord);
+
+                // Perfil da normal do vidro: plano chanfrado vs lente cilíndrica
+                float flatSlope = cellF;
+                float curvedSlope = sin(cellF * 1.5707963);
+                float prismNormalX = mix(flatSlope, curvedSlope, uCurvature);
+
+                // Ondulação vertical sutil e influência do ponteiro
+                float distToMouse = length((vUv - uMouse) * vec2(aspect, 1.0));
+                float mouseLens = exp(-distToMouse * 3.2) * 0.45;
+                float prismNormalY = sin(rp.y * 4.5 + cellId * 0.8 + uTime * 0.35) * 0.14 + (vUv.y - uMouse.y) * mouseLens;
+
+                // Intensidade dinâmica: repouso elegante + explosão prismática no scroll/drag
+                float motion = abs(uVelocity) * uMotionBoost + abs(uDrag) * 0.55;
+                float refractStrength = uRefraction * (0.28 + motion + mouseLens * 0.5);
+                float dispStrength = uDispersion * (0.18 + motion * 1.65 + mouseLens * 0.45);
+
+                // Direção do vetor de refração no espaço da tela
+                vec2 refractDir = mat2(ca, sa, -sa, ca) * vec2(prismNormalX, prismNormalY);
+                vec2 baseUv = getCoverUv(vUv, uResolution, uImageSize);
+
+                // Amostragem espectral em 6 bandas para dispersão prismática autêntica
+                vec3 accumColor = vec3(0.0);
+                vec3 weightSum = vec3(0.0);
+
+                for (int i = 0; i < 6; i++) {
+                    float t = float(i) / 5.0; // 0 = R, 0.5 = G, 1 = B
+                    float wavelengthShift = (t - 0.5) * 2.0; // -1..1
+                    float iorOffset = 1.0 + wavelengthShift * dispStrength;
+
+                    vec2 sampleUv = baseUv - refractDir * refractStrength * 0.16 * iorOffset;
+
+                    // Espelhamento suave nas bordas para nunca vazar faixa preta
+                    sampleUv = abs(fract(sampleUv * 0.5 + 0.5) * 2.0 - 1.0);
+
+                    vec3 tex = texture2D(uTexture, sampleUv).rgb;
+                    vec3 w = spectralWeight(t);
+                    accumColor += tex * w;
+                    weightSum += w;
                 }
-            });
-            const advScene = makeQuadScene(advMat);
 
-            const advMaskMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_ADVECTION_MASK,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace:   { value: new THREE.Vector2(0, 0) },
-                    px:              { value: cellScale },
-                    fboSize:         { value: fboSize },
-                    velocity:        { value: fbos.vel_0.texture },
-                    maskTex:         { value: maskRead.texture },
-                    dt:              { value: DT },
-                    maskDissipation: { value: MASK_DISSIPATION }
+                vec3 color = accumColor / max(weightSum, vec3(0.0001));
+
+                // Brilho especular Fresnel nas arestas das facetas de vidro
+                float ridge = pow(abs(cellF), 7.0);
+                float glint = pow(max(0.0, 1.0 - abs(cellF - (uMouse.x - 0.5) * 1.2)), 10.0);
+                float edgeLight = (ridge * 0.65 + glint * 0.55) * uSpecular * (0.45 + motion * 0.9);
+
+                // Toque iridescente nas arestas refratadas
+                vec3 prismTint = vec3(
+                    0.92 + 0.08 * sin(cellId + 0.0),
+                    0.98 + 0.02 * sin(cellId + 2.1),
+                    0.95 + 0.05 * sin(cellId + 4.2)
+                );
+                color += prismTint * edgeLight * 0.42;
+
+                // Pequena compressão de contraste cristalino nas juntas das facetas
+                color *= 1.0 - ridge * 0.08;
+
+                gl_FragColor = vec4(color, 1.0);
+            }`;
+
+            function activateFallback() {
+                if (useFallback) return;
+                useFallback = true;
+                glCanvas.style.display = "none";
+                fallbackCanvas.style.display = "block";
+                cssFallback.classList.add("active");
+                resizeFallback();
+                drawFallback(Math.max(0, lastFrameIndex));
+            }
+
+            function resizeFallback() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                fallbackCanvas.width = Math.floor(window.innerWidth * dpr);
+                fallbackCanvas.height = Math.floor(window.innerHeight * dpr);
+                fallbackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function drawFallback(index) {
+                const img = images[index];
+                if (!img || !img.complete || img.naturalWidth === 0) return;
+                const viewW = window.innerWidth;
+                const viewH = window.innerHeight;
+                const ratio = Math.max(viewW / img.naturalWidth, viewH / img.naturalHeight);
+                const drawW = img.naturalWidth * ratio;
+                const drawH = img.naturalHeight * ratio;
+                const x = (viewW - drawW) / 2;
+                const y = (viewH - drawH) / 2;
+                fallbackCtx.clearRect(0, 0, viewW, viewH);
+                fallbackCtx.drawImage(img, x, y, drawW, drawH);
+            }
+
+            function initWebGL() {
+                if (typeof THREE === "undefined") {
+                    activateFallback();
+                    return;
                 }
-            });
-            const advMaskScene = makeQuadScene(advMaskMat);
+                try {
+                    renderer = new THREE.WebGLRenderer({
+                        canvas: glCanvas,
+                        antialias: true,
+                        alpha: false,
+                        powerPreference: "high-performance"
+                    });
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                    renderer.setSize(window.innerWidth, window.innerHeight);
 
-            const forceMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_FORCE,
-                fragmentShader: FS_FORCE,
-                blending: THREE.AdditiveBlending,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    px:     { value: cellScale },
-                    force:  { value: new THREE.Vector2() },
-                    center: { value: new THREE.Vector2() },
-                    scale:  { value: new THREE.Vector2(CURSOR_SIZE, CURSOR_SIZE) }
-                }
-            });
-            const forceScene = new THREE.Scene();
-            forceScene.add(new THREE.Mesh(brushGeo, forceMat));
+                    scene = new THREE.Scene();
+                    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-            const maskStampMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_FORCE,
-                fragmentShader: FS_MASK_STAMP,
-                blending: THREE.AdditiveBlending,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    px:         { value: cellScale },
-                    center:     { value: new THREE.Vector2() },
-                    scale:      { value: new THREE.Vector2(CURSOR_SIZE * 1.6, CURSOR_SIZE * 1.6) },
-                    strength:   { value: 0.0 },
-                    uTime:      { value: 0.0 },
-                    uGapAmount: { value: 1.0 }
-                }
-            });
-            const maskStampScene = new THREE.Scene();
-            maskStampScene.add(new THREE.Mesh(brushGeo, maskStampMat));
+                    // Placeholder 1x1 até o primeiro frame subir
+                    const dummy = new Uint8Array([10, 26, 30, 255]);
+                    frameTexture = new THREE.DataTexture(dummy, 1, 1, THREE.RGBAFormat);
+                    frameTexture.needsUpdate = true;
 
-            const viscMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_VISCOUS,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace: { value: boundarySpace },
-                    velocity:      { value: fbos.vel_1.texture },
-                    velocity_new:  { value: fbos.vel_viscous0.texture },
-                    v:             { value: VISCOUS },
-                    px:            { value: cellScale },
-                    dt:            { value: DT }
-                }
-            });
-            const viscScene = makeQuadScene(viscMat);
+                    material = new THREE.RawShaderMaterial({
+                        vertexShader: VS_PRISM,
+                        fragmentShader: FS_PRISM,
+                        depthTest: false,
+                        depthWrite: false,
+                        uniforms: {
+                            uTexture:     { value: frameTexture },
+                            uResolution:  { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                            uImageSize:   { value: new THREE.Vector2(1920, 1080) },
+                            uTime:        { value: 0 },
+                            uVelocity:    { value: 0 },
+                            uDrag:        { value: 0 },
+                            uMouse:       { value: new THREE.Vector2(0.5, 0.5) },
+                            uFacets:      { value: params.facets },
+                            uRefraction:  { value: params.refraction },
+                            uDispersion:  { value: params.dispersion },
+                            uCurvature:   { value: params.curvature },
+                            uAngle:       { value: params.angle },
+                            uSpecular:    { value: params.specular },
+                            uMotionBoost: { value: params.motionBoost }
+                        }
+                    });
 
-            const divMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_DIVERGENCE,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace: { value: boundarySpace },
-                    velocity:      { value: fbos.vel_viscous0.texture },
-                    px:            { value: cellScale },
-                    dt:            { value: DT }
-                }
-            });
-            const divScene = makeQuadScene(divMat);
-
-            const poisMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_POISSON,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace: { value: boundarySpace },
-                    pressure:      { value: fbos.pressure_1.texture },
-                    divergence:    { value: fbos.div.texture },
-                    px:            { value: cellScale },
-                    straightness:  { value: STRAIGHTNESS }
-                }
-            });
-            const poisScene = makeQuadScene(poisMat);
-
-            const presMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_BASE,
-                fragmentShader: FS_PRESSURE,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    boundarySpace: { value: boundarySpace },
-                    pressure:      { value: fbos.pressure_0.texture },
-                    velocity:      { value: fbos.vel_viscous0.texture },
-                    px:            { value: cellScale },
-                    dt:            { value: DT }
-                }
-            });
-            const presScene = makeQuadScene(presMat);
-
-            const outMat = new THREE.RawShaderMaterial({
-                vertexShader: VS_OUTPUT,
-                fragmentShader: FS_OUTPUT,
-                transparent: false,
-                depthTest: false,
-                depthWrite: false,
-                uniforms: {
-                    velocity:   { value: fbos.vel_0.texture },
-                    maskTex:    { value: maskRead.texture },
-                    px:         { value: cellScale },
-                    uTime:      { value: 0.0 },
-                    uAspect:    { value: window.innerWidth / Math.max(window.innerHeight, 1) },
-                    uGapAmount: { value: 1.0 }
-                }
-            });
-            const outScene = makeQuadScene(outMat);
-
-            // ----- Rastreamento de cursor / toque -----
-            const mouse     = new THREE.Vector2();
-            const mouseOld  = new THREE.Vector2();
-            const prevFrame = new THREE.Vector2();
-            const diff      = new THREE.Vector2();
-            const interpPos = new THREE.Vector2();
-            let hasPointer  = false;
-            let lastUserMove = 0;
-
-            function updatePointer(clientX, clientY, resetPrev = false) {
-                const nx = (clientX / window.innerWidth) * 2 - 1;
-                const ny = -(clientY / window.innerHeight) * 2 + 1;
-                mouse.set(nx, ny);
-                lastUserMove = performance.now();
-                if (!hasPointer || resetPrev) {
-                    mouseOld.copy(mouse);
-                    hasPointer = true;
+                    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+                } catch (err) {
+                    activateFallback();
                 }
             }
 
-            window.addEventListener("mousemove", (e) => updatePointer(e.clientX, e.clientY), { passive: true });
-            window.addEventListener("touchstart", (e) => {
-                if (e.touches.length === 1) updatePointer(e.touches[0].clientX, e.touches[0].clientY, true);
-            }, { passive: true });
-            window.addEventListener("touchmove", (e) => {
-                if (e.touches.length === 1) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
-            }, { passive: true });
+            let imageTexture = null;
+            function setFrame(index) {
+                const safeIdx = Math.max(0, Math.min(images.length - 1, index));
+                if (safeIdx === lastFrameIndex) return;
+                const img = images[safeIdx];
+                if (!img || !img.complete || img.naturalWidth === 0) return;
 
-            // ----- Loop 60fps -----
+                lastFrameIndex = safeIdx;
+
+                if (useFallback) {
+                    drawFallback(safeIdx);
+                    return;
+                }
+
+                try {
+                    if (!imageTexture) {
+                        imageTexture = new THREE.Texture(img);
+                        imageTexture.minFilter = THREE.LinearFilter;
+                        imageTexture.magFilter = THREE.LinearFilter;
+                        imageTexture.generateMipmaps = false;
+                        imageTexture.wrapS = THREE.ClampToEdgeWrapping;
+                        imageTexture.wrapT = THREE.ClampToEdgeWrapping;
+                        material.uniforms.uTexture.value = imageTexture;
+                    } else {
+                        imageTexture.image = img;
+                    }
+                    imageTexture.needsUpdate = true;
+                    material.uniforms.uImageSize.value.set(img.naturalWidth, img.naturalHeight);
+                } catch (err) {
+                    activateFallback();
+                }
+            }
+
+            function syncUniforms() {
+                if (useFallback || !material) return;
+                material.uniforms.uFacets.value      = params.facets;
+                material.uniforms.uRefraction.value  = params.refraction;
+                material.uniforms.uDispersion.value  = params.dispersion;
+                material.uniforms.uCurvature.value   = params.curvature;
+                material.uniforms.uAngle.value       = params.angle;
+                material.uniforms.uSpecular.value    = params.specular;
+                material.uniforms.uMotionBoost.value = params.motionBoost;
+            }
+
+            function resize() {
+                if (useFallback) {
+                    resizeFallback();
+                    drawFallback(Math.max(0, lastFrameIndex));
+                    return;
+                }
+                if (!renderer || !material) return;
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+            }
+
+            // Loop contínuo do shader (suaviza mouse, arraste e velocidade do prisma)
             const startTime = performance.now();
-            let lastTime = startTime;
-            const INTERVAL = 1000 / 60;
+            function tick() {
+                requestAnimationFrame(tick);
+                if (document.hidden || useFallback || !renderer || !material) return;
 
-            function clampCoord(val, margin) {
-                return Math.min(Math.max(val, -1 + margin), 1 - margin);
+                state.velocity += (state.targetVelocity - state.velocity) * 0.1;
+                state.targetVelocity *= 0.90;
+
+                state.drag += (state.targetDrag - state.drag) * 0.12;
+                state.mouseX += (state.targetMouseX - state.mouseX) * 0.08;
+                state.mouseY += (state.targetMouseY - state.mouseY) * 0.08;
+
+                material.uniforms.uTime.value = (performance.now() - startTime) * 0.001;
+                material.uniforms.uVelocity.value = state.velocity;
+                material.uniforms.uDrag.value = state.drag;
+                material.uniforms.uMouse.value.set(state.mouseX, state.mouseY);
+
+                try {
+                    renderer.render(scene, camera);
+                } catch (err) {
+                    // Captura SecurityError se a imagem local bloquear texImage2D em file://
+                    activateFallback();
+                }
             }
 
-            function simulate() {
-                requestAnimationFrame(simulate);
-                if (document.hidden) return;
-
-                const now = performance.now();
-                if (now - lastTime < INTERVAL) return;
-                lastTime = now;
-
-                const elapsed = (now - startTime) * 0.001;
-
-                // Fluxo automático suave (somente quando o usuário ativar o botão "Fluxo Auto")
-                if (autoFlowEnabled && now - lastUserMove > 1400) {
-                    const ax = Math.sin(elapsed * 0.95) * 0.55;
-                    const ay = Math.sin(elapsed * 1.45) * 0.38;
-                    if (!hasPointer) {
-                        mouseOld.set(ax, ay);
-                        hasPointer = true;
-                    }
-                    mouse.set(ax, ay);
-                }
-
-                if (IS_BOUNCE) boundarySpace.set(0, 0);
-                else           boundarySpace.copy(cellScale);
-
-                // 1. Advecção de velocidade (BFECC)
-                advMat.uniforms.velocity.value = fbos.vel_0.texture;
-                advMat.uniforms.isBFECC.value  = BFECC;
-                renderToFBO(fbos.vel_1, advScene);
-
-                // 2. Força externa interpolada (rastro líquido contínuo sem quebras artificiais)
-                prevFrame.copy(mouseOld);
-                diff.subVectors(mouse, mouseOld);
-                mouseOld.copy(mouse);
-
-                const moveLen = diff.length();
-                const hasMove = moveLen > 0.0005;
-                const steps = hasMove ? Math.min(6, Math.max(1, Math.ceil(moveLen / 0.035))) : 0;
-
-                const marginX = CURSOR_SIZE * cellScale.x + cellScale.x * 2;
-                const marginY = CURSOR_SIZE * cellScale.y + cellScale.y * 2;
-
-                if (hasMove) {
-                    const fx = THREE.MathUtils.clamp((diff.x / steps) * 0.5 * MOUSE_FORCE, -3.8, 3.8);
-                    const fy = THREE.MathUtils.clamp((diff.y / steps) * 0.5 * MOUSE_FORCE, -3.8, 3.8);
-                    forceMat.uniforms.force.value.set(fx, fy);
-
-                    for (let s = 1; s <= steps; s++) {
-                        interpPos.lerpVectors(prevFrame, mouse, s / steps);
-                        forceMat.uniforms.center.value.set(
-                            clampCoord(interpPos.x, marginX),
-                            clampCoord(interpPos.y, marginY)
-                        );
-                        renderToFBO(fbos.vel_1, forceScene);
-                    }
-                }
-
-                // 3. Viscosidade (opcional)
-                let velResult = fbos.vel_1;
-                if (IS_VISCOUS) {
-                    for (let i = 0; i < ITER_VISCOUS; i++) {
-                        const src = i % 2 === 0 ? fbos.vel_viscous0 : fbos.vel_viscous1;
-                        const dst = i % 2 === 0 ? fbos.vel_viscous1 : fbos.vel_viscous0;
-                        viscMat.uniforms.velocity.value     = fbos.vel_1.texture;
-                        viscMat.uniforms.velocity_new.value = src.texture;
-                        renderToFBO(dst, viscScene);
-                        velResult = dst;
-                    }
-                }
-
-                // 4. Divergência
-                divMat.uniforms.velocity.value = velResult.texture;
-                renderToFBO(fbos.div, divScene);
-
-                // 5. Poisson (pressão)
-                let presResult = fbos.pressure_1;
-                for (let i = 0; i < ITER_POISSON; i++) {
-                    const src = i % 2 === 0 ? fbos.pressure_0 : fbos.pressure_1;
-                    const dst = i % 2 === 0 ? fbos.pressure_1 : fbos.pressure_0;
-                    poisMat.uniforms.pressure.value   = src.texture;
-                    poisMat.uniforms.divergence.value = fbos.div.texture;
-                    renderToFBO(dst, poisScene);
-                    presResult = dst;
-                }
-
-                // 6. Subtração de gradiente de pressão
-                presMat.uniforms.velocity.value = velResult.texture;
-                presMat.uniforms.pressure.value = presResult.texture;
-                renderToFBO(fbos.vel_0, presScene);
-
-                // 7. Advecção + Carimbo interpolado da máscara líquida
-                advMaskMat.uniforms.velocity.value = fbos.vel_0.texture;
-                advMaskMat.uniforms.maskTex.value  = maskRead.texture;
-                renderToFBO(maskWrite, advMaskScene);
-
-                if (hasMove) {
-                    const perStepStrength = THREE.MathUtils.clamp((moveLen * 24.0) / Math.sqrt(steps), 0.24, 0.92);
-                    maskStampMat.uniforms.strength.value = perStepStrength;
-
-                    for (let s = 1; s <= steps; s++) {
-                        interpPos.lerpVectors(prevFrame, mouse, s / steps);
-                        maskStampMat.uniforms.center.value.set(
-                            clampCoord(interpPos.x, marginX),
-                            clampCoord(interpPos.y, marginY)
-                        );
-                        maskStampMat.uniforms.uTime.value = elapsed + s * 0.13;
-                        renderToFBO(maskWrite, maskStampScene);
-                    }
-                }
-
-                const tmp = maskRead;
-                maskRead  = maskWrite;
-                maskWrite = tmp;
-
-                // 8. Render final do véu #F8F8F3 com recorte líquido e falhas
-                outMat.uniforms.velocity.value = fbos.vel_0.texture;
-                outMat.uniforms.maskTex.value  = maskRead.texture;
-                outMat.uniforms.uTime.value    = elapsed;
-                renderer.setRenderTarget(null);
-                renderer.clear();
-                renderer.render(outScene, orthoCamera);
-            }
-
-            simulate();
+            initWebGL();
+            tick();
 
             return {
-                clear: clearAllFBOs,
-                setGaps: (enabled) => {
-                    const val = enabled ? 1.0 : 0.0;
-                    outMat.uniforms.uGapAmount.value = val;
-                    maskStampMat.uniforms.uGapAmount.value = val;
-                },
-                setAutoFlow: (enabled) => {
-                    autoFlowEnabled = enabled;
-                    if (enabled) lastUserMove = 0;
-                },
-                resize: () => {
-                    const w = window.innerWidth;
-                    const h = window.innerHeight;
-                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-                    renderer.setSize(w, h);
-                    simW = Math.max(32, Math.round(SIM_RES * w));
-                    simH = Math.max(32, Math.round(SIM_RES * h));
-                    pxX  = (1 / simW) * (simW / (1100 * SIM_RES));
-                    pxY  = (1 / simH) * (simW / (1100 * SIM_RES));
-                    cellScale.set(pxX, pxY);
-                    fboSize.set(simW, simH);
-                    outMat.uniforms.uAspect.value = w / Math.max(h, 1);
-                    for (const key in fbos) fbos[key].setSize(simW, simH);
+                params,
+                state,
+                setFrame,
+                syncUniforms,
+                resize,
+                boost(amount) {
+                    state.targetVelocity = Math.max(-2.5, Math.min(2.5, state.targetVelocity + amount));
                 }
             };
+        }
+
+        /* Inicialização opcional do Tweakpane 4.0.5 (sob demanda no clique do botão) */
+        async function setupTweakpane(prism) {
+            const mount = document.getElementById("tweakpane-mount");
+            const btn = document.getElementById("btn-tweakpane");
+            let initialized = false;
+
+            btn.addEventListener("click", async () => {
+                mount.classList.toggle("open");
+                if (initialized) return;
+                initialized = true;
+
+                try {
+                    const { Pane } = await import("https://esm.sh/tweakpane@4.0.5");
+                    const pane = new Pane({ container: mount, title: "Prism Gallery" });
+                    pane.addBinding(prism.params, "facets",      { min: 2, max: 20, step: 1, label: "Facetas" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "refraction",  { min: 0, max: 0.45, step: 0.01, label: "Refração" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "dispersion",  { min: 0, max: 1.2, step: 0.02, label: "Dispersão" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "curvature",   { min: 0, max: 1.0, step: 0.02, label: "Curvatura" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "angle",       { min: -0.6, max: 0.6, step: 0.01, label: "Ângulo" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "specular",    { min: 0, max: 1.0, step: 0.02, label: "Brilho" }).on("change", prism.syncUniforms);
+                    pane.addBinding(prism.params, "motionBoost", { min: 0, max: 3.0, step: 0.05, label: "Dinâmica" }).on("change", prism.syncUniforms);
+                } catch (e) {
+                    mount.innerHTML = `<div class="bg-petroleum/90 text-white text-xs p-3 rounded-xl">Tweakpane indisponível offline.</div>`;
+                }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             initLucide();
             gsap.registerPlugin(ScrollTrigger);
-
-            /* Inicia máscara líquida */
-            const fluid = initLiquidReveal();
-
-            /* Controles .liquid-pill */
-            const btnGaps = document.getElementById("btn-gaps");
-            const btnAuto = document.getElementById("btn-autoflow");
-            const btnClear = document.getElementById("btn-clear");
-
-            let gapsOn = true;
-            btnGaps?.addEventListener("click", () => {
-                gapsOn = !gapsOn;
-                fluid.setGaps(gapsOn);
-                btnGaps.classList.toggle("is-active", gapsOn);
-                btnGaps.textContent = gapsOn ? "Falhas: ON" : "Falhas: OFF";
-            });
-
-            let autoOn = false;
-            btnAuto?.addEventListener("click", () => {
-                autoOn = !autoOn;
-                fluid.setAutoFlow(autoOn);
-                btnAuto.classList.toggle("is-active", autoOn);
-            });
-
-            btnClear?.addEventListener("click", () => {
-                fluid.clear();
-            });
 
             /* 1. Lenis Smooth Scroll sincronizado com GSAP Ticker */
             const lenis = new Lenis({
@@ -1291,53 +917,130 @@
                 });
             });
 
-            /* 2. Canvas HiDPI + Preload dos 78 frames */
-            const canvas = document.getElementById("hero-canvas");
-            const context = canvas.getContext("2d", { alpha: false });
+            /* 2. Preload dos 78 frames + Prism Gallery Engine */
             const loader = document.getElementById("loader");
             const progressBar = document.getElementById("progress-bar");
-            const loaderStatus = document.getElementById("loader-status");
+            const heroEl = document.getElementById("scroll-hero");
+            const prismViewport = document.getElementById("prism-viewport");
+            const counterEl = document.getElementById("prism-counter");
+            const dots = Array.from(document.querySelectorAll(".prism-dot"));
+            const prevBtn = document.getElementById("prism-prev");
+            const nextBtn = document.getElementById("prism-next");
 
             const frameCount = 78;
             const images = new Array(frameCount);
             const playhead = { frame: 0 };
             let loadedImages = 0;
-            let lastRenderedFrame = -1;
+
+            const prism = createPrismEngine(images);
+            setupTweakpane(prism);
 
             const getUrl = (index) => `./frame_${index.toString().padStart(2, "0")}_delay-0.041s.webp`;
 
-            function resizeCanvas() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-                const width = window.innerWidth;
-                const height = window.innerHeight;
-                canvas.width = Math.floor(width * dpr);
-                canvas.height = Math.floor(height * dpr);
-                context.setTransform(dpr, 0, 0, dpr, 0, 0);
-                lastRenderedFrame = -1;
-                renderFrame(Math.round(playhead.frame));
+            // Pontos de progresso dos 3 slides da Prism Gallery no Hero
+            const slideStops = [0.0, 0.48, 0.94];
+            let activeSlide = 0;
+
+            function updateSlideUI(progress) {
+                const idx = progress < 0.30 ? 0 : progress < 0.72 ? 1 : 2;
+                if (idx !== activeSlide) {
+                    activeSlide = idx;
+                    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === idx));
+                    if (counterEl) counterEl.textContent = `0${idx + 1} / 03`;
+                }
             }
 
-            function renderFrame(index) {
-                const safeIndex = gsap.utils.clamp(0, frameCount - 1, index);
-                if (safeIndex === lastRenderedFrame) return;
-                const img = images[safeIndex];
-                if (!img || !img.complete || img.naturalWidth === 0) return;
-
-                const viewW = window.innerWidth;
-                const viewH = window.innerHeight;
-                const ratio = Math.max(viewW / img.naturalWidth, viewH / img.naturalHeight);
-                const drawW = img.naturalWidth * ratio;
-                const drawH = img.naturalHeight * ratio;
-                const x = (viewW - drawW) / 2;
-                const y = (viewH - drawH) / 2;
-
-                context.clearRect(0, 0, viewW, viewH);
-                context.drawImage(img, x, y, drawW, drawH);
-                lastRenderedFrame = safeIndex;
+            function goToSlide(idx) {
+                const targetIdx = (idx + slideStops.length) % slideStops.length;
+                const heroTop = heroEl.offsetTop;
+                const scrollable = Math.max(1, heroEl.offsetHeight - window.innerHeight);
+                const targetY = heroTop + scrollable * slideStops[targetIdx];
+                prism.boost(targetIdx > activeSlide ? 1.4 : -1.4);
+                lenis.scrollTo(targetY, { duration: 1.25 });
             }
+
+            prevBtn?.addEventListener("click", (e) => { e.stopPropagation(); goToSlide(activeSlide - 1); });
+            nextBtn?.addEventListener("click", (e) => { e.stopPropagation(); goToSlide(activeSlide + 1); });
+            dots.forEach((dot) => {
+                dot.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    goToSlide(parseInt(dot.getAttribute("data-slide"), 10) || 0);
+                });
+            });
+
+            // Interação de mouse + arraste horizontal estilo Prism Gallery
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragAccum = 0;
+
+            window.addEventListener("mousemove", (e) => {
+                prism.state.targetMouseX = e.clientX / Math.max(window.innerWidth, 1);
+                prism.state.targetMouseY = 1.0 - e.clientY / Math.max(window.innerHeight, 1);
+
+                if (isDragging) {
+                    const dx = (e.clientX - dragStartX) / Math.max(window.innerWidth, 1);
+                    dragStartX = e.clientX;
+                    dragAccum += dx;
+                    prism.state.targetDrag += dx * 1.4;
+                    prism.boost(dx * 16.0);
+                }
+            }, { passive: true });
+
+            prismViewport.addEventListener("mousedown", (e) => {
+                if (e.target.closest(".prism-hud")) return;
+                isDragging = true;
+                dragStartX = e.clientX;
+                dragAccum = 0;
+                prismViewport.classList.add("is-dragging");
+            });
+
+            window.addEventListener("mouseup", () => {
+                if (!isDragging) return;
+                isDragging = false;
+                prismViewport.classList.remove("is-dragging");
+                if (Math.abs(dragAccum) > 0.08) {
+                    goToSlide(activeSlide + (dragAccum < 0 ? 1 : -1));
+                }
+                prism.state.targetDrag = 0;
+            });
+
+            // Touch swipe horizontal no Hero
+            prismViewport.addEventListener("touchstart", (e) => {
+                if (e.touches.length === 1 && !e.target.closest(".prism-hud")) {
+                    isDragging = true;
+                    dragStartX = e.touches[0].clientX;
+                    dragAccum = 0;
+                }
+            }, { passive: true });
+
+            prismViewport.addEventListener("touchmove", (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    const dx = (e.touches[0].clientX - dragStartX) / Math.max(window.innerWidth, 1);
+                    dragStartX = e.touches[0].clientX;
+                    dragAccum += dx;
+                    prism.state.targetDrag += dx * 1.5;
+                    prism.boost(dx * 16.0);
+                }
+            }, { passive: true });
+
+            window.addEventListener("touchend", () => {
+                if (!isDragging) return;
+                isDragging = false;
+                if (Math.abs(dragAccum) > 0.1) {
+                    goToSlide(activeSlide + (dragAccum < 0 ? 1 : -1));
+                }
+                prism.state.targetDrag = 0;
+            }, { passive: true });
+
+            // Scroll velocity alimenta a dispersão óptica do prisma em tempo real
+            lenis.on("scroll", ({ velocity }) => {
+                const normVel = Math.max(-2.0, Math.min(2.0, velocity * 0.045));
+                prism.state.targetVelocity = normVel;
+            });
 
             function initScrollAnimations() {
-                resizeCanvas();
+                prism.resize();
+                prism.setFrame(0);
 
                 /* 3. Timeline principal do Hero com scrub: 0.5 */
                 const heroTl = gsap.timeline({
@@ -1346,7 +1049,8 @@
                         start: "top top",
                         end: "bottom bottom",
                         scrub: 0.5,
-                        invalidateOnRefresh: true
+                        invalidateOnRefresh: true,
+                        onUpdate: (self) => updateSlideUI(self.progress)
                     }
                 });
 
@@ -1354,7 +1058,7 @@
                     frame: frameCount - 1,
                     ease: "none",
                     duration: 1,
-                    onUpdate: () => renderFrame(Math.round(playhead.frame))
+                    onUpdate: () => prism.setFrame(Math.round(playhead.frame))
                 }, 0);
 
                 heroTl.fromTo("#text-01",
@@ -1452,27 +1156,30 @@
 
                 /* 7. Resize com debounce de 250ms */
                 window.addEventListener("resize", debounce(() => {
-                    resizeCanvas();
-                    fluid.resize();
+                    prism.resize();
                     ScrollTrigger.refresh();
                 }, 250));
             }
 
             function finishLoading() {
                 initScrollAnimations();
-                loader.classList.add("is-loaded");
-                setTimeout(() => {
-                    document.body.style.overflow = "auto";
-                    lenis.start();
-                    ScrollTrigger.refresh();
-                }, 500);
+                gsap.to(loader, {
+                    opacity: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    onComplete: () => {
+                        loader.style.visibility = "hidden";
+                        document.body.style.overflow = "auto";
+                        lenis.start();
+                        ScrollTrigger.refresh();
+                    }
+                });
             }
 
             function onAssetDone() {
                 loadedImages++;
-                const pct = Math.round((loadedImages / frameCount) * 100);
+                const pct = (loadedImages / frameCount) * 100;
                 gsap.to(progressBar, { width: `${pct}%`, duration: 0.2, ease: "power1.out", overwrite: true });
-                if (loaderStatus) loaderStatus.textContent = `Carregando experiência · ${pct}%`;
                 if (loadedImages === frameCount) {
                     finishLoading();
                 }
