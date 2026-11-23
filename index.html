@@ -3,1201 +3,787 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Germano Saúde Animal | Prism Gallery</title>
-    
-    <link rel="dns-prefetch" href="//maps.googleapis.com">
-    <link rel="dns-prefetch" href="//maps.gstatic.com">
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    
+    <!-- Favicon / Ícone do Site -->
+    <link rel="icon" type="image/webp" href="assets/img/favicon.webp">
+    <link rel="apple-touch-icon" href="assets/img/favicon.webp">
+
+    <!-- Canonical + Preload prioritário do primeiro frame (LCP) -->
+    <link rel="canonical" href="https://www.araguaiamaquinas.com.br/">
+    <link rel="preload" as="image" href="./0083.webp" type="image/webp" fetchpriority="high">
+
+    <!-- SEO Otimizado para Anápolis -->
+    <title>Araguaia Máquinas em Anápolis | Ferramentas, Máquinas e Construção</title>
+    <meta name="description" content="Compre lixadeira telescópica SGT, martelete 10J SGT-5700 Pro, serra mármore SGT-5200, lavadora de alta pressão STIHL RE 90 Plus, motosserra STIHL MS 172, roçadeira STIHL FS 120, soprador STIHL BG 50 e Kress em Anápolis - GO. Atendimento especializado na Araguaia Máquinas.">
+
+    <!-- Google Tag Manager (carregamento adiado para zerar TBT sem perder eventos no dataLayer) -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        (function(w, d, id) {
+            var loaded = false;
+            function loadGTM() {
+                if (loaded) return;
+                loaded = true;
+                w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+                var f = d.getElementsByTagName('script')[0];
+                var j = d.createElement('script');
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + id;
+                f.parentNode.insertBefore(j, f);
+                ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function(evt) {
+                    w.removeEventListener(evt, loadGTM);
+                });
+            }
+            ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function(evt) {
+                w.addEventListener(evt, loadGTM, { once: true, passive: true });
+            });
+            w.setTimeout(loadGTM, 3500);
+        })(window, document, 'GTM-5K8SDS4P');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Dados Estruturados LocalBusiness para SEO do Google Maps -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HardwareStore",
+      "name": "Araguaia Máquinas",
+      "image": "https://www.araguaiamaquinas.com.br/Araguai.webp",
+      "@id": "https://www.araguaiamaquinas.com.br",
+      "url": "https://www.araguaiamaquinas.com.br",
+      "telephone": "+556230997275",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Tiradentes, 30",
+        "addressLocality": "Anápolis",
+        "addressRegion": "GO",
+        "postalCode": "75043-045",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -16.3267,
+        "longitude": -48.9534
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "07:30",
+        "closes": "18:00"
+      }
+    }
+    </script>
+
+    <!-- Meta Tags Open Graph para WhatsApp / Redes Sociais -->
+    <meta property="og:title" content="Araguaia Máquinas em Anápolis | Máquinas e Ferramentas">
+    <meta property="og:description" content="Loja especializada na venda de máquinas, ferramentas, ferragens, hidráulicos e materiais elétricos em Anápolis - GO. Segurança e agilidade na entrega.">
+    <meta property="og:url" content="https://www.araguaiamaquinas.com.br/">
+    <meta property="og:image" content="https://www.araguaiamaquinas.com.br/Araguai.webp">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Araguaia Máquinas">
+
+    <!-- Fontes do Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- GSAP 3.13.0 + ScrollTrigger + Lenis + Three.js (WebGL Prism) -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap">
+    </noscript>
 
-    <style type="text/tailwindcss">
-        @theme {
-            --color-petroleum: #0F3A47;
-            --color-emerald: #047857;
-            --color-emerald-light: #10B981;
-            --color-milky: #F5F7F5;
-            --font-sans: 'Inter', sans-serif;
+    <style>
+        :root {
+            --brand-yellow: #FFB800;
+            --brand-yellow-deep: #CC9200;
+            --brand-dark: #111111;
+            --tt-cyan: #25F4EE;
+            --tt-pink: #FE2C55;
+            --fill-width: 0%;
         }
 
-        html.lenis, html.lenis body {
-            height: auto;
-        }
+        .antialiased { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .py-32-px-8 { padding: 128px 8%; }
 
-        .lenis.lenis-smooth {
-            scroll-behavior: auto !important;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .lenis.lenis-stopped {
-            overflow: hidden;
+        html {
+            overscroll-behavior-y: none;
+            background-color: #111111;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: var(--font-sans);
-            background-color: var(--color-milky);
-            color: var(--color-petroleum);
+            background-color: #111111;
+            color: #F8F8F8;
+            font-family: 'DM Sans', sans-serif;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: none;
+            overflow-x: clip;
+            max-width: 100vw;
+        }
+        body.intro-locked {
             overflow: hidden;
+            height: 100vh;
         }
 
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        }
-
-        .reveal-mask {
-            overflow: clip;
-        }
-
-        .hero-text-item,
-        .parallax-card {
-            will-change: transform, opacity;
-        }
-
-        /* Palco do Prism Gallery */
-        #prism-viewport {
-            cursor: grab;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        #prism-viewport.is-dragging {
-            cursor: grabbing;
-        }
-
-        /* Fallback de facetas prismáticas em CSS caso aberto via file:// sem servidor local */
-        #prism-css-fallback {
-            display: none;
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            background: repeating-linear-gradient(
-                98deg,
-                rgba(255, 255, 255, 0.08) 0px,
-                rgba(255, 255, 255, 0.0) 14%,
-                rgba(16, 185, 129, 0.06) 14.2%,
-                rgba(15, 58, 71, 0.10) 14.5%
-            );
-            backdrop-filter: contrast(1.06) saturate(1.12);
-            -webkit-backdrop-filter: contrast(1.06) saturate(1.12);
-        }
-
-        #prism-css-fallback.active {
-            display: block;
-        }
-
-        /* Controles de Galeria Prism (estilo react-gallery) */
-        .prism-hud {
-            position: absolute;
-            left: 50%;
-            bottom: 2.25rem;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 999px;
-            background: rgba(15, 58, 71, 0.48);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
-        }
-
-        .prism-nav-btn {
-            width: 2.25rem;
-            height: 2.25rem;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.85);
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            cursor: pointer;
-            transition: background-color 0.25s ease, transform 0.2s ease, color 0.25s ease;
-        }
-
-        .prism-nav-btn:hover {
-            background: #10B981;
-            color: #ffffff;
-            border-color: #10B981;
-        }
-
-        .prism-nav-btn:active {
-            transform: scale(0.92);
-        }
-
-        .prism-dot {
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.35);
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
-        }
-
-        .prism-dot.is-active {
-            width: 2rem;
-            background: #10B981;
-        }
-
-        /* Reflexo prismático sutil nos cards de produto */
-        .prism-card-frame::after {
+        body::before {
             content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0;
-            background: linear-gradient(
-                115deg,
-                transparent 20%,
-                rgba(255, 110, 110, 0.12) 42%,
-                rgba(16, 185, 129, 0.18) 50%,
-                rgba(96, 165, 250, 0.14) 58%,
-                transparent 80%
-            );
-            transform: translateX(-60%);
-            transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
-        }
-
-        .parallax-card:hover .prism-card-frame::after {
-            opacity: 1;
-            transform: translateX(60%);
-        }
-
-        /* Container do Tweakpane (canto inferior esquerdo) */
-        #tweakpane-dock {
             position: fixed;
-            left: 1.5rem;
-            bottom: 1.5rem;
-            z-index: 60;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        #tweakpane-mount {
-            display: none;
-            width: 260px;
-        }
-
-        #tweakpane-mount.open {
-            display: block;
-        }
-
-        .prism-toggle-pill {
-            appearance: none;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 999px;
-            padding: 0.6rem 1.05rem;
-            background: rgba(15, 58, 71, 0.78);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            color: #ffffff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.25s ease, transform 0.2s ease;
-        }
-
-        .prism-toggle-pill:hover {
-            background: #047857;
-        }
-
-        #whatsapp-chat {
-            display: none;
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-            transition: opacity 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                        transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #whatsapp-chat.active {
-            display: flex;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        img, iframe { content-visibility: auto; }
-
-        canvas {
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.04; z-index: 9998; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
             transform: translateZ(0);
-            backface-visibility: hidden;
-            will-change: transform;
-        }
-    </style>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body class="antialiased selection:bg-emerald selection:text-white">
-
-    <!-- LOADER -->
-    <div id="loader" style="position:fixed;inset:0;background:linear-gradient(135deg,#0F3A47,#047857);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-        <div class="mb-6 animate-pulse">
-            <img src="logo_germano-removebg-preview.png" alt="Germano" class="w-40 h-40 object-contain">
-        </div>
-        <div style="width:16rem;height:2px;background:rgba(255,255,255,0.2);border-radius:99px;overflow:hidden;">
-            <div id="progress-bar" style="height:100%;background:white;width:0%;"></div>
-        </div>
-    </div>
-
-    <!-- DOCK TWEAKPANE (controles ópticos do Prism Gallery) -->
-    <div id="tweakpane-dock">
-        <div id="tweakpane-mount"></div>
-        <button id="btn-tweakpane" type="button" class="prism-toggle-pill">Ajustar Prisma</button>
-    </div>
-
-    <!-- WHATSAPP WIDGET -->
-    <div class="fixed bottom-8 right-8 z-[100] flex flex-col items-end">
-        <div id="whatsapp-chat" class="mb-6 w-[340px] max-w-[calc(100vw-3rem)] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(15,58,71,0.2)] border border-petroleum/5 overflow-hidden flex-col">
-            <div class="bg-petroleum p-6 flex items-center gap-4 shrink-0 text-left">
-                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-light shadow-lg bg-white flex items-center justify-center">
-                    <img src="assets/camila.jpg.jpg" alt="Camila" class="w-full h-full object-cover block">
-                    <span class="absolute bottom-1 right-1 w-3 h-3 bg-emerald-light border-2 border-petroleum rounded-full animate-pulse"></span>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold text-base leading-tight">Camila</h4>
-                    <p class="text-emerald-light text-xs font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-emerald-light rounded-full"></span> Online agora
-                    </p>
-                </div>
-                <button onclick="toggleChat()" class="ml-auto text-white/40 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div id="chat-history" class="p-6 bg-milky/30 h-[280px] overflow-y-auto flex flex-col gap-4 text-left" data-lenis-prevent>
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum leading-relaxed self-start max-w-[85%]">
-                    Olá! Me chamo <strong>Camila</strong>, sou consultora técnica da Germano. <br><br> Como posso auxiliar no ganho de peso e saúde do seu rebanho hoje?
-                </div>
-            </div>
-            <div class="p-4 bg-white border-t border-petroleum/5">
-                <div class="flex gap-2 items-center bg-milky rounded-2xl px-4 py-2 border border-petroleum/5 focus-within:border-emerald">
-                    <input type="text" id="user-input" placeholder="Escreva sua dúvida..." class="flex-1 bg-transparent border-none text-sm text-petroleum outline-none py-2" onkeypress="if(event.key === 'Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="bg-emerald text-white p-2 rounded-xl active:scale-90 cursor-pointer">
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <button onclick="toggleChat()" class="group relative cursor-pointer flex items-center justify-center">
-            <span class="absolute w-16 h-16 bg-emerald/30 rounded-full animate-ping"></span>
-            <div class="relative bg-emerald w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110">
-                <img src="3d-round-with-whatsapp-logo.png" alt="WhatsApp" class="w-10 h-10 object-contain">
-            </div>
-        </button>
-    </div>
-
-    <!-- NAVBAR -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-500 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 py-0 flex justify-between items-center text-left">
-            <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="block">
-                <img src="logo_germano-removebg-preview.png" alt="Logo" class="w-36 h-36 object-contain scale-160 -translate-x-2 transform-gpu origin-left">
-            </a>
-            <div class="hidden md:flex gap-10 items-center text-sm font-semibold tracking-wide text-petroleum">
-                <a href="#scroll-hero" data-scroll-to="#scroll-hero" class="hover:text-emerald uppercase transition-colors">Inovação</a>
-                <a href="#biotech-section" data-scroll-to="#biotech-section" class="hover:text-emerald uppercase transition-colors">Produtos</a>
-                <a href="#contato" data-scroll-to="#contato" class="hover:text-emerald uppercase transition-colors">Contato</a>
-                <button onclick="toggleChat()" class="bg-petroleum text-white px-8 py-3 rounded-full hover:bg-emerald font-bold uppercase text-xs tracking-widest cursor-pointer transition-all">
-                    Falar com Especialista
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- HERO COM EFEITO PRISM GALLERY SOBRE OS 78 FRAMES -->
-    <section id="scroll-hero" style="height:420vh;position:relative;background-color:#050a0c;">
-        <div id="prism-viewport" style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;">
-            <!-- Canvas WebGL do Prism Gallery (e canvas 2D oculto para fallback automático) -->
-            <canvas id="prism-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;"></canvas>
-            <canvas id="hero-fallback-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:none;z-index:0;"></canvas>
-            <div id="prism-css-fallback" aria-hidden="true"></div>
-
-            <!-- Vinheta cinematográfica -->
-            <div style="position:absolute;inset:0;background:radial-gradient(circle at center, rgba(5,14,18,0.12) 0%, rgba(5,14,18,0.52) 100%);pointer-events:none;z-index:2;"></div>
-
-            <!-- Textos sincronizados com os slides/frames -->
-            <div style="position:absolute;inset:0;z-index:3;display:flex;justify-content:center;align-items:center;pointer-events:none;">
-                <div class="relative w-full max-w-5xl h-full flex items-center justify-center px-6">
-                    <h1 id="text-01" class="hero-text-item absolute text-center w-full px-6 text-5xl md:text-8xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
-                        Soluções ecológicas <br/> <span class="text-emerald-light">para seu rebanho</span>
-                    </h1>
-
-                    <p id="text-02" class="hero-text-item absolute text-center w-full px-6 text-white/95 text-2xl md:text-4xl font-bold tracking-tight max-w-4xl mx-auto drop-shadow-md opacity-0">
-                        Um único animal afetado pode reduzir drasticamente sua produção.
-                    </p>
-
-                    <h2 id="text-03" class="hero-text-item absolute text-center w-full px-6 text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight opacity-0 uppercase drop-shadow-2xl">
-                        Quem trata certo, <br/> <span class="text-emerald-light">lucra mais.</span> <br/>
-                        <span class="text-xl font-light tracking-widest block mt-4 text-white/75">Simples assim.</span>
-                    </h2>
-                </div>
-            </div>
-
-            <!-- Controles da Galeria Prism (arraste lateral, setas e dots) -->
-            <div class="prism-hud" aria-label="Navegação da galeria prismática">
-                <button id="prism-prev" type="button" class="prism-nav-btn" aria-label="Slide anterior">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                </button>
-                <div class="flex items-center gap-2 px-1">
-                    <button type="button" class="prism-dot is-active" data-slide="0" aria-label="Slide 1"></button>
-                    <button type="button" class="prism-dot" data-slide="1" aria-label="Slide 2"></button>
-                    <button type="button" class="prism-dot" data-slide="2" aria-label="Slide 3"></button>
-                </div>
-                <span id="prism-counter" class="text-[11px] font-bold tracking-widest text-white/80 tabular-nums px-1">01 / 03</span>
-                <button id="prism-next" type="button" class="prism-nav-btn" aria-label="Próximo slide">
-                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- BIOTECH PRODUTOS -->
-    <section id="biotech-section" class="relative z-10 bg-milky py-40 overflow-hidden text-left">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-petroleum/10 pb-12">
-                <div>
-                    <div class="reveal-mask">
-                        <span class="reveal-text text-emerald font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Excelência Molecular</span>
-                    </div>
-                    <div class="reveal-mask">
-                        <h2 class="reveal-text text-5xl md:text-7xl font-black text-petroleum tracking-tighter uppercase leading-tight">
-                            BioTech <br/> Germano
-                        </h2>
-                    </div>
-                </div>
-                <div class="reveal-mask hidden md:block">
-                    <p class="reveal-text text-petroleum/60 max-w-sm text-right italic">
-                        Tecnologia de ponta desenvolvida para maximizar o rendimento do seu rebanho.
-                    </p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
-                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
-                        <img src="produtos/produto%20calmix%20cromovita1.png" loading="lazy" alt="Calmix Cromovita" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Calmix Cromovita</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Equilíbrio nutricional e redução de estresse sob manejo intensivo.</p>
-                </div>
-
-                <div class="parallax-card group cursor-pointer md:mt-24 text-left" data-parallax-speed="-35">
-                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
-                        <img src="produtos/produto-fort-vit.png" loading="lazy" alt="Fort Vit + 3" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Fort Vit + 3</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Complexo vitamínico de alta biodisponibilidade para imunidade superior.</p>
-                </div>
-
-                <div class="parallax-card group cursor-pointer text-left" data-parallax-speed="25">
-                    <div class="prism-card-frame relative overflow-hidden rounded-[40px] aspect-[4/5] bg-white border border-petroleum/5 mb-8 shadow-sm">
-                        <img src="produtos/produto%20germano%20nucleo%20acelerado%202.png" loading="lazy" alt="Núcleo Acelerado" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-                    </div>
-                    <h3 class="text-3xl font-bold text-petroleum mb-4 group-hover:text-emerald transition-colors uppercase tracking-tight">Núcleo Acelerado</h3>
-                    <p class="text-petroleum/60 leading-relaxed">Aceleração metabólica para ganho de peso em tempo recorde.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTATO -->
-    <section id="contato" class="relative z-10 bg-white py-32 border-t border-petroleum/5 overflow-hidden text-left">
-        <div class="max-w-7xl mx-auto px-6 text-left">
-            <div class="flex flex-col lg:flex-row gap-16 items-stretch text-left">
-                <div class="w-full lg:w-1/2 flex flex-col justify-center text-left contact-reveal">
-                    <h2 class="text-4xl md:text-6xl font-black text-petroleum tracking-tighter uppercase leading-tight mb-4">
-                        Envie-nos uma <span class="text-emerald">Mensagem</span>
-                    </h2>
-                    <div class="w-20 h-1.5 bg-emerald mb-8 rounded-full"></div>
-                    <p class="text-petroleum/70 text-lg mb-12 font-medium">Fale com a gente e receba atendimento rápido e personalizado.</p>
-                    <form class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <input type="text" placeholder="Nome" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
-                            <input type="tel" placeholder="Telefone" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
-                        </div>
-                        <input type="email" placeholder="E-mail" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium text-left">
-                        <textarea placeholder="Mensagem" rows="5" class="w-full bg-milky border border-petroleum/5 rounded-2xl px-6 py-4 outline-none focus:border-emerald transition-all text-petroleum font-medium resize-none text-left"></textarea>
-                        <button type="button" class="w-full bg-petroleum text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:bg-emerald shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer">
-                            Solicitar Atendimento Especializado
-                        </button>
-                    </form>
-                </div>
-                <div class="w-full lg:w-1/2 flex flex-col text-left contact-reveal">
-                    <div id="map-container" class="flex-1 bg-milky rounded-[40px] overflow-hidden border border-petroleum/5 shadow-2xl relative group min-h-[450px]">
-                        <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.9632313627915!2d-48.9567406!3d-16.331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea48316c0211f%3A0xc34b726487e4125a!2sAv.%20Sen.%20Jos%C3%A9%20Louren%C3%A7o%20Dias%2C%2063%20-%20St.%20Central%2C%20An%C3%A1polis%20-%20GO%2C%2075020-010!5e0!3m2!1spt-BR!2sbr!4v1713000000000!5m2!1spt-BR!2sbr0" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></iframe>
-                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[32px] border border-petroleum/5 shadow-lg text-left text-petroleum">
-                            <h4 class="font-bold uppercase tracking-wider text-xs mb-3">Germano Saúde Animal</h4>
-                            <p class="text-[11px] md:text-xs font-medium leading-relaxed">
-                                Av. Senador José Lourenço Dias, 63<br>
-                                Anápolis - GO<br>
-                                <span class="text-emerald font-bold mt-2 inline-block">(62) 99302-4012</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-milky py-20 border-t border-petroleum/5 text-center">
-        <div class="text-petroleum/30 text-xs tracking-widest uppercase font-bold text-center">© 2026 Germano Saúde Animal</div>
-    </footer>
-
-    <script>
-        /* Detecção Safari / iPhone */
-        (function detectPlatform() {
-            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-            const isIphone = /iPhone/i.test(navigator.userAgent);
-            if (isSafari) document.documentElement.classList.add("is-safari");
-            if (isIphone) document.documentElement.classList.add("is-iphone");
-        })();
-
-        /* WhatsApp Chat */
-        function toggleChat() {
-            const chat = document.getElementById("whatsapp-chat");
-            chat.classList.toggle("active");
-            if (chat.classList.contains("active")) initLucide();
-        }
-
-        function sendMessage() {
-            const input = document.getElementById("user-input");
-            const history = document.getElementById("chat-history");
-            if (!input.value.trim()) return;
-
-            const userText = input.value.trim();
-            const userDiv = document.createElement("div");
-            userDiv.className = "bg-petroleum text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm self-end max-w-[85%]";
-            userDiv.innerText = userText;
-            history.appendChild(userDiv);
-            input.value = "";
-            history.scrollTop = history.scrollHeight;
-
-            setTimeout(() => {
-                const responseDiv = document.createElement("div");
-                responseDiv.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-petroleum/5 text-sm text-petroleum self-start max-w-[85%]";
-                responseDiv.innerHTML = `<strong>Camila:</strong> Entendido! Vou te conectar agora com nosso especialista no WhatsApp.`;
-                history.appendChild(responseDiv);
-                history.scrollTop = history.scrollHeight;
-                setTimeout(() => {
-                    window.open(`https://wa.me/5562993024012?text=${encodeURIComponent(userText)}`, "_blank");
-                }, 1500);
-            }, 1000);
-        }
-
-        function initLucide() {
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function debounce(fn, wait = 250) {
-            let timer;
-            return function (...args) {
-                clearTimeout(timer);
-                timer = setTimeout(() => fn.apply(this, args), wait);
-            };
         }
 
         /* =========================================================
-           PRISM GALLERY ENGINE (WebGL GLSL + Dispersão Cromática)
-           Aplica refração de prisma facetado, dispersão espectral
-           em 6 bandas e brilho de vidro sobre os 78 frames do site
-        ========================================================= */
-        function createPrismEngine(images) {
-            const glCanvas = document.getElementById("prism-canvas");
-            const fallbackCanvas = document.getElementById("hero-fallback-canvas");
-            const fallbackCtx = fallbackCanvas.getContext("2d", { alpha: false });
-            const cssFallback = document.getElementById("prism-css-fallback");
-
-            // Parâmetros ópticos (editáveis via Tweakpane)
-            const params = {
-                facets: 8,          // número de facetas de vidro do prisma
-                refraction: 0.14,   // força da refração óptica
-                dispersion: 0.48,   // intensidade da aberração cromática RGB
-                curvature: 0.55,    // mistura entre prisma reto (0) e lente cilíndrica (1)
-                angle: 0.12,        // inclinação das facetas (radianos)
-                specular: 0.36,     // reflexo de luz nas bordas das facetas
-                motionBoost: 1.35   // ganho dinâmico durante scroll/arraste
-            };
-
-            let useFallback = false;
-            let renderer = null;
-            let scene = null;
-            let camera = null;
-            let material = null;
-            let frameTexture = null;
-            let lastFrameIndex = -1;
-
-            const state = {
-                progress: 0,
-                targetVelocity: 0,
-                velocity: 0,
-                targetDrag: 0,
-                drag: 0,
-                targetMouseX: 0.5,
-                targetMouseY: 0.5,
-                mouseX: 0.5,
-                mouseY: 0.5
-            };
-
-            const VS_PRISM = `
-            attribute vec3 position;
-            varying vec2 vUv;
-            precision highp float;
-            void main() {
-                vUv = position.xy * 0.5 + 0.5;
-                gl_Position = vec4(position, 1.0);
-            }`;
-
-            const FS_PRISM = `
-            precision highp float;
-            uniform sampler2D uTexture;
-            uniform vec2 uResolution;
-            uniform vec2 uImageSize;
-            uniform float uTime;
-            uniform float uVelocity;
-            uniform float uDrag;
-            uniform vec2 uMouse;
-            uniform float uFacets;
-            uniform float uRefraction;
-            uniform float uDispersion;
-            uniform float uCurvature;
-            uniform float uAngle;
-            uniform float uSpecular;
-            uniform float uMotionBoost;
-            varying vec2 vUv;
-
-            // Mapeamento exato object-fit: cover dentro do shader
-            vec2 getCoverUv(vec2 uv, vec2 res, vec2 imgSize) {
-                float screenAspect = res.x / max(res.y, 1.0);
-                float imgAspect = imgSize.x / max(imgSize.y, 1.0);
-                vec2 scale = vec2(1.0);
-                if (screenAspect > imgAspect) {
-                    scale.y = imgAspect / screenAspect;
-                } else {
-                    scale.x = screenAspect / imgAspect;
-                }
-                return (uv - 0.5) * scale + 0.5;
-            }
-
-            // Pesos espectrais contínuos (6 bandas: Vermelho -> Laranja -> Verde -> Ciano -> Azul)
-            vec3 spectralWeight(float t) {
-                vec3 c = vec3(
-                    smoothstep(0.68, 0.0, t),
-                    sin(t * 3.14159265),
-                    smoothstep(0.32, 1.0, t)
-                );
-                return max(c, vec3(0.0));
-            }
-
-            void main() {
-                vec2 centered = vUv - 0.5;
-                float aspect = uResolution.x / max(uResolution.y, 1.0);
-                vec2 p = vec2(centered.x * aspect, centered.y);
-
-                // Rotação sutil das facetas do prisma
-                float ca = cos(uAngle);
-                float sa = sin(uAngle);
-                vec2 rp = mat2(ca, -sa, sa, ca) * p;
-
-                // Deslocamento do prisma pelo arraste lateral e movimento do mouse
-                float mouseShift = (uMouse.x - 0.5) * 0.35;
-                float cellCoord = (rp.x / max(aspect, 0.75) + 0.5) * uFacets + uDrag * 2.4 + mouseShift;
-                float cellF = fract(cellCoord) * 2.0 - 1.0; // -1..1 em cada faceta
-                float cellId = floor(cellCoord);
-
-                // Perfil da normal do vidro: plano chanfrado vs lente cilíndrica
-                float flatSlope = cellF;
-                float curvedSlope = sin(cellF * 1.5707963);
-                float prismNormalX = mix(flatSlope, curvedSlope, uCurvature);
-
-                // Ondulação vertical sutil e influência do ponteiro
-                float distToMouse = length((vUv - uMouse) * vec2(aspect, 1.0));
-                float mouseLens = exp(-distToMouse * 3.2) * 0.45;
-                float prismNormalY = sin(rp.y * 4.5 + cellId * 0.8 + uTime * 0.35) * 0.14 + (vUv.y - uMouse.y) * mouseLens;
-
-                // Intensidade dinâmica: repouso elegante + explosão prismática no scroll/drag
-                float motion = abs(uVelocity) * uMotionBoost + abs(uDrag) * 0.55;
-                float refractStrength = uRefraction * (0.28 + motion + mouseLens * 0.5);
-                float dispStrength = uDispersion * (0.18 + motion * 1.65 + mouseLens * 0.45);
-
-                // Direção do vetor de refração no espaço da tela
-                vec2 refractDir = mat2(ca, sa, -sa, ca) * vec2(prismNormalX, prismNormalY);
-                vec2 baseUv = getCoverUv(vUv, uResolution, uImageSize);
-
-                // Amostragem espectral em 6 bandas para dispersão prismática autêntica
-                vec3 accumColor = vec3(0.0);
-                vec3 weightSum = vec3(0.0);
-
-                for (int i = 0; i < 6; i++) {
-                    float t = float(i) / 5.0; // 0 = R, 0.5 = G, 1 = B
-                    float wavelengthShift = (t - 0.5) * 2.0; // -1..1
-                    float iorOffset = 1.0 + wavelengthShift * dispStrength;
-
-                    vec2 sampleUv = baseUv - refractDir * refractStrength * 0.16 * iorOffset;
-
-                    // Espelhamento suave nas bordas para nunca vazar faixa preta
-                    sampleUv = abs(fract(sampleUv * 0.5 + 0.5) * 2.0 - 1.0);
-
-                    vec3 tex = texture2D(uTexture, sampleUv).rgb;
-                    vec3 w = spectralWeight(t);
-                    accumColor += tex * w;
-                    weightSum += w;
-                }
-
-                vec3 color = accumColor / max(weightSum, vec3(0.0001));
-
-                // Brilho especular Fresnel nas arestas das facetas de vidro
-                float ridge = pow(abs(cellF), 7.0);
-                float glint = pow(max(0.0, 1.0 - abs(cellF - (uMouse.x - 0.5) * 1.2)), 10.0);
-                float edgeLight = (ridge * 0.65 + glint * 0.55) * uSpecular * (0.45 + motion * 0.9);
-
-                // Toque iridescente nas arestas refratadas
-                vec3 prismTint = vec3(
-                    0.92 + 0.08 * sin(cellId + 0.0),
-                    0.98 + 0.02 * sin(cellId + 2.1),
-                    0.95 + 0.05 * sin(cellId + 4.2)
-                );
-                color += prismTint * edgeLight * 0.42;
-
-                // Pequena compressão de contraste cristalino nas juntas das facetas
-                color *= 1.0 - ridge * 0.08;
-
-                gl_FragColor = vec4(color, 1.0);
-            }`;
-
-            function activateFallback() {
-                if (useFallback) return;
-                useFallback = true;
-                glCanvas.style.display = "none";
-                fallbackCanvas.style.display = "block";
-                cssFallback.classList.add("active");
-                resizeFallback();
-                drawFallback(Math.max(0, lastFrameIndex));
-            }
-
-            function resizeFallback() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-                fallbackCanvas.width = Math.floor(window.innerWidth * dpr);
-                fallbackCanvas.height = Math.floor(window.innerHeight * dpr);
-                fallbackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            }
-
-            function drawFallback(index) {
-                const img = images[index];
-                if (!img || !img.complete || img.naturalWidth === 0) return;
-                const viewW = window.innerWidth;
-                const viewH = window.innerHeight;
-                const ratio = Math.max(viewW / img.naturalWidth, viewH / img.naturalHeight);
-                const drawW = img.naturalWidth * ratio;
-                const drawH = img.naturalHeight * ratio;
-                const x = (viewW - drawW) / 2;
-                const y = (viewH - drawH) / 2;
-                fallbackCtx.clearRect(0, 0, viewW, viewH);
-                fallbackCtx.drawImage(img, x, y, drawW, drawH);
-            }
-
-            function initWebGL() {
-                if (typeof THREE === "undefined") {
-                    activateFallback();
-                    return;
-                }
-                try {
-                    renderer = new THREE.WebGLRenderer({
-                        canvas: glCanvas,
-                        antialias: true,
-                        alpha: false,
-                        powerPreference: "high-performance"
-                    });
-                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-
-                    scene = new THREE.Scene();
-                    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-                    // Placeholder 1x1 até o primeiro frame subir
-                    const dummy = new Uint8Array([10, 26, 30, 255]);
-                    frameTexture = new THREE.DataTexture(dummy, 1, 1, THREE.RGBAFormat);
-                    frameTexture.needsUpdate = true;
-
-                    material = new THREE.RawShaderMaterial({
-                        vertexShader: VS_PRISM,
-                        fragmentShader: FS_PRISM,
-                        depthTest: false,
-                        depthWrite: false,
-                        uniforms: {
-                            uTexture:     { value: frameTexture },
-                            uResolution:  { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-                            uImageSize:   { value: new THREE.Vector2(1920, 1080) },
-                            uTime:        { value: 0 },
-                            uVelocity:    { value: 0 },
-                            uDrag:        { value: 0 },
-                            uMouse:       { value: new THREE.Vector2(0.5, 0.5) },
-                            uFacets:      { value: params.facets },
-                            uRefraction:  { value: params.refraction },
-                            uDispersion:  { value: params.dispersion },
-                            uCurvature:   { value: params.curvature },
-                            uAngle:       { value: params.angle },
-                            uSpecular:    { value: params.specular },
-                            uMotionBoost: { value: params.motionBoost }
-                        }
-                    });
-
-                    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-                } catch (err) {
-                    activateFallback();
-                }
-            }
-
-            let imageTexture = null;
-            function setFrame(index) {
-                const safeIdx = Math.max(0, Math.min(images.length - 1, index));
-                if (safeIdx === lastFrameIndex) return;
-                const img = images[safeIdx];
-                if (!img || !img.complete || img.naturalWidth === 0) return;
-
-                lastFrameIndex = safeIdx;
-
-                if (useFallback) {
-                    drawFallback(safeIdx);
-                    return;
-                }
-
-                try {
-                    if (!imageTexture) {
-                        imageTexture = new THREE.Texture(img);
-                        imageTexture.minFilter = THREE.LinearFilter;
-                        imageTexture.magFilter = THREE.LinearFilter;
-                        imageTexture.generateMipmaps = false;
-                        imageTexture.wrapS = THREE.ClampToEdgeWrapping;
-                        imageTexture.wrapT = THREE.ClampToEdgeWrapping;
-                        material.uniforms.uTexture.value = imageTexture;
-                    } else {
-                        imageTexture.image = img;
-                    }
-                    imageTexture.needsUpdate = true;
-                    material.uniforms.uImageSize.value.set(img.naturalWidth, img.naturalHeight);
-                } catch (err) {
-                    activateFallback();
-                }
-            }
-
-            function syncUniforms() {
-                if (useFallback || !material) return;
-                material.uniforms.uFacets.value      = params.facets;
-                material.uniforms.uRefraction.value  = params.refraction;
-                material.uniforms.uDispersion.value  = params.dispersion;
-                material.uniforms.uCurvature.value   = params.curvature;
-                material.uniforms.uAngle.value       = params.angle;
-                material.uniforms.uSpecular.value    = params.specular;
-                material.uniforms.uMotionBoost.value = params.motionBoost;
-            }
-
-            function resize() {
-                if (useFallback) {
-                    resizeFallback();
-                    drawFallback(Math.max(0, lastFrameIndex));
-                    return;
-                }
-                if (!renderer || !material) return;
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
-            }
-
-            // Loop contínuo do shader (suaviza mouse, arraste e velocidade do prisma)
-            const startTime = performance.now();
-            function tick() {
-                requestAnimationFrame(tick);
-                if (document.hidden || useFallback || !renderer || !material) return;
-
-                state.velocity += (state.targetVelocity - state.velocity) * 0.1;
-                state.targetVelocity *= 0.90;
-
-                state.drag += (state.targetDrag - state.drag) * 0.12;
-                state.mouseX += (state.targetMouseX - state.mouseX) * 0.08;
-                state.mouseY += (state.targetMouseY - state.mouseY) * 0.08;
-
-                material.uniforms.uTime.value = (performance.now() - startTime) * 0.001;
-                material.uniforms.uVelocity.value = state.velocity;
-                material.uniforms.uDrag.value = state.drag;
-                material.uniforms.uMouse.value.set(state.mouseX, state.mouseY);
-
-                try {
-                    renderer.render(scene, camera);
-                } catch (err) {
-                    // Captura SecurityError se a imagem local bloquear texImage2D em file://
-                    activateFallback();
-                }
-            }
-
-            initWebGL();
-            tick();
-
-            return {
-                params,
-                state,
-                setFrame,
-                syncUniforms,
-                resize,
-                boost(amount) {
-                    state.targetVelocity = Math.max(-2.5, Math.min(2.5, state.targetVelocity + amount));
-                }
-            };
+           INTRO CINEMATOGRÁFICA (FAÍSCAS + HUD + CORTE A LASER + CORTINA)
+           ========================================================= */
+        #intro-stage {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            overflow: hidden;
+            pointer-events: all;
+            contain: layout style paint;
+        }
+        #intro-stage.phase-open {
+            pointer-events: none;
         }
 
-        /* Inicialização opcional do Tweakpane 4.0.5 (sob demanda no clique do botão) */
-        async function setupTweakpane(prism) {
-            const mount = document.getElementById("tweakpane-mount");
-            const btn = document.getElementById("btn-tweakpane");
-            let initialized = false;
-
-            btn.addEventListener("click", async () => {
-                mount.classList.toggle("open");
-                if (initialized) return;
-                initialized = true;
-
-                try {
-                    const { Pane } = await import("https://esm.sh/tweakpane@4.0.5");
-                    const pane = new Pane({ container: mount, title: "Prism Gallery" });
-                    pane.addBinding(prism.params, "facets",      { min: 2, max: 20, step: 1, label: "Facetas" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "refraction",  { min: 0, max: 0.45, step: 0.01, label: "Refração" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "dispersion",  { min: 0, max: 1.2, step: 0.02, label: "Dispersão" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "curvature",   { min: 0, max: 1.0, step: 0.02, label: "Curvatura" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "angle",       { min: -0.6, max: 0.6, step: 0.01, label: "Ângulo" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "specular",    { min: 0, max: 1.0, step: 0.02, label: "Brilho" }).on("change", prism.syncUniforms);
-                    pane.addBinding(prism.params, "motionBoost", { min: 0, max: 3.0, step: 0.05, label: "Dinâmica" }).on("change", prism.syncUniforms);
-                } catch (e) {
-                    mount.innerHTML = `<div class="bg-petroleum/90 text-white text-xs p-3 rounded-xl">Tweakpane indisponível offline.</div>`;
-                }
-            });
+        .intro-curtain {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50.5%;
+            background: #0B0B0B;
+            z-index: 1;
+            will-change: transform;
+            transition: transform 0.95s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        .intro-curtain-top {
+            top: 0;
+            border-bottom: 1px solid rgba(255, 184, 0, 0.14);
+        }
+        .intro-curtain-bottom {
+            bottom: 0;
+            border-top: 1px solid rgba(255, 184, 0, 0.14);
+        }
+        #intro-stage.phase-open .intro-curtain-top {
+            transform: translate3d(0, -102%, 0);
+        }
+        #intro-stage.phase-open .intro-curtain-bottom {
+            transform: translate3d(0, 102%, 0);
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            initLucide();
-            gsap.registerPlugin(ScrollTrigger);
+        .intro-grid {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background-image:
+                linear-gradient(rgba(255, 184, 0, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 184, 0, 0.035) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,0.9) 0%, transparent 78%);
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,0.9) 0%, transparent 78%);
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
 
-            /* 1. Lenis Smooth Scroll sincronizado com GSAP Ticker */
-            const lenis = new Lenis({
-                lerp: 0.085,
-                smoothWheel: true,
-                wheelMultiplier: 0.9,
-                touchMultiplier: 1.5
-            });
-            window.lenis = lenis;
-            lenis.stop();
+        .intro-ambient {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: radial-gradient(circle at 50% 52%, rgba(255, 184, 0, 0.12) 0%, rgba(255, 184, 0, 0.02) 34%, transparent 65%);
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
 
-            lenis.on("scroll", ScrollTrigger.update);
-            gsap.ticker.add((time) => {
-                lenis.raf(time * 1000);
-            });
-            gsap.ticker.lagSmoothing(0);
+        .intro-scanline {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 2px;
+            z-index: 3;
+            background: linear-gradient(90deg, transparent, rgba(255, 184, 0, 0.55), transparent);
+            box-shadow: 0 0 22px rgba(255, 184, 0, 0.45);
+            will-change: transform, opacity;
+            animation: intro-scan 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        @keyframes intro-scan {
+            0% { transform: translate3d(0, -5vh, 0); opacity: 0; }
+            15% { opacity: 0.7; }
+            85% { opacity: 0.7; }
+            100% { transform: translate3d(0, 105vh, 0); opacity: 0; }
+        }
 
-            document.querySelectorAll("[data-scroll-to]").forEach((link) => {
-                link.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const target = link.getAttribute("data-scroll-to");
-                    if (target) lenis.scrollTo(target, { duration: 1.4 });
-                });
-            });
+        #intro-sparks {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
+        }
 
-            /* 2. Preload dos 78 frames + Prism Gallery Engine */
-            const loader = document.getElementById("loader");
-            const progressBar = document.getElementById("progress-bar");
-            const heroEl = document.getElementById("scroll-hero");
-            const prismViewport = document.getElementById("prism-viewport");
-            const counterEl = document.getElementById("prism-counter");
-            const dots = Array.from(document.querySelectorAll(".prism-dot"));
-            const prevBtn = document.getElementById("prism-prev");
-            const nextBtn = document.getElementById("prism-next");
+        .intro-flash-line {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            z-index: 8;
+            background: linear-gradient(90deg, transparent 0%, #FFB800 20%, #FFF3C4 50%, #FFB800 80%, transparent 100%);
+            box-shadow: 0 0 24px #FFB800, 0 0 60px rgba(255, 184, 0, 0.75);
+            transform: translateY(-50%) scaleX(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+        }
+        #intro-stage.phase-flash .intro-flash-line {
+            transform: translateY(-50%) scaleX(1);
+            opacity: 1;
+        }
+        #intro-stage.phase-open .intro-flash-line {
+            opacity: 0;
+        }
 
-            const frameCount = 78;
-            const images = new Array(frameCount);
-            const playhead = { frame: 0 };
-            let loadedImages = 0;
+        .intro-hud {
+            position: relative;
+            z-index: 6;
+            height: 100%;
+            width: 100%;
+            padding: 32px 6%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #intro-stage.phase-flash .intro-hud,
+        #intro-stage.phase-open .intro-hud {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+        #intro-stage.phase-flash .intro-grid,
+        #intro-stage.phase-flash .intro-scanline,
+        #intro-stage.phase-flash .intro-ambient,
+        #intro-stage.phase-open .intro-grid,
+        #intro-stage.phase-open .intro-scanline,
+        #intro-stage.phase-open .intro-ambient,
+        #intro-stage.phase-open #intro-sparks {
+            opacity: 0;
+        }
 
-            const prism = createPrismEngine(images);
-            setupTweakpane(prism);
+        .intro-hud-top,
+        .intro-hud-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
 
-            const getUrl = (index) => `./frame_${index.toString().padStart(2, "0")}_delay-0.041s.webp`;
+        .intro-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.48);
+            font-weight: 500;
+        }
+        .intro-chip strong {
+            color: #FFB800;
+            font-weight: 600;
+        }
+        .intro-pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #FFB800;
+            box-shadow: 0 0 12px #FFB800;
+            animation: intro-pulse-anim 1.4s ease-in-out infinite;
+        }
+        @keyframes intro-pulse-anim {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.45); opacity: 0.45; }
+        }
 
-            // Pontos de progresso dos 3 slides da Prism Gallery no Hero
-            const slideStops = [0.0, 0.48, 0.94];
-            let activeSlide = 0;
+        .intro-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: auto 0;
+        }
 
-            function updateSlideUI(progress) {
-                const idx = progress < 0.30 ? 0 : progress < 0.72 ? 1 : 2;
-                if (idx !== activeSlide) {
-                    activeSlide = idx;
-                    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === idx));
-                    if (counterEl) counterEl.textContent = `0${idx + 1} / 03`;
-                }
-            }
+        .intro-eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.42em;
+            text-transform: uppercase;
+            color: #FFB800;
+            margin-bottom: 16px;
+            min-height: 16px;
+            font-weight: 600;
+        }
 
-            function goToSlide(idx) {
-                const targetIdx = (idx + slideStops.length) % slideStops.length;
-                const heroTop = heroEl.offsetTop;
-                const scrollable = Math.max(1, heroEl.offsetHeight - window.innerHeight);
-                const targetY = heroTop + scrollable * slideStops[targetIdx];
-                prism.boost(targetIdx > activeSlide ? 1.4 : -1.4);
-                lenis.scrollTo(targetY, { duration: 1.25 });
-            }
+        .intro-brand-mask {
+            overflow: hidden;
+            padding: 4px 0;
+        }
+        .intro-brand {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(40px, 8.5vw, 108px);
+            letter-spacing: 0.08em;
+            line-height: 1;
+            color: #F8F8F8;
+            transform: translate3d(0, 115%, 0);
+            animation: intro-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+        }
+        .intro-brand span {
+            background: linear-gradient(110deg, #FFB800 18%, #FFF2B2 48%, #CC9200 78%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        @keyframes intro-rise {
+            to { transform: translate3d(0, 0, 0); }
+        }
 
-            prevBtn?.addEventListener("click", (e) => { e.stopPropagation(); goToSlide(activeSlide - 1); });
-            nextBtn?.addEventListener("click", (e) => { e.stopPropagation(); goToSlide(activeSlide + 1); });
-            dots.forEach((dot) => {
-                dot.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    goToSlide(parseInt(dot.getAttribute("data-slide"), 10) || 0);
-                });
-            });
+        .intro-counter-wrap {
+            margin-top: 22px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            font-family: 'Anton', sans-serif;
+            line-height: 1;
+        }
+        #intro-pct {
+            font-size: clamp(34px, 5vw, 54px);
+            letter-spacing: 0.06em;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.65);
+        }
+        .intro-pct-sign {
+            font-size: 18px;
+            color: #FFB800;
+            letter-spacing: 0.08em;
+        }
 
-            // Interação de mouse + arraste horizontal estilo Prism Gallery
-            let isDragging = false;
-            let dragStartX = 0;
-            let dragAccum = 0;
+        .intro-progress-wrap {
+            width: min(380px, 82vw);
+            margin-top: 18px;
+        }
+        .intro-bar-track {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.09);
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        #intro-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            transform-origin: left center;
+            transform: scaleX(0);
+            will-change: transform;
+            background: linear-gradient(90deg, #CC9200, #FFB800, #FFF0B3);
+            box-shadow: 0 0 16px rgba(255, 184, 0, 0.85);
+            border-radius: 2px;
+        }
+        .intro-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.3);
+        }
 
-            window.addEventListener("mousemove", (e) => {
-                prism.state.targetMouseX = e.clientX / Math.max(window.innerWidth, 1);
-                prism.state.targetMouseY = 1.0 - e.clientY / Math.max(window.innerHeight, 1);
+        .intro-skip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 0.5px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.65);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+        }
+        .intro-skip:hover {
+            border-color: #FFB800;
+            color: #FFB800;
+            background: rgba(255, 184, 0, 0.08);
+        }
 
-                if (isDragging) {
-                    const dx = (e.clientX - dragStartX) / Math.max(window.innerWidth, 1);
-                    dragStartX = e.clientX;
-                    dragAccum += dx;
-                    prism.state.targetDrag += dx * 1.4;
-                    prism.boost(dx * 16.0);
-                }
-            }, { passive: true });
+        /* Entrada cinematográfica do Hero e Navbar ao abrir a cortina */
+        .hero-canvas-stage {
+            position: absolute;
+            inset: 0;
+            transform: scale(1.12);
+            filter: brightness(0.55);
+            transition: transform 1.45s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
+            will-change: transform, filter;
+            z-index: 1;
+        }
+        body.site-ready .hero-canvas-stage {
+            transform: scale(1);
+            filter: brightness(1);
+        }
 
-            prismViewport.addEventListener("mousedown", (e) => {
-                if (e.target.closest(".prism-hud")) return;
-                isDragging = true;
-                dragStartX = e.clientX;
-                dragAccum = 0;
-                prismViewport.classList.add("is-dragging");
-            });
+        #hero-canvas {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            background-color: #111111;
+            z-index: 1;
+        }
 
-            window.addEventListener("mouseup", () => {
-                if (!isDragging) return;
-                isDragging = false;
-                prismViewport.classList.remove("is-dragging");
-                if (Math.abs(dragAccum) > 0.08) {
-                    goToSlide(activeSlide + (dragAccum < 0 ? 1 : -1));
-                }
-                prism.state.targetDrag = 0;
-            });
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(17,17,17,0.35) 0%, transparent 28%, transparent 72%, rgba(17,17,17,0.5) 100%);
+            z-index: 10;
+            pointer-events: none;
+        }
 
-            // Touch swipe horizontal no Hero
-            prismViewport.addEventListener("touchstart", (e) => {
-                if (e.touches.length === 1 && !e.target.closest(".prism-hud")) {
-                    isDragging = true;
-                    dragStartX = e.touches[0].clientX;
-                    dragAccum = 0;
-                }
-            }, { passive: true });
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 50; padding: 20px 24px;
+            opacity: 0; transform: translate3d(0, -28px, 0);
+            transition: padding 0.4s ease, opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+            will-change: transform, opacity;
+        }
+        body.site-ready nav {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 0.5px solid rgba(255,255,255,0.08); padding: 14px 28px; border-radius: 100px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        nav.scrolled .nav-inner { background-color: rgba(17,17,17,0.85); border-color: rgba(255,255,255,0.12); }
+        .nav-logo { font-family: 'Anton', sans-serif; letter-spacing: 0.15em; font-size: 15px; color: rgba(255,255,255,0.9); }
+        .nav-logo span { color: #FFB800; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 500; transition: color 0.2s ease; }
+        .nav-links a:hover { color: rgba(255,255,255,0.9); }
+        .nav-cta { background-color: rgba(255,184,0,0.15); border: 0.5px solid rgba(255,184,0,0.35); color: #FFB800 !important; padding: 8px 20px; border-radius: 100px; transition: background-color 0.2s ease, border-color 0.2s ease !important; }
+        .nav-cta:hover { background-color: rgba(255,184,0,0.25) !important; border-color: rgba(255,184,0,0.6) !important; color: #FFB800 !important; }
+        .nav-icons { display: flex; gap: 16px; color: rgba(255,255,255,0.6); }
 
-            prismViewport.addEventListener("touchmove", (e) => {
-                if (isDragging && e.touches.length === 1) {
-                    const dx = (e.touches[0].clientX - dragStartX) / Math.max(window.innerWidth, 1);
-                    dragStartX = e.touches[0].clientX;
-                    dragAccum += dx;
-                    prism.state.targetDrag += dx * 1.5;
-                    prism.boost(dx * 16.0);
-                }
-            }, { passive: true });
+        /* Calibrado para 110 frames (0083.webp a 0192.webp) */
+        #scroll-hero { height: 600vh; position: relative; background-color: #111111; }
 
-            window.addEventListener("touchend", () => {
-                if (!isDragging) return;
-                isDragging = false;
-                if (Math.abs(dragAccum) > 0.1) {
-                    goToSlide(activeSlide + (dragAccum < 0 ? 1 : -1));
-                }
-                prism.state.targetDrag = 0;
-            }, { passive: true });
+        .hero-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            height: 100svh;
+            width: 100%;
+            overflow: hidden;
+            background-color: #111111;
+            background-size: cover;
+            background-position: center;
+        }
 
-            // Scroll velocity alimenta a dispersão óptica do prisma em tempo real
-            lenis.on("scroll", ({ velocity }) => {
-                const normVel = Math.max(-2.0, Math.min(2.0, velocity * 0.045));
-                prism.state.targetVelocity = normVel;
-            });
+        .scroll-dots {
+            position: fixed; right: 40px; top: 50%; transform: translateY(-50%); z-index: 60;
+            display: flex; flex-direction: column; gap: 24px; pointer-events: none;
+            opacity: 0; transition: opacity 0.8s ease 0.5s;
+        }
+        body.site-ready .scroll-dots { opacity: 1; }
+        .dot {
+            position: relative;
+            width: 4px; height: 4px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.15;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, background-color 0.4s ease;
+            will-change: transform, opacity;
+        }
+        .dot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--brand-yellow);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .dot.active { opacity: 1; transform: scale(2.5); background-color: var(--brand-yellow); }
+        .dot.active::after { opacity: 1; }
 
-            function initScrollAnimations() {
-                prism.resize();
-                prism.setFrame(0);
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 30; opacity: 0; transition: opacity 0.6s ease 0.55s; pointer-events: none; }
+        body.site-ready .scroll-indicator { opacity: 0.7; }
+        body.site-ready .scroll-indicator.hidden { opacity: 0; transition-delay: 0s; }
+        .mouse-icon { width: 22px; height: 34px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 12px; position: relative; }
+        .wheel-icon { width: 2px; height: 6px; background-color: #FFB800; border-radius: 2px; position: absolute; top: 6px; left: 50%; animation: scroll-wheel 1.5s infinite; }
+        @keyframes scroll-wheel { 0% { transform: translate(-50%, 0); opacity: 1; } 100% { transform: translate(-50%, 12px); opacity: 0; } }
+        .scroll-text { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 500; font-family: 'DM Sans', sans-serif; }
 
-                /* 3. Timeline principal do Hero com scrub: 0.5 */
-                const heroTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: "#scroll-hero",
-                        start: "top top",
-                        end: "bottom bottom",
-                        scrub: 0.5,
-                        invalidateOnRefresh: true,
-                        onUpdate: (self) => updateSlideUI(self.progress)
-                    }
-                });
+        .hero-block { position: absolute; left: 8%; right: 8%; z-index: 20; pointer-events: none; will-change: transform; backface-visibility: hidden; }
+        .hero-block.active a { pointer-events: auto; }
 
-                heroTl.to(playhead, {
-                    frame: frameCount - 1,
-                    ease: "none",
-                    duration: 1,
-                    onUpdate: () => prism.setFrame(Math.round(playhead.frame))
-                }, 0);
+        .word-wrap { overflow: hidden; display: inline-block; vertical-align: bottom; padding-top: 0.25em; margin-top: -0.25em; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+        .hero-word { display: inline-block; transform: translate3d(0, 110%, 0); opacity: 0; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1); will-change: transform, opacity; backface-visibility: hidden; }
+        .hero-block.active .hero-word { transform: translate3d(0, 0, 0); opacity: 1; }
 
-                heroTl.fromTo("#text-01",
-                    { opacity: 1, y: 0, scale: 1 },
-                    { opacity: 0, y: -60, scale: 0.96, ease: "power2.inOut", duration: 0.24 },
-                    0.06
-                );
+        .hero-word:nth-child(1) { transition-delay: 0s; }
+        .hero-word:nth-child(2) { transition-delay: 0.12s; }
+        .hero-word:nth-child(3) { transition-delay: 0.24s; }
 
-                heroTl.fromTo("#text-02",
-                    { opacity: 0, y: 50, scale: 0.96 },
-                    { opacity: 1, y: 0, scale: 1, ease: "power2.out", duration: 0.16 },
-                    0.32
-                );
-                heroTl.to("#text-02",
-                    { opacity: 0, y: -50, scale: 0.96, ease: "power2.in", duration: 0.16 },
-                    0.54
-                );
+        .hero-sub { opacity: 0; transform: translate3d(0, 25px, 0); transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.45s, transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.45s; will-change: transform, opacity; backface-visibility: hidden; }
+        .hero-block.active .hero-sub { opacity: 1; transform: translate3d(0, 0, 0); }
 
-                heroTl.fromTo("#text-03",
-                    { opacity: 0, y: 60, scale: 0.95 },
-                    { opacity: 1, y: 0, scale: 1, ease: "power3.out", duration: 0.20 },
-                    0.74
-                );
+        .hero-block.exiting .hero-word { transform: translate3d(0, -110%, 0); opacity: 0; transition-duration: 0.7s; transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); }
+        .hero-block.exiting .hero-sub { opacity: 0; transform: translate3d(0, -20px, 0); transition-duration: 0.5s; transition-delay: 0s; transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); }
 
-                /* 4. Revelação mascarada BioTech (top 80%) */
-                gsap.from("#biotech-section .reveal-text", {
-                    yPercent: 110,
-                    opacity: 0,
-                    duration: 1.15,
-                    ease: "power3.out",
-                    stagger: 0.12,
-                    scrollTrigger: {
-                        trigger: "#biotech-section",
-                        start: "top 80%",
-                        once: true
-                    }
-                });
+        .animated-stroke { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.5); position: relative; display: inline-block; }
+        .animated-stroke::after { content: "COMPLETA."; position: absolute; left: 0; top: 0; width: var(--fill-width); height: 100%; color: var(--brand-yellow); -webkit-text-stroke: 1.5px var(--brand-yellow); overflow: hidden; white-space: nowrap; filter: drop-shadow(0 0 14px rgba(255,184,0,0.5)); transition: width 0.08s linear; }
 
-                /* 5. Entrada + Parallax nos cards */
-                gsap.from(".parallax-card", {
-                    y: 90,
-                    opacity: 0,
-                    duration: 1.2,
-                    ease: "power3.out",
-                    stagger: 0.16,
-                    scrollTrigger: {
-                        trigger: "#biotech-section .grid",
-                        start: "top 82%",
-                        once: true
-                    }
-                });
+        .h-display { font-family: 'Anton', sans-serif; letter-spacing: 0.05em; line-height: 1.1; font-size: clamp(40px, 11vw, 120px); color: #F8F8F8; display: block; margin-bottom: 28px; }
+        .accent { color: #FFB800; }
+        .side-line { border-left: 2px solid #FFB800; padding-left: 20px; font-size: clamp(13px, 1.8vw, 17px); color: rgba(255,255,255,0.85); font-weight: 300; line-height: 1.6; max-width: 420px; }
 
-                const mm = gsap.matchMedia();
-                mm.add("(min-width: 768px)", () => {
-                    document.querySelectorAll(".parallax-card").forEach((card) => {
-                        const speed = parseFloat(card.getAttribute("data-parallax-speed")) || 20;
-                        gsap.to(card, {
-                            y: speed,
-                            ease: "none",
-                            scrollTrigger: {
-                                trigger: "#biotech-section",
-                                start: "top bottom",
-                                end: "bottom top",
-                                scrub: 0.5
-                            }
-                        });
-                    });
-                });
+        .cta-btn { display: inline-block; background: linear-gradient(135deg, #FFB800, #CC9200); color: #111111; padding: 18px 44px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; border: none; box-shadow: 0 0 40px rgba(255,184,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; position: relative; overflow: hidden; }
+        .cta-btn::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transform: translate3d(-100%, 0, 0); transition: transform 0.5s ease; }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(255,184,0,0.6); }
+        .cta-btn:hover::after { transform: translate3d(100%, 0, 0); }
 
-                /* 6. Seção Contato + Lazy Load do mapa */
-                gsap.from("#contato .contact-reveal", {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1.1,
-                    ease: "power3.out",
-                    stagger: 0.15,
-                    scrollTrigger: {
-                        trigger: "#contato",
-                        start: "top 80%",
-                        once: true
-                    }
-                });
+        .cta-btn-outline { display: inline-block; background-color: transparent; color: rgba(255,255,255,0.7); padding: 18px 44px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; border: 0.5px solid rgba(255,255,255,0.4); transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; text-decoration: none; position: relative; overflow: hidden; }
+        .cta-btn-outline:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.6); color: #fff; box-shadow: 0 10px 30px -10px rgba(255,255,255,0.1); }
 
-                ScrollTrigger.create({
-                    trigger: "#contato",
-                    start: "top 130%",
-                    once: true,
-                    onEnter: () => {
-                        const iframe = document.querySelector("#map-container iframe");
-                        if (iframe && !iframe.src) {
-                            iframe.src = iframe.getAttribute("data-src");
-                        }
-                    }
-                });
+        #produtos { position: relative; z-index: 40; margin-top: -100vh; margin-top: -100svh; padding-top: 15vh; background: linear-gradient(to bottom, transparent, #111111 15vh, #111111 100%); }
 
-                /* 7. Resize com debounce de 250ms */
-                window.addEventListener("resize", debounce(() => {
-                    prism.resize();
-                    ScrollTrigger.refresh();
-                }, 250));
-            }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 24px;
+        }
 
-            function finishLoading() {
-                initScrollAnimations();
-                gsap.to(loader, {
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power2.out",
-                    onComplete: () => {
-                        loader.style.visibility = "hidden";
-                        document.body.style.overflow = "auto";
-                        lenis.start();
-                        ScrollTrigger.refresh();
-                    }
-                });
-            }
+        /* Galeria e Imagens dos Produtos */
+        .product-img-wrapper {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(255,184,0,0.06), transparent);
+        }
+        .product-image {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            filter: drop-shadow(0px 16px 24px rgba(0, 0, 0, 0.6));
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.06);
+        }
 
-            function onAssetDone() {
-                loadedImages++;
-                const pct = (loadedImages / frameCount) * 100;
-                gsap.to(progressBar, { width: `${pct}%`, duration: 0.2, ease: "power1.out", overwrite: true });
-                if (loadedImages === frameCount) {
-                    finishLoading();
-                }
-            }
+        .card-gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(17, 17, 17, 0.72);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 0.5px solid rgba(255, 255, 255, 0.18);
+            color: #F8F8F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 6;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+        .card-gallery-btn:hover {
+            background: #FFB800;
+            border-color: #FFB800;
+            color: #111111;
+        }
+        .card-gallery-prev { left: 10px; }
+        .card-gallery-next { right: 10px; }
 
-            for (let i = 0; i < frameCount; i++) {
-                const img = new Image();
-                img.decoding = "async";
-                img.onload = () => {
-                    images[i] = img;
-                    onAssetDone();
-                };
-                img.onerror = () => {
-                    onAssetDone();
-                };
-                img.src = getUrl(i);
-            }
-        });
-    </script>
-</body>
-</html>
+        .card-gallery-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0;
+            z-index: 6;
+            padding: 0 6px;
+            border-radius: 100px;
+            background: rgba(17, 17, 17, 0.55);
+            backdrop-filter: blur(8px);
+        }
+        /* Área de toque 24x24px mantendo o indicador visual de 6px */
+        .card-gallery-dot {
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-gallery-dot::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .card-gallery-dot.active::after {
+            background: #FFB800;
+            transform: scale(1.25);
+        }
+
+        .product-card {
+            scroll-margin-top: 130px;
+            opacity: 0; transform: translate3d(0, 40px, 0);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: default; background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 0.5px solid rgba(255,255,255,0.08); box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            will-change: transform, opacity; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px; position: relative;
+        }
+        .product-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 184, 0, 0.10), transparent 65%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            z-index: 1;
+        }
+        .product-card:hover::after { opacity: 1; }
+        .product-card > * { position: relative; z-index: 2; }
+        .product-card:hover { transform: translate3d(0, -6px, 0) !important; border-color: rgba(255,184,0,0.38); box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 0 rgba(255,184,0,0.3); }
+        .product-card.revealed { opacity: 1; transform: translate3d(0,0,0); }
+
+        .product-card:target {
+            opacity: 1 !important; transform: translate3d(0,0,0) !important;
+            border-color: rgba(255,184,0,0.7);
+            box-shadow: 0 0 30px rgba(255,184,0,0.15), inset 0 1px 0 0 rgba(255,184,0,0.3);
+        }
+
+        .product-badge { position: absolute; top: 16px; left: 16px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 10px; border-radius: 6px; z-index: 7; }
+        .badge-hot { background-color: #FFB800; color: #111111; }
+        .badge-pro { background-color: rgba(17,17,17,0.8); color: #FFB800; border: 0.5px solid rgba(255,184,0,0.45); }
+        .badge-new { background-color: #F8F8F8; color: #111111; }
+
+        .product-brand { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #FFB800; font-weight: 600; margin-bottom: 6px; }
+        .product-name { font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 0.03em; color: #F8F8F8; margin-bottom: 10px; line-height: 1.2; }
+        .product-desc { color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 300; line-height: 1.7; margin-bottom: 16px; }
+        .product-features { font-size: 12px; color: rgba(255,255,255,0.58); font-weight: 300; line-height: 1.85; margin-bottom: 22px; border-left: 2px solid rgba(255,184,0,0.3); padding-left: 12px; }
+        .product-features li { list-style: none; }
+        .product-consult { font-size: 11px; color: rgba(255,255,255,0.55); margin-bottom: 12px; letter-spacing: 0.04em; }
+
+        .product-wa-btn {
+            width: 100%; padding: 14px 18px; border-radius: 12px;
+            background: linear-gradient(135deg, #25D366, #1DA851);
+            border: 0.5px solid rgba(37, 211, 102, 0.5);
+            color: #0B1910;
+            font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            box-shadow: 0 8px 22px -8px rgba(37, 211, 102, 0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+            cursor: pointer;
+        }
+        .product-wa-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px -6px rgba(37, 211, 102, 0.65);
+            filter: brightness(1.06);
+        }
+
+        .section-label { font-size: 10px; letter-spacing: 0.5em; color: #FFB800; text-transform: uppercase; font-weight: 500; display: block; margin-bottom: 16px; }
+        .section-title { font-family: 'Anton', sans-serif; font-size: clamp(40px, 8vw, 88px); letter-spacing: 0.05em; line-height: 1.15; color: #F8F8F8; }
+        .section-title br { display: none; }
+        @media (min-width: 768px) { .section-title br { display: block; } }
+        .section-body { font-size: clamp(14px, 1.6vw, 16px); color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.7; }
+
+        .reveal { opacity: 0; transform: translate3d(0, 32px, 0); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); will-change: transform, opacity; }
+        .reveal.visible { opacity: 1; transform: translate3d(0, 0, 0); }
+        .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; } .reveal-delay-3 { transition-delay: 0.3s; } .reveal-delay-4 { transition-delay: 0.4s; }
+
+        .reveal-sweep { opacity: 1 !important; transform: translate3d(0,0,0) !important; }
+        .reveal-sweep::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #111111; transform-origin: right center; transform: scaleX(1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); z-index: 1; }
+        .reveal-sweep.visible::after { transform: scaleX(0); }
+
+        .stat-num { font-family: 'Anton', sans-serif; font-size: clamp(48px, 8vw, 80px); letter-spacing: 0.02em; line-height: 1; color: #F8F8F8; }
+        .stat-num span { color: #FFB800; }
+
+        .service-item { border-top: 0.5px solid rgba(255,255,255,0.07); padding: 32px 0; display: grid; grid-template-columns: 40px 1fr auto; gap: 32px; align-items: start; cursor: default; transition: padding 0.3s ease; }
+        .service-item:hover { padding-left: 8px; }
+        .service-item:last-child { border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+        .service-num { font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); padding-top: 4px; }
+        .service-name { font-family: 'Anton', sans-serif; font-size: clamp(22px, 3.5vw, 38px); letter-spacing: 0.03em; color: #F8F8F8; margin-bottom: 8px; }
+        .service-desc { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.6; max-width: 500px; }
+        .service-arrow { color: rgba(255,255,255,0.3); transition: color 0.2s ease, transform 0.2s ease; padding-top: 6px; }
+        .service-item:hover .service-arrow { color: #FFB800; transform: translate3d(4px, -4px, 0); }
+
+        .process-container { position: relative; }
+        .process-line-bg { position: absolute; top: 16px; left: 10%; right: 10%; height: 1px; background-color: rgba(255,255,255,0.15); z-index: 0; }
+        .process-line-fill {
+            position: absolute; top: 16px; left: 10%; right: 10%; height: 1px;
+            background-color: var(--brand-yellow); z-index: 1;
+            box-shadow: 0 0 15px var(--brand-yellow);
+            transform-origin: left center;
+            transform: scaleX(0);
+            will-change: transform;
+        }
+        .process-line-v-bg { display: none; position: absolute; top: 16px; bottom: 16px; left: 15px; width: 2px; background-color: rgba(255,255,255,0.15); z-index: 0; }
+        .process-line-v-fill {
+            display: none; position: absolute; top: 16px; bottom: 16px; left: 15px; width: 2px;
+            background-color: var(--brand-yellow); z-index: 1;
+            box-shadow: 0 0 15px var(--brand-yellow);
+            transform-origin: top center;
+            transform: scaleY(0);
+            will-change: transform;
+        }
+
+        /* Contraste >= 11:1 mantido mesmo no estado inativo */
+        .process-step { text-align: center; padding: 0 24px; position: relative; z-index: 2; opacity: 1; transition: transform 0.5s ease; transform: translateY(20px); }
+        .process-step.active { transform: translateY(0); }
+
+        .process-icon-wrap { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background-color: #111111; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.5s ease; }
+        .process-dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(255,255,255,0.3); transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), background-color 0.5s ease; }
+
+        .process-step.active .process-icon-wrap { border-color: var(--brand-yellow); transform: scale(1.15); box-shadow: inset 0 0 20px rgba(255,184,0,0.2), 0 0 20px rgba(255,184,0,0.3); }
+        .process-step.active .process-dot { background-color: var(--
